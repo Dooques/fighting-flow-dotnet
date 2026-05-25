@@ -1,6 +1,18 @@
-﻿@page "/ComboViewer"
-<h3>ComboViewer</h3>
+﻿@page "/ComboViewer/{Name}"
+
+@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources.TekkenData
+
+<h3>@(Fighter?.Name ?? "Invalid Character")</h3>
 
 @code {
-    
+    [Parameter] 
+    public string? Name { get; set; }
+
+    private Fighter? Fighter { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Fighter = TekkenFighters.Fighters.First(f => f.Name == Name);
+    }
 }

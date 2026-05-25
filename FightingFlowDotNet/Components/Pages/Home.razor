@@ -1,5 +1,40 @@
 ﻿@page "/"
+@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources.TekkenData
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Fighting Flow</PageTitle>
 
-<h1>Fighting Flow</h1>
+<h1 class="text-white">Fighting <span style="color:#ee1164">Flow</span></h1>
+
+<div class="container" id="character-select">
+    <div class="d-flex flex-row flex-wrap gap-2">
+            @foreach (var fighter in _fighters)
+            {
+                <NavLink href=@GetName(fighter.Name)>
+                    <div class="card bg-black border-0">
+                        <div class="card-header">
+                            <div class="card-img">
+                                <img class="img-thumbnail bg-black"
+                                     src="./images/@(fighter.ImageId).png" 
+                                     alt="@fighter.Name"/>
+                            </div>
+                            <div class="card-title text-center">
+                                <h4 class="text-white">
+                                    @fighter.Name
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </NavLink>
+            }
+    </div>
+</div>
+
+@code {
+    private readonly List<Fighter> _fighters = TekkenFighters.Fighters;
+    
+    private string GetName(string name)
+    {
+         return "ComboViewer/" + _fighters.First(fighter => fighter.Name == name).Name;
+    }
+}
