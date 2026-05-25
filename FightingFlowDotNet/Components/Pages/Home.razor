@@ -2,36 +2,83 @@
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 
+@rendermode InteractiveServer
+
 <PageTitle>Fighting Flow</PageTitle>
-
-<h1 class="text-white">Fighting <span style="color:#ee1164">Flow</span></h1>
-
-<div class="container" id="character-select">
-    <div class="d-flex flex-row flex-wrap gap-2">
-            @foreach (var fighter in _fighters)
-            {
-                <NavLink href=@GetName(fighter.Name)>
-                    <div class="card bg-black border-0">
-                        <div class="card-header">
-                            <div class="card-img">
-                                <img class="img-thumbnail bg-black"
-                                     src="./images/@(fighter.ImageId).png" 
-                                     alt="@fighter.Name"/>
-                            </div>
-                            <div class="card-title text-center">
-                                <h4 class="text-white text-decoration-none">
-                                    @fighter.Name
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                </NavLink>
-            }
+<div class="d-flex flex-row gap-5 my-2">
+    <h1 class="text-white">Fighting <span style="color:#ee1164">Flow</span></h1>
+    <div class="dropdown d-flex flex-row" style="z-index:1050;">
+        <button class="btn btn-secondary"
+                type="button"
+                @onclick="ToggleDropDown"
+                @onblur="CloseDropdown">
+            Select a Game
+        </button>
+        @if (_dropDownSelected)
+        {
+            <div class="dropdown-content d-flex flex-column bg-secondary"
+                 style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 40px);">
+                <button class="btn" value="Tekken 8"
+                        @onclick="@(e => UpdateGameSelected("Tekken 8"))">
+                    Tekken 8
+                </button>
+                <button class="btn" @onclick="@(e => UpdateGameSelected("Street Fighter 6"))">
+                    Street Fighter 6
+                </button>
+                <button class="btn" @onclick="@(e => UpdateGameSelected("Mortal Kombat 1"))">
+                    Mortal Kombat 1
+                </button>
+                <button class="btn" @onclick="@(e => UpdateGameSelected("2XKO"))">
+                    2XKO
+                </button>
+                <button class="btn" @onclick="@(e => UpdateGameSelected("Invincible Vs"))">
+                    Invincible Vs
+                </button>
+            </div>
+        }
     </div>
+</div>
+
+<div class="d-flex flex-row flex-wrap flex-shrink-1 justify-content-around gap-2">
+    @foreach (var fighter in _fighters)
+    {
+        <div class="card bg-black ">
+            <NavLink class="text-decoration-none" href=@GetName(fighter.Name)>
+                    <div class="card-img-top">
+                        <img class="img-thumbnail bg-black"
+                             src="./images/@(fighter.ImageId).png" 
+                             alt="@fighter.Name"/>
+                    </div>
+                    <div class="card-body text-center">
+                        <h4 class="text-white ">
+                            @fighter.Name
+                        </h4>
+                    </div>
+            </NavLink>
+        </div>
+    }
 </div>
 
 @code {
     private readonly List<Fighter> _fighters = TekkenFighters.Fighters;
+    private bool _dropDownSelected = false;
+    private string _gameSelected = "Tekken 8";
+
+    private void ToggleDropDown()
+    {
+        _dropDownSelected = !_dropDownSelected;
+    }
+
+    private async Task CloseDropdown()
+    {
+        await Task.Delay(150);
+        _dropDownSelected = false;
+    }
+
+    private void UpdateGameSelected(string gameSelected)
+    {
+        _gameSelected = gameSelected;
+    }
     
     private string GetName(string name)
     {
