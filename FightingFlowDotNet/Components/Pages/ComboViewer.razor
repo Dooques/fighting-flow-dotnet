@@ -3,16 +3,72 @@
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 
-<h3>@(Fighter?.Name ?? "Invalid Character")</h3>
+<div class="d-flex flex-row">
+    <div class="combo-container w-75 bg-danger">
+        @foreach (var combo in _comboList)
+        {
+                <div class="d-flex flex-row flex-wrap gap-3">
+                    @foreach (var moveItem in combo.Select(GetMove))
+                    {
+                        if (moveItem.Notation == "►" ||  moveItem.Notation == "h/burst")
+                        {
+                            <p>@moveItem.Notation</p>
+                        }
+                        else
+                        {
+                            <img 
+                                src="@GetMoveImage(moveItem.Name)" 
+                                alt="@moveItem.Name"
+                                height="50"
+                                width="50"/>
+                        }
+                    }
+                </div>
+        }
+    </div>
+
+    <div class="card bg-black w-25 mx-auto">
+        <div class="card-img-top">
+            <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+        </div>
+        <div class="card-body">
+            <h3 class="card-title text-white text-center">@(ChosenFighter?.Name ?? "Invalid Character")</h3>
+        </div>
+    </div>
+</div>
+
+
+
 
 @code {
     [Parameter] 
     public string? Name { get; set; }
+    private Fighter? ChosenFighter { get; set; }
 
-    private Fighter? Fighter { get; set; }
+    private readonly List<List<string>> _comboList = [
+        ["d/b", "4", "3", "►", "2", "1", "2", "►", "h/burst", "►", "F", "2", "1+2"],
+        ["1+2", "►", "d/b", "4", "3", "►", "2", "1", "2", "►", "1", "1+2", "1+2"]
+    ];
+
+    private readonly List<Move> _moveList = TekkenMoves.Moves;
+
+    private Move GetMove(string note)
+    {
+        return _moveList.First(m => m.Notation == note);
+    }
+
+    private static string GetMoveImage(string name)
+    {
+        return $"./images/{name}.png";
+    }
 
     protected override void OnInitialized()
     {
-        Fighter = TekkenFighters.Fighters.First(f => f.Name == Name);
+        ChosenFighter = TekkenFighters.Fighters.First(f => f.Name == Name);
+    }
+
+    private string GetPhotoUrl()
+    {
+        return $"images/{ChosenFighter?.Name}.png";
     }
 }

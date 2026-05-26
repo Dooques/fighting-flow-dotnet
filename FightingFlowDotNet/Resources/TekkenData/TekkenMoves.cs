@@ -7,6 +7,7 @@ public static class TekkenMoves
 {
     public static readonly List<Move> Moves =
     [
+        new Move(name: "break", notation: "►", type: "Break", character: "Generic", game: "tekken 8"),
         new Move(name: "forward", notation: "f", type: "Movement", character: "Generic", game: "Tekken 8"),
         new Move(name: "up", notation: "u", type: "Movement", character: "Generic", game: "Tekken 8"),
         new Move(name: "up_forward", notation: "u/f", type: "Movement", character: "Generic", game: "Tekken 8"),
