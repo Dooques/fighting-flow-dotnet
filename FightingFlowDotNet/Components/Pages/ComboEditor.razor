@@ -1,6 +1,7 @@
-﻿@page "/ComboEditor"
+﻿@page "/ComboEditor/{Name}"
 <h3>ComboEditor</h3>
 
 @code {
-    
-}SADAS
+    [Parameter]
+    public string Name { get; set; } 
+}

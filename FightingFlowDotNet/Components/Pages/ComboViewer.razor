@@ -3,51 +3,91 @@
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 
-<div class="d-flex flex-row">
-    <div class="combo-container w-75 bg-danger">
-        @foreach (var combo in _comboList)
-        {
-                <div class="d-flex flex-row flex-wrap gap-3">
-                    @foreach (var moveItem in combo.Select(GetMove))
-                    {
-                        if (moveItem.Notation == "►" ||  moveItem.Notation == "h/burst")
-                        {
-                            <p>@moveItem.Notation</p>
-                        }
-                        else
-                        {
-                            <img 
-                                src="@GetMoveImage(moveItem.Name)" 
-                                alt="@moveItem.Name"
-                                height="50"
-                                width="50"/>
-                        }
-                    }
-                </div>
-        }
+<div class="d-flex flex-column">
+    
+    <div class="d-flex flex-row">
+        <NavLink href="@GetEditorUrl()">
+            <button class="btn btn-danger">
+                Create a Combo
+            </button>
+        </NavLink>
     </div>
 
-    <div class="card bg-black w-25 mx-auto">
-        <div class="card-img-top">
-            <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+    <div class="d-flex flex-row">
+        <div class="w-75 text-white py-3 mx-2">
+            @foreach (var combo in _comboList)
+            {
+                <div class="d-flex flex-column pb-5">
+                    <h4>@combo.Combo.Title</h4>
+
+                    <div class="d-flex flex-row flex-wrap gap-2 py-1">
+                        @foreach (var moveItem in combo.Combo.Moves.Select(GetMove))
+                        {
+                            if (moveItem.Notation is "►" or "h/burst")
+                            {
+                                <p class="my-auto">@moveItem.Notation</p>
+                            }
+                            else
+                            {
+                                <img src="@GetMoveImage(moveItem.Name)"
+                                     alt="@moveItem.Name" height="50" width="50"/>
+                            }
+                        }
+                    </div>
+
+                    <div class="d-flex flex-row justify-content-between mt-2">
+                        <div class="d-flex flex-column">
+                            <p class="mb-0">Damage: @combo.Combo.Damage</p>
+                            <p>Created By: @combo.Combo.CreatedBy</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-secondary align-self-start">
+                                Edit
+                            </button>
+                        </div>
+                        <div>
+                            <p>Ki: @combo.Ki</p>
+                        </div>
+                    </div>
+                </div>
+
+            }
         </div>
-        <div class="card-body">
-            <h3 class="card-title text-white text-center">@(ChosenFighter?.Name ?? "Invalid Character")</h3>
+
+        <div class="card bg-black w-25">
+
+            <div class="card-img text-center">
+                <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+            </div>
+
+            <div class="card-body">
+                <h3 class="card-title text-white">@(ChosenFighter?.Name ?? "Invalid Character")</h3>
+                <p class="text-white">@((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)</p>
+                <p class="text-white">@(ChosenFighter?.FightingStyle)</p>
+                <p class="text-white">@(ChosenFighter?.Game)</p>
+            </div>
         </div>
     </div>
 </div>
 
-
-
-
 @code {
-    [Parameter] 
-    public string? Name { get; set; }
+    [Parameter] public string? Name { get; set; }
     private Fighter? ChosenFighter { get; set; }
 
-    private readonly List<List<string>> _comboList = [
-        ["d/b", "4", "3", "►", "2", "1", "2", "►", "h/burst", "►", "F", "2", "1+2"],
-        ["1+2", "►", "d/b", "4", "3", "►", "2", "1", "2", "►", "1", "1+2", "1+2"]
+    private readonly List<ComboDisplay> _comboList =
+    [
+        new ComboDisplay(
+            new Combo(title: "Combo 1", character: "Generic", createdBy: "Dooks", damage: 500,
+                moves: ["d/b", "4", "3", "►", "2", "1", "2", "►", "h/burst", "►", "F", "2", "1+2"]),
+            ki: 100,
+            favourites: 5
+        ),
+        new ComboDisplay(
+            new Combo(title: "Combo 2", character: "Generic", createdBy: "Kazuya", damage: 9001,
+                moves:["1+2", "►", "d/b", "4", "3", "►", "2", "1", "2", "►", "1", "1+2", "1+2"]),
+            ki: 250,
+            favourites: 10
+        )
     ];
 
     private readonly List<Move> _moveList = TekkenMoves.Moves;
@@ -70,5 +110,10 @@
     private string GetPhotoUrl()
     {
         return $"images/{ChosenFighter?.Name}.png";
+    }
+
+    private string GetEditorUrl()
+    {
+        return $"/ComboEditor/{ChosenFighter?.Name}";
     }
 }
