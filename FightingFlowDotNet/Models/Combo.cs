@@ -24,7 +24,8 @@ public class Combo(
 
 public class ComboDisplay(
     Combo combo, bool areOptionsRevealed = false, int ki = 0, int favourites = 0, 
-    List<string>? comments = null)
+    List<string>? comments = null
+    )
 {
     public Combo Combo { get; set; } = combo;
     public bool AreOptionsRevealed { get; set; } = areOptionsRevealed;

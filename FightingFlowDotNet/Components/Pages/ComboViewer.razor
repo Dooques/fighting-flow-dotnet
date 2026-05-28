@@ -40,10 +40,17 @@
                             <p class="mb-0">Damage: @combo.Combo.Damage</p>
                             <p>Created By: @combo.Combo.CreatedBy</p>
                         </div>
-                        <div>
-                            <button class="btn btn-secondary align-self-start">
-                                Edit
-                            </button>
+                        <div class="d-flex flex-row align-content-start gap-3">
+                            <NavLink href="@GetEditorUrl()">
+                                <button class="btn btn-secondary align-self-start">
+                                    Edit
+                                </button>
+                            </NavLink>
+                            <NavLink href="@GetEditorUrl()">
+                                <button class="btn btn-primary align-self-start">
+                                   Share 
+                                </button>
+                            </NavLink>
                         </div>
                         <div>
                             <p>Ki: @combo.Ki</p>
