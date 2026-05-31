@@ -1,8 +1,9 @@
 ﻿@page "/login"
-@using FightingFlowDotNet.Models
-@inject Supabase.Client SupabaseClient
+@using FightingFlowDotNet.Clients
+@using Firebase.Auth
+@using User = FightingFlowDotNet.Models.User
 @inject NavigationManager Navigation
-@inject IHttpClientFactory ClientFactory
+@inject FirebaseClientFactory FirebaseClientFactory
 
 @rendermode InteractiveServer
 
@@ -11,14 +12,14 @@
 <div class="auth-container">
     <div class="form-group">
         <label>Email</label>
-        <input type="email" @bind="email" class="form-control" />
+        <input type="email" @bind="_email" class="form-control" />
     </div>
     <div class="form-group mt-2">
         <label>Password</label>
-        <input type="password" @bind="password" class="form-control" />
+        <input type="password" @bind="_password" class="form-control" />
     </div>
 
-    <button class="btn btn-primary mt-3" @onclick="SignInWithEmail">Login with Email</button>
+    <button class="btn btn-primary mt-3" @onclick="SignUpWithEmail">Login with Email</button>
     
     <hr />
 
@@ -27,30 +28,39 @@
     </button>
 </div>
 
-@if (!string.IsNullOrEmpty(errorMessage))
+@if (!string.IsNullOrEmpty(_errorMessage))
 {
-    <p class="text-danger mt-2">@errorMessage</p>
+    <p class="text-danger mt-2">@_errorMessage</p>
 }
 
 @code {
-    private string email = "";
-    private string password = "";
-    private string errorMessage = "";
+    private string _email = "";
+    private string _password = "";
+    private string _errorMessage = "";
 
-    private async Task SignInWithEmail()
+    private async Task SignUpWithEmail()
     {
         Console.WriteLine("Attempting to sign in with email");
-        var client = ClientFactory.CreateClient("MyApi");
-        var protectedData = await client.GetFromJsonAsync<User>("auth");
-
+        var client = FirebaseClientFactory.GetAuthClient();
+        try
+        {
+            var protectedData = await client.CreateUserWithEmailAndPasswordAsync(_email, _password);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+    private async Task SignInWitEmailAndPassword()
+    {
+        var client = FirebaseClientFactory.GetAuthClient();
         Console.WriteLine("Client Created");
-        Console.WriteLine(protectedData);
         try
         {
             Console.WriteLine("Calling supabase.Auth.SignIn");
             // Call Supabase auth using C#
-            var session = await SupabaseClient.Auth.SignIn(email, password);
-            Console.WriteLine($"Session Created: {session?.AccessToken ?? "invalid token"}");
+            var session = await client.SignInWithEmailAndPasswordAsync(_email, _password);
+            Console.WriteLine($"Session Created: {session.User.Credential.IdToken ?? "invalid token"}");
             if (session != null)
             {
                 Console.WriteLine("Session Created, navigating to home");
@@ -59,8 +69,8 @@
         }
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
-            Console.WriteLine($"Exception occured: {errorMessage}");
+            _errorMessage = ex.Message;
+            Console.WriteLine($"Exception occured: {_errorMessage}");
         }
     }
 
@@ -69,14 +79,10 @@
         try
         {
             // Trigger the Google OAuth Redirect
-            await SupabaseClient.Auth.SignIn(Supabase.Gotrue.Constants.Provider.Google, new Supabase.Gotrue.SignInOptions
-            {
-                RedirectTo = Navigation.ToAbsoluteUri("/dashboard").ToString()
-            });
         }
         catch (Exception ex)
         {
-            errorMessage = ex.Message;
+            _errorMessage = ex.Message;
         }
     }
 }
