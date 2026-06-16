@@ -1,0 +1,30 @@
+﻿@using FightingFlowDotNet.Clients
+@using MudBlazor
+@inject UserData UserData
+
+<MudAppBar Style="background: black">
+    <MudNavLink href="/" Match="NavLinkMatch.All">
+        @* <img *@
+        @*      style="height: 32px; width: 32px;" *@
+        @*      src="./images/fighting_flow_logo.png" *@
+        @*      alt="Fighting Flow Logo"/> *@
+        
+        <MudText
+            Typo="Typo.h1"
+            Style="font-size: 32px; width: 250px;">
+            Fighting <span style="color:#ee1164">Flow</span>
+        </MudText>
+    </MudNavLink>
+    
+    <MudNavLink Match="NavLinkMatch.Prefix" href="/resources">Resources</MudNavLink>
+
+    <MudNavLink Match="NavLinkMatch.Prefix" href="/profile">Profile</MudNavLink>
+    
+    @if (UserData?.UserCredential is null ||
+         UserData.UserCredential.User.Credential.IsExpired())
+    {
+        <div class="nav-item px-3 text-light">
+            <MudNavLink Match="NavLinkMatch.All" href="/login">Login</MudNavLink>
+        </div>
+    }
+</MudAppBar>

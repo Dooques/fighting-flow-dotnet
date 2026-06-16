@@ -9,16 +9,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
-      <PackageReference Include="Google.Apis.Auth" Version="1.74.0" />
-      <PackageReference Include="Google.Cloud.Firestore" Version="4.2.0" />
-      <PackageReference Include="Supabase" Version="1.1.1" />
+        <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
+        <PackageReference Include="Google.Apis.Auth" Version="1.74.0" />
+        <PackageReference Include="Google.Cloud.Firestore" Version="4.2.0" />
+        <PackageReference Include="MudBlazor" Version="9.5.0" />
+        <PackageReference Include="Supabase" Version="1.1.1" />
     </ItemGroup>
 
 </Project>

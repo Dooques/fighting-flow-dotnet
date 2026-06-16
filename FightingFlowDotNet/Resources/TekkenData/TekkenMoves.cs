@@ -31,10 +31,14 @@ public static class TekkenMoves
         new Move(name: "one_plus_four", notation: "1+4", type: "Input", character: "Generic", game: "Tekken 8"),
         new Move(name: "two_plus_three", notation: "2+3", type: "Input", character: "Generic", game: "Tekken 8"),
         new Move(name: "one_plus_two_plus_three", notation: "1+2+3", type: "Input", character: "Generic", game: "Tekken 8"),
-        new Move(name: "one_plus_two_plus_four", notation: "1+2+4", type: "Input", character: "Generic", game: "Tekken 8"),
-        new Move(name: "one_plus_three_plus_four", notation: "1+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
-        new Move(name: "two_plus_three_plus_four", notation: "2+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
-        new Move(name: "one_plus_two_plus_three_plus_four", notation: "1+2+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
+        new Move(name: "one_plus_two_plus_four", notation: "1+2+4", type: "Input", character: "Generic",
+            game: "Tekken 8"),
+        new Move(name: "one_plus_three_plus_four", notation: "1+3+4", type: "Input", character: "Generic",
+            game: "Tekken 8"),
+        new Move(name: "two_plus_three_plus_four", notation: "2+3+4", type: "Input", character: "Generic",
+            game: "Tekken 8"),
+        new Move(name: "one_plus_two_plus_three_plus_four", notation: "1+2+3+4", type: "Input", character: "Generic",
+            game: "Tekken 8"),
 
         // Modifiers
         new Move(name: "Hold", notation: "h", type: "Modifier", character: "Generic", game: "Tekken 8"),
@@ -54,9 +58,11 @@ public static class TekkenMoves
         new Move(name: "Low Parry", notation: "l/p", type: "Common", character: "Generic", game: "Tekken"),
 
         // Mechanics
-        new Move(name: "Heat Burst", notation: "h/burst", type: "Mechanics Input", character: "Generic", game: "Tekken"),
+        new Move(name: "Heat Burst", notation: "h/burst", type: "Mechanics Input", character: "Generic",
+            game: "Tekken"),
         new Move(name: "Heat Dash", notation: "h/dash", type: "Mechanic Input", character: "Generic", game: "Tekken"),
-        new Move(name: "During Heat", notation: "in heat", type: "Mechanics Input", character: "Generic", game: "Tekken"),
+        new Move(name: "During Heat", notation: "in heat", type: "Mechanics Input", character: "Generic",
+            game: "Tekken"),
         new Move(name: "Rage Art", notation: "rage", type: "Mechanics Input", character: "Generic", game: "Tekken"),
 
         // Stage
@@ -69,60 +75,61 @@ public static class TekkenMoves
         new Move(name: "Balcony Break", notation: "b/break", type: "Stage", character: "Generic", game: "Tekken"),
 
         // Alisa
-        new Move(name: "Destructive Form", notation: "Destructive Form", type: "character", character: "Alisa"),
-        new Move(name: "Boot", notation: "Boot", type: "character", character: "Alisa"),
-        new Move(name: "Dual Boot", notation: "Dual Boot", type: "character", character: "Alisa"),
+        new Move(name: "Destructive Form", notation: "Destructive Form", type: "Character", character: "Alisa"),
+        new Move(name: "Boot", notation: "Boot", type: "Character", character: "Alisa"),
+        new Move(name: "Dual Boot", notation: "Dual Boot", type: "Character", character: "Alisa"),
 
         // Anna
-        new Move(name: "Hammer Chance", notation: "Hammer Chance", type: "character", character: "Anna"),
-        new Move(name: "Chaos Judgement", notation: "Chaos Judgement", type: "character", character: "Anna"),
+        new Move(name: "Hammer Chance", notation: "Hammer Chance", type: "Character", character: "Anna"),
+        new Move(name: "Chaos Judgement", notation: "Chaos Judgement", type: "Character", character: "Anna"),
 
         //Asuka
-        new Move(name: "Naniwa Gusto", notation: "Naniwa Gusto", type: "character", character: "Asuka"),
-        new Move(name: "Leg Cutter", notation: "Leg Cutter", type: "character", character: "Asuka"),
+        new Move(name: "Naniwa Gusto", notation: "Naniwa Gusto", type: "Character", character: "Asuka"),
+        new Move(name: "Leg Cutter", notation: "Leg Cutter", type: "Character", character: "Asuka"),
 
         // Azucena
-        new Move(name: "Libertador", notation: "Libertador", type: "character", character: "Azucena"),
-        new Move(name: "Taking High Attack", notation: "Taking High Attack", type: "character", character: "Azucena"),
-        new Move(name: "Taking Low Attack", notation: "Taking Low Attack", type: "character", character: "Azucena"),
+        new Move(name: "Libertador", notation: "Libertador", type: "Character", character: "Azucena"),
+        new Move(name: "Taking High Attack", notation: "Taking High Attack", type: "Character", character: "Azucena"),
+        new Move(name: "Taking Low Attack", notation: "Taking Low Attack", type: "Character", character: "Azucena"),
 
         // Bryan
-        new Move(name: "Snake Eyes", notation: "Snake Eyes", type: "character", character: "Bryan"),
-        new Move(name: "Slither Step", notation: "Slither Step", type: "character", character: "Bryan"),
+        new Move(name: "Snake Eyes", notation: "Snake Eyes", type: "Character", character: "Bryan"),
+        new Move(name: "Slither Step", notation: "Slither Step", type: "Character", character: "Bryan"),
 
         // Claudio
-        new Move(name: "Starburst", notation: "Starburst", type: "character", character: "Claudio"),
+        new Move(name: "Starburst", notation: "Starburst", type: "Character", character: "Claudio"),
 
         // Clive
-        new Move(name: "Phoenix Shift", notation: "Phoenix Shift", type: "character", character: "Clive"),
-        new Move(name: "Wings Of Light", notation: "Wings Of Light", type: "character", character: "Clive"),
-        new Move(name: "Updraft", notation: "Updraft", type: "character", character: "Clive"),
-        new Move(name: "Zantetsuken", notation: "Zantetsuken", type: "character", character: "Clive"),
+        new Move(name: "Phoenix Shift", notation: "Phoenix Shift", type: "Character", character: "Clive"),
+        new Move(name: "Wings Of Light", notation: "Wings Of Light", type: "Character", character: "Clive"),
+        new Move(name: "Updraft", notation: "Updraft", type: "Character", character: "Clive"),
+        new Move(name: "Zantetsuken", notation: "Zantetsuken", type: "Character", character: "Clive"),
 
         // Devil Jin
-        new Move(name: "Mourning Crow", notation: "Mourning Crow", type: "character", character: "Devil Jin"),
-        new Move(name: "Fly", notation: "Fly", type: "character", character: "Devil Jin"),
+        new Move(name: "Mourning Crow", notation: "Mourning Crow", type: "Character", character: "Devil Jin"),
+        new Move(name: "Fly", notation: "Fly", type: "Character", character: "Devil Jin"),
         new Move(name: "WGS", notation: "WGS", type: "Mishima", character: "Devil Jin"),
         new Move(name: "WGF", notation: "WGF", type: "Mishima", character: "Devil Jin"),
         new Move(name: "EWGF", notation: "EWGF", type: "Mishima", character: "Devil Jin"),
 
         // Dragunov
-        new Move(name: "Sneak", notation: "Sneak", type: "character", character: "Dragunov"),
+        new Move(name: "Sneak", notation: "Sneak", type: "Character", character: "Dragunov"),
 
         // Eddy
-        new Move(name: "Ginga", notation: "Ginga", type: "character", character: "Eddy"),
-        new Move(name: "Bananeira", notation: "Bananeira", type: "character", character: "Eddy"),
-        new Move(name: "Negativa", notation: "Negativa", type: "character", character: "Eddy"),
-        new Move(name: "Mandinga", notation: "Mandinga", type: "character", character: "Eddy"),
+        new Move(name: "Ginga", notation: "Ginga", type: "Character", character: "Eddy"),
+        new Move(name: "Bananeira", notation: "Bananeira", type: "Character", character: "Eddy"),
+        new Move(name: "Negativa", notation: "Negativa", type: "Character", character: "Eddy"),
+        new Move(name: "Mandinga", notation: "Mandinga", type: "Character", character: "Eddy"),
 
         // Feng
-        new Move(name: "Deceptive Step", notation: "Deceptive Step", type: "character", character: "Feng"),
-        new Move(name: "Shifting Clouds", notation: "Shifting Clouds", type: "character", character: "Feng"),
+        new Move(name: "Deceptive Step", notation: "Deceptive Step", type: "Character", character: "Feng"),
+        new Move(name: "Shifting Clouds", notation: "Shifting Clouds", type: "Character", character: "Feng"),
 
         // Heihachi
-        new Move(name: "Wind God's Kamae", notation: "Wind God's Kamae", type: "character", character: "Heihachi"),
-        new Move(name: "Thunder God's Kamae", notation: "Thunder God's Kamae", type: "character", character: "Heihachi"),
-        new Move(name: "Warrior Instinct", notation: "Warrior Instinct", type: "character", character: "Heihachi"),
+        new Move(name: "Wind God's Kamae", notation: "Wind God's Kamae", type: "Character", character: "Heihachi"),
+        new Move(name: "Thunder God's Kamae", notation: "Thunder God's Kamae", type: "Character",
+            character: "Heihachi"),
+        new Move(name: "Warrior Instinct", notation: "Warrior Instinct", type: "Character", character: "Heihachi"),
         new Move(name: "WGS", notation: "WGS", type: "Mishima", character: "Heihachi"),
         new Move(name: "WGF", notation: "WGF", type: "Mishima", character: "Heihachi"),
         new Move(name: "EWGF", notation: "EWGF", type: "Mishima", character: "Heihachi"),
@@ -133,71 +140,71 @@ public static class TekkenMoves
         new Move(name: "SD", notation: "SD", type: "Mishima", character: "Heihachi"),
 
         // Hwoarang
-        new Move(name: "Right Stance", notation: "Right Stance", type: "character", character: "Hwoarang"),
-        new Move(name: "Left Stance", notation: "Left Stance", type: "character", character: "Hwoarang"),
-        new Move(name: "Right Flamingo", notation: "Right Flamingo", type: "character", character: "Hwoarang"),
-        new Move(name: "Left Flamingo", notation: "Left Flamingo", type: "character", character: "Hwoarang"),
+        new Move(name: "Right Stance", notation: "Right Stance", type: "Character", character: "Hwoarang"),
+        new Move(name: "Left Stance", notation: "Left Stance", type: "Character", character: "Hwoarang"),
+        new Move(name: "Right Flamingo", notation: "Right Flamingo", type: "Character", character: "Hwoarang"),
+        new Move(name: "Left Flamingo", notation: "Left Flamingo", type: "Character", character: "Hwoarang"),
 
         // Jack-8
-        new Move(name: "Sit Down", notation: "Sit Down", type: "character", character: "Jack-8"),
-        new Move(name: "Gamma Howl", notation: "Gamma Howl", type: "character", character: "Jack-8"),
+        new Move(name: "Sit Down", notation: "Sit Down", type: "Character", character: "Jack-8"),
+        new Move(name: "Gamma Howl", notation: "Gamma Howl", type: "Character", character: "Jack-8"),
 
         // Jin
-        new Move(name: "Zenshin", notation: "Zenshin", type: "character", character: "Jin"),
+        new Move(name: "Zenshin", notation: "Zenshin", type: "Character", character: "Jin"),
         new Move(name: "WGS", notation: "WGS", type: "Mishima", character: "Jin"),
         new Move(name: "WHF", notation: "WGF", type: "Mishima", character: "Jin"),
         new Move(name: "EWHF", notation: "EWGF", type: "Mishima", character: "Jin"),
 
         // Jun
-        new Move(name: "Izumo", notation: "Izumo", type: "character", character: "Jun"),
-        new Move(name: "Genjutsu", notation: "Genjutsu", type: "character", character: "Jun"),
-        new Move(name: "Miare", notation: "Miare", type: "character", character: "Jun"),
+        new Move(name: "Izumo", notation: "Izumo", type: "Character", character: "Jun"),
+        new Move(name: "Genjutsu", notation: "Genjutsu", type: "Character", character: "Jun"),
+        new Move(name: "Miare", notation: "Miare", type: "Character", character: "Jun"),
 
         // Kazuya
-        new Move(name: "Devil Form", notation: "Devil Form", type: "character", character: "Kazuya"),
+        new Move(name: "Devil Form", notation: "Devil Form", type: "Character", character: "Kazuya"),
         new Move(name: "WGS", notation: "WGS", type: "Mishima", character: "Kazuya"),
         new Move(name: "WGF", notation: "WGF", type: "Mishima", character: "Kazuya"),
         new Move(name: "EWGF", notation: "EWGF", type: "Mishima", character: "Kazuya"),
 
         // Kuma & Panda
-        new Move(name: "Hunting", notation: "Hunting", type: "character", character: "Kuma & Panda"),
-        new Move(name: "Bear Sit", notation: "Bear Sit", type: "character", character: "Kuma & Panda"),
-        new Move(name: "Bear Roll", notation: "Bear Roll", type: "character", character: "Kuma & Panda"),
+        new Move(name: "Hunting", notation: "Hunting", type: "Character", character: "Kuma & Panda"),
+        new Move(name: "Bear Sit", notation: "Bear Sit", type: "Character", character: "Kuma & Panda"),
+        new Move(name: "Bear Roll", notation: "Bear Roll", type: "Character", character: "Kuma & Panda"),
 
         // Lars
-        new Move(name: "Dynamic Entry", notation: "Dynamic Entry", type: "character", character: "Lars"),
-        new Move(name: "Silent Entry", notation: "Silent Entry", type: "character", character: "Lars"),
-        new Move(name: "Limited Entry", notation: "Limited Entry", type: "character", character: "Lars"),
+        new Move(name: "Dynamic Entry", notation: "Dynamic Entry", type: "Character", character: "Lars"),
+        new Move(name: "Silent Entry", notation: "Silent Entry", type: "Character", character: "Lars"),
+        new Move(name: "Limited Entry", notation: "Limited Entry", type: "Character", character: "Lars"),
 
         // Law
-        new Move(name: "Dragon Charge", notation: "Dragon Charge", type: "character", character: "Law"),
+        new Move(name: "Dragon Charge", notation: "Dragon Charge", type: "Character", character: "Law"),
 
         // Lee
-        new Move(name: "Hitman", notation: "Hitman", type: "character", character: "Lee"),
+        new Move(name: "Hitman", notation: "Hitman", type: "Character", character: "Lee"),
 
         // Leo
-        new Move(name: "Jin Ji Du Li", notation: "Jin Ji Du Li", type: "character", character: "Leo"),
-        new Move(name: "Fo Bu", notation: "Fo Bu", type: "character", character: "Leo"),
+        new Move(name: "Jin Ji Du Li", notation: "Jin Ji Du Li", type: "Character", character: "Leo"),
+        new Move(name: "Fo Bu", notation: "Fo Bu", type: "Character", character: "Leo"),
 
         // Leroy
-        new Move(name: "Hermit", notation: "Hermit", type: "character", character: "Leroy"),
+        new Move(name: "Hermit", notation: "Hermit", type: "Character", character: "Leroy"),
 
         // Lidia
-        new Move(name: "Horse Stance", notation: "Horse Stance", type: "character", character: "Lidia"),
-        new Move(name: "Cat Stance", notation: "Cat Stance", type: "character", character: "Lidia"),
-        new Move(name: "Heaven and Earth", notation: "Heaven and Earth", type: "character", character: "Lidia"),
-        new Move(name: "Stalking Wolf Stance", notation: "Stalking Wolf Stance", type: "character", character: "Lidia"),
+        new Move(name: "Horse Stance", notation: "Horse Stance", type: "Character", character: "Lidia"),
+        new Move(name: "Cat Stance", notation: "Cat Stance", type: "Character", character: "Lidia"),
+        new Move(name: "Heaven and Earth", notation: "Heaven and Earth", type: "Character", character: "Lidia"),
+        new Move(name: "Stalking Wolf Stance", notation: "Stalking Wolf Stance", type: "Character", character: "Lidia"),
 
         // Lili
-        new Move(name: "Dew Glide", notation: "Dew Glide", type: "character", character: "Lili"),
+        new Move(name: "Dew Glide", notation: "Dew Glide", type: "Character", character: "Lili"),
 
         // Raven
-        new Move(name: "Soulzone", notation: "Soulzone", type: "character", character: "Raven"),
+        new Move(name: "Soulzone", notation: "Soulzone", type: "Character", character: "Raven"),
 
         // Reina
-        new Move(name: "Unsoku", notation: "Unsoku", type: "character", character: "Reina"),
-        new Move(name: "Sentai", notation: "Sentai", type: "character", character: "Reina"),
-        new Move(name: "Heaven's Wrath", notation: "Heaven's Wrath", type: "character", character: "Reina"),
+        new Move(name: "Unsoku", notation: "Unsoku", type: "Character", character: "Reina"),
+        new Move(name: "Sentai", notation: "Sentai", type: "Character", character: "Reina"),
+        new Move(name: "Heaven's Wrath", notation: "Heaven's Wrath", type: "Character", character: "Reina"),
         new Move(name: "WGS", notation: "WGS", type: "Mishima", character: "Reina"),
         new Move(name: "WGF", notation: "WGF", type: "Mishima", character: "Reina"),
         new Move(name: "EWGF", notation: "EWGF", type: "Mishima", character: "Reina"),
@@ -205,37 +212,37 @@ public static class TekkenMoves
         new Move(name: "EWGK", notation: "EWGK", type: "Mishima", character: "Reina"),
 
         // Shaheen
-        new Move(name: "Stealth Step", notation: "Stealth Step", type: "character", character: "Shaheen"),
+        new Move(name: "Stealth Step", notation: "Stealth Step", type: "Character", character: "Shaheen"),
 
         // Steve
-        new Move(name: "Quick Spin", notation: "Quick Spin", type: "character", character: "Steve"),
-        new Move(name: "Ducking", notation: "Ducking", type: "character", character: "Steve"),
-        new Move(name: "Peekaboo", notation: "Peekaboo", type: "character", character: "Steve"),
-        new Move(name: "Ducking In", notation: "Ducking In", type: "character", character: "Steve"),
-        new Move(name: "Ducking Left", notation: "Ducking Left", type: "character", character: "Steve"),
-        new Move(name: "Ducking Right", notation: "Ducking Right", type: "character", character: "Steve"),
-        new Move(name: "Flicker Stance", notation: "Flicker Stance", type: "character", character: "Steve"),
-        new Move(name: "Swaying", notation: "Swaying", type: "character", character: "Steve"),
-        new Move(name: "Lion Heart", notation: "Lion Heart", type: "character", character: "Steve"),
+        new Move(name: "Quick Spin", notation: "Quick Spin", type: "Character", character: "Steve"),
+        new Move(name: "Ducking", notation: "Ducking", type: "Character", character: "Steve"),
+        new Move(name: "Peekaboo", notation: "Peekaboo", type: "Character", character: "Steve"),
+        new Move(name: "Ducking In", notation: "Ducking In", type: "Character", character: "Steve"),
+        new Move(name: "Ducking Left", notation: "Ducking Left", type: "Character", character: "Steve"),
+        new Move(name: "Ducking Right", notation: "Ducking Right", type: "Character", character: "Steve"),
+        new Move(name: "Flicker Stance", notation: "Flicker Stance", type: "Character", character: "Steve"),
+        new Move(name: "Swaying", notation: "Swaying", type: "Character", character: "Steve"),
+        new Move(name: "Lion Heart", notation: "Lion Heart", type: "Character", character: "Steve"),
 
         // Victor
-        new Move(name: "Iai", notation: "Iai", type: "character", character: "Victor"),
-        new Move(name: "Perfumer", notation: "Perfumer", type: "character", character: "Victor"),
+        new Move(name: "Iai", notation: "Iai", type: "Character", character: "Victor"),
+        new Move(name: "Perfumer", notation: "Perfumer", type: "Character", character: "Victor"),
 
         // Xiaoyu
-        new Move(name: "Phoenix", notation: "Phoenix", type: "character", character: "Xiaoyu"),
-        new Move(name: "Hypnotist", notation: "Hypnotist", type: "character", character: "Xiaoyu"),
+        new Move(name: "Phoenix", notation: "Phoenix", type: "Character", character: "Xiaoyu"),
+        new Move(name: "Hypnotist", notation: "Hypnotist", type: "Character", character: "Xiaoyu"),
 
         // Yoshimitsu
-        new Move(name: "Kincho", notation: "Kincho", type: "character", character: "Yoshimitsu"),
-        new Move(name: "Mutou No Kiwami", notation: "Mutou No Kiwami", type: "character", character: "Yoshimitsu"),
-        new Move(name: "Manji Dragonfly", notation: "Manji Dragonfly", type: "character", character: "Yoshimitsu"),
-        new Move(name: "Flea", notation: "Flea", type: "character", character: "Yoshimitsu"),
-        new Move(name: "Indian Stance", notation: "Indian Stance", type: "character", character: "Yoshimitsu"),
+        new Move(name: "Kincho", notation: "Kincho", type: "Character", character: "Yoshimitsu"),
+        new Move(name: "Mutou No Kiwami", notation: "Mutou No Kiwami", type: "Character", character: "Yoshimitsu"),
+        new Move(name: "Manji Dragonfly", notation: "Manji Dragonfly", type: "Character", character: "Yoshimitsu"),
+        new Move(name: "Flea", notation: "Flea", type: "Character", character: "Yoshimitsu"),
+        new Move(name: "Indian Stance", notation: "Indian Stance", type: "Character", character: "Yoshimitsu"),
 
         // Zafina
-        new Move(name: "Tarantula", notation: "Tarantula", type: "character", character: "Zafina"),
-        new Move(name: "Scarecrow", notation: "Scarecrow", type: "character", character: "Zafina"),
-        new Move(name: "Mantis", notation: "Mantis", type: "character", character: "Zafina")
+        new Move(name: "Tarantula", notation: "Tarantula", type: "Character", character: "Zafina"),
+        new Move(name: "Scarecrow", notation: "Scarecrow", type: "Character", character: "Zafina"),
+        new Move(name: "Mantis", notation: "Mantis", type: "Character", character: "Zafina")
     ];
 }

@@ -1,4 +1,5 @@
 ﻿@page "/ComboEditor/{Name}/{EditMode:bool}/{ComboId}"
+@using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 
@@ -7,18 +8,13 @@
 <ComboDisplayer Combo="Combo" ChosenFighter="@GetChosenFighter()"></ComboDisplayer>
 
 @code {
-    [Parameter] public string Name { get; set; }
+    [Parameter] public string Name { get; set; } = "";
 
-    [Parameter] public bool EditMode { get; set; }
+    [Parameter] public bool EditMode { get; set; } = false;
 
-    [Parameter] public string ComboId { get; set; }
+    [Parameter] public string ComboId { get; set; } = "";
 
-    public readonly ComboDisplay Combo = new ComboDisplay(
-        new Combo(title: "Combo 1", character: "Generic", createdBy: "Dooks", damage: 500,
-            moves: ["d/b", "4", "3", "►", "2", "1", "2", "►", "h/burst", "►", "F", "2", "1+2"]),
-        ki: 100,
-        favourites: 5
-    );
+    public readonly ComboDisplay Combo = new(new Combo());
 
     private Fighter GetChosenFighter()
     {

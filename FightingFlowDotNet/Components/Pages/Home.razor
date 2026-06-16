@@ -1,68 +1,87 @@
 ﻿@page "/"
+@using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
+@inject FirestoreGetter fbGetter
 
-@rendermode InteractiveServer
 
 <PageTitle>Fighting Flow</PageTitle>
-<div class="d-flex flex-row gap-5 my-2">
-    <h1 class="text-white">Fighting <span style="color:#ee1164">Flow</span></h1>
-    <div class="dropdown d-flex flex-row" style="z-index:1050;">
-        <button class="btn btn-secondary"
-                type="button"
-                @onclick="ToggleDropDown"
-                @onblur="CloseDropdown">
-            Select a Game
-        </button>
-        @if (_dropDownSelected)
-        {
-            <div class="dropdown-content d-flex flex-column bg-secondary"
-                 style="position: absolute; inset: 0px auto auto 0px; margin: 0px; transform: translate(0px, 40px);">
-                <button class="btn" value="Tekken 8"
-                        @onclick="@(e => UpdateGameSelected("Tekken 8"))">
-                    Tekken 8
-                </button>
-                <button class="btn" @onclick="@(e => UpdateGameSelected("Street Fighter 6"))">
-                    Street Fighter 6
-                </button>
-                <button class="btn" @onclick="@(e => UpdateGameSelected("Mortal Kombat 1"))">
-                    Mortal Kombat 1
-                </button>
-                <button class="btn" @onclick="@(e => UpdateGameSelected("2XKO"))">
-                    2XKO
-                </button>
-                <button class="btn" @onclick="@(e => UpdateGameSelected("Invincible Vs"))">
-                    Invincible Vs
-                </button>
-            </div>
-        }
-    </div>
-</div>
 
-<div class="d-flex flex-row flex-wrap flex-shrink-1 justify-content-around gap-2">
+<MudPaper
+    Class="d-flex flex-column align-items-center gap-5"
+    Style="background: inherit; color: inherit; padding-top: 20px;">
+    
+    @* Header *@
+    <MudText hidden="true"
+        Typo="Typo.h1"
+        Style="font-size: 32px; width: 250px;"
+        >Fighting <span style="color:#ee1164">Flow</span></MudText>
+        
+    <MudPaper Class="d-flex flex-row gap-5" Style="background: inherit; color: inherit;">
+    @* Game Selector *@
+        <MudPaper Style="background: inherit; color: inherit; min-width:140px">
+            <MudSelect 
+                T="string"
+                Label="Game Select" 
+                Style="background: inherit; color: inherit;"
+                Dense="true"
+                AdornmentColor="Color.Primary"
+                @bind-Value="_gameSelected">
+                @foreach (var game in _gameList)
+                {
+                    <MudSelectItem T="string" Value="@(game)"/>
+                }
+            </MudSelect>
+        </MudPaper>
+    
+    @* Subtitle *@
+        <MudPaper 
+            Class="d-flex flex-column justify-content-center align-content-center vh-50" 
+            Style="background: inherit; color: inherit;">
+            <MudText Typo="Typo.body2">
+                Load us up on your phone, tablet or second monitor and find your main. 
+                Catalogue combos and lab to your heart's content
+            </MudText>
+        </MudPaper>
+    </MudPaper>
+</MudPaper>
+
+<MudGrid Spacing="2" Justify="Justify.Center">
     @foreach (var fighter in _fighters)
     {
-        <div class="card bg-black ">
-            <NavLink class="text-decoration-none" href=@GetName(fighter.Name)>
-                    <div class="card-img-top">
-                        <img class="img-thumbnail bg-black"
-                             src="./images/@(fighter.ImageId).png" 
-                             alt="@fighter.Name"/>
-                    </div>
-                    <div class="card-body text-center">
-                        <h4 class="text-white ">
+        <MudItem xs="6" sm="4" md="3" lg="2">
+            <MudCard
+                Style="color: white; background: inherit; width: 100%;"
+                Class="flex-shrink-1">
+                <MudNavLink Href=@GetName(fighter.Name) Class="p-0">
+                    <img 
+                        src="./images/@(fighter.ImageId).png"
+                        style="max-width: 100%; max-height: 200px; object-fit: contain" 
+                        alt="@(fighter.Name)"/>
+                    <MudCardContent>
+                        <MudText Typo="Typo.body2" Style="color: white">
                             @fighter.Name
-                        </h4>
-                    </div>
-            </NavLink>
-        </div>
+                        </MudText>
+                    </MudCardContent>
+                </MudNavLink>
+            </MudCard>
+        </MudItem>
     }
-</div>
+</MudGrid>
 
 @code {
     private readonly List<Fighter> _fighters = TekkenFighters.Fighters;
     private bool _dropDownSelected = false;
     private string _gameSelected = "Tekken 8";
+
+    private readonly List<string> _gameList =
+    [
+        "Tekken 8",
+        "Street Fighter 6",
+        "Mortal Kombat 1",
+        "2XKO",
+        "Invincible Vs"
+    ];
 
     private void ToggleDropDown()
     {
@@ -79,9 +98,10 @@
     {
         _gameSelected = gameSelected;
     }
-    
+
     private string GetName(string name)
     {
-         return "ComboViewer/" + _fighters.First(fighter => fighter.Name == name).Name;
+        return "CombosFor/" + _fighters.First(fighter => fighter.Name == name).Name;
     }
+
 }

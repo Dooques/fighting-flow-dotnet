@@ -1,30 +1,31 @@
-﻿namespace FightingFlowDotNet.Models;
+﻿using Google.Cloud.Firestore;
 
-public class User
-{
-    public AuthDetails AuthDetails { get; set; } = new AuthDetails();
-    public UserInfo UserInfo { get; set; } = new UserInfo();
-}
+namespace FightingFlowDotNet.Models;
 
-public class AuthDetails
-{
-    public string Id { get; set; } = "";
-    public string Username { get; set; } = "";
-    public string Email { get; set; } = "";
-}
-
+[FirestoreData]
 public class UserInfo
 {
-    public string ProfileImage { get; set; } = "";
+    public UserInfo() {}
+    [FirestoreProperty("userId")] 
+    public string UserId { get; set; } = "";
+    [FirestoreProperty("username")] 
+    public string Username { get; set; } = "";
+    [FirestoreProperty("profile_pic")] 
+    public string ProfilePic { get; set; } = "";
+    [FirestoreProperty("name")] 
     public string Name { get; set; } = "";
+    [FirestoreProperty("date_created")] 
+    public string DateCreated { get; set; } = "";
+    [FirestoreProperty("dob")] 
     public string DoB { get; set; } = "";
+    [FirestoreProperty("liked_combos")] 
     public List<string> LikedCombos { get; set; } = [];
+    [FirestoreProperty("character_list")] 
     public List<string> CharacterList { get; set; } = [];
 }
 
-public class AuthDetailsCreation
+public class AuthoriseUser
 {
-    public AuthDetails AuthDetails { get; set; } = new AuthDetails();
-    public string Password { get; set; } = ""; 
+    public UserInfo UserInfo { get; set; } = new();
+    public string Password { get; set; } = "";
 }
-

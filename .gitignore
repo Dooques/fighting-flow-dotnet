@@ -8,6 +8,8 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
 customsettings.json
+appsettings.json
+appsettings.Development.json
 
 # Build results
 [Dd]ebug/

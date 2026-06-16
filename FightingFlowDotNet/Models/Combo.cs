@@ -1,35 +1,31 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+﻿using System.Text.Json.Serialization;
+using Google.Cloud.Firestore;
+using Microsoft.AspNetCore.Components.Web;
 
 namespace FightingFlowDotNet.Models;
 
-public class Combo(
-    string title, 
-    string character, 
-    List<string> moves,
-    string createdBy = "",
-    string createdOn = "",
-    string lastModifiedBy = "",
-    int damage = 0
-    )
+[FirestoreData]
+public class Combo
 {
-    public string Id { get; set; } = "";
-    public string Title { get; set; } = title;
-    public string Character { get; set; } = character;
-    public int Damage { get; set; } = damage;
-    public string CreatedBy { get; set; } = createdBy;
-    public string CreatedOn { get; set; } = createdOn;
-    public string LastModifiedBy { get; set; } = lastModifiedBy;
-    public  List<string> Moves { get; set; } = moves;
+    public Combo() {}
+    
+    [FirestoreDocumentId] public string Id { get; set; } = "";
+    [FirestoreProperty("title")] public string Title { get; set; } = "";
+    [FirestoreProperty("character")] public string Character { get; set; } = "";
+    [FirestoreProperty("game")] public string Game { get; set; } = "";
+    [FirestoreProperty("damage")] public int Damage { get; set; } = 0;
+    [FirestoreProperty("created_by")] public string CreatedBy { get; set; } = "";
+    [FirestoreProperty("date_created")] public string CreatedOn { get; set; } = "";
+    [FirestoreProperty("control_type")] public string ControlType { get; set; } = "";
+    [FirestoreProperty("tags")] public string Tags { get; set; } = "";
+    [FirestoreProperty("moves")] public List<string> Moves { get; set; } = [];
 }
 
-public class ComboDisplay(
-    Combo combo, bool areOptionsRevealed = false, int ki = 0, int favourites = 0, 
-    List<string>? comments = null
-    )
+public class ComboDisplay(Combo combo)
 {
     public Combo Combo { get; set; } = combo;
-    public bool AreOptionsRevealed { get; set; } = areOptionsRevealed;
-    public int Ki { get; set; } = ki;
-    public int Favourites { get; set; } = favourites;
-    public List<string>? Comments = comments;
+    public bool AreOptionsRevealed { get; set; }
+    public int Ki { get; set; }
+    public int Favourites { get; set; }
+    public List<string>? Comments { get; set; }
 }

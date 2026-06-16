@@ -21,5 +21,4 @@ public class FirebaseClientFactory(IConfiguration configuration)
         };
         return new FirebaseAuthClient(config);
     }
-    
 }

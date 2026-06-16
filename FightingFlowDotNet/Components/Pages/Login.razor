@@ -1,32 +1,57 @@
 ﻿@page "/login"
 @using FightingFlowDotNet.Clients
-@using Firebase.Auth
-@using User = FightingFlowDotNet.Models.User
 @inject NavigationManager Navigation
 @inject FirebaseClientFactory FirebaseClientFactory
+@inject IConfiguration Configuration
 
-@rendermode InteractiveServer
+@if (_signUp)
+{
+    <h3 class="text-white text-center">Sign Up</h3>
+}
+else
+{
+    <h3 class="text-white text-center">Sign In</h3>
+}
 
-<h3>Sign In</h3>
-
-<div class="auth-container">
+<div class="container-fluid text-white w-50">
     <div class="form-group">
-        <label>Email</label>
-        <input type="email" @bind="_email" class="form-control" />
+        <label>Username</label>
+        <input type="text" @bind="_username" class="form-control"/>
     </div>
     <div class="form-group mt-2">
         <label>Password</label>
-        <input type="password" @bind="_password" class="form-control" />
+        <input type="password" @bind="_password" class="form-control"/>
     </div>
+    @if (_signUp)
+    {
+        <label>Email</label>
+        <input type="email" class="form-control"/>
 
-    <button class="btn btn-primary mt-3" @onclick="SignUpWithEmail">Login with Email</button>
-    
-    <hr />
+        <label>Date of Birth</label>
+        <input type="date" class="form-control"/>
 
-    <button class="btn btn-danger" @onclick="SignInWithGoogle">
-        <img src="google-icon.svg" width="20" class="me-2" /> Sign in with Google
-    </button>
+        <label>Name</label>
+        <input type="text" class="form-control"/>
+    }
 </div>
+<div class="container-fluid">
+    <div class="d-flex flex-row justify-content-center">
+        <div class="flex-item">
+            @if (_signUp)
+            {
+                <button class="btn btn-primary mt-3" @onclick="TriggerSignUp">Sign In</button>
+                <button class="btn btn-success mt-3 ms-3" @onclick="SignUpWithEmail">Sign Up</button>
+            }
+            else
+            {
+                <button class="btn btn-primary mt-3" @onclick="SignInWitEmail">Sign In</button>
+                <button class="btn btn-light mt-3 ms-3" @onclick="TriggerSignUp">Sign Up</button>
+            }
+        </div>
+    </div>
+</div>
+
+
 
 @if (!string.IsNullOrEmpty(_errorMessage))
 {
@@ -34,9 +59,20 @@
 }
 
 @code {
+    private string _username = "";
     private string _email = "";
     private string _password = "";
+    private string _name = "";
+    private string _dob = "";
+    private DateTime _dateCreated = DateTime.Now;
+    
     private string _errorMessage = "";
+    private bool _signUp = false;
+
+    private void TriggerSignUp()
+    {
+        _signUp = !_signUp;
+    }
 
     private async Task SignUpWithEmail()
     {
@@ -44,14 +80,16 @@
         var client = FirebaseClientFactory.GetAuthClient();
         try
         {
-            var protectedData = await client.CreateUserWithEmailAndPasswordAsync(_email, _password);
+            await client.CreateUserWithEmailAndPasswordAsync(_email, _password);
         }
         catch (Exception ex)
         {
+            _errorMessage = ex.Message;
             Console.WriteLine(ex.Message);
         }
     }
-    private async Task SignInWitEmailAndPassword()
+
+    private async Task SignInWitEmail()
     {
         var client = FirebaseClientFactory.GetAuthClient();
         Console.WriteLine("Client Created");
@@ -61,28 +99,13 @@
             // Call Supabase auth using C#
             var session = await client.SignInWithEmailAndPasswordAsync(_email, _password);
             Console.WriteLine($"Session Created: {session.User.Credential.IdToken ?? "invalid token"}");
-            if (session != null)
-            {
-                Console.WriteLine("Session Created, navigating to home");
-                Navigation.NavigateTo("/");
-            }
+            Console.WriteLine("Session Created, navigating to home");
+            Navigation.NavigateTo("/");
         }
         catch (Exception ex)
         {
             _errorMessage = ex.Message;
             Console.WriteLine($"Exception occured: {_errorMessage}");
-        }
-    }
-
-    private async Task SignInWithGoogle()
-    {
-        try
-        {
-            // Trigger the Google OAuth Redirect
-        }
-        catch (Exception ex)
-        {
-            _errorMessage = ex.Message;
         }
     }
 }

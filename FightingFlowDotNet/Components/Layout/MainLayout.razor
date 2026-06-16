@@ -1,15 +1,30 @@
 ﻿@inherits LayoutComponentBase
 
-    <NavMenu/>
+<MudThemeProvider Theme="_customTheme"/>
+<MudDialogProvider/>
+<MudSnackbarProvider/>
 
-    <main class="">
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+<MudLayout>
+    <FlowAppBar/>
+    <MudMainContent>
+        <MudPaper class="rounded-0" Style="background-color: black; color: white;">
+            <MudContainer MaxWidth="MaxWidth.False">
+                @Body
+            </MudContainer>
+        </MudPaper>
+    </MudMainContent>
+</MudLayout>
 
-@* <div id="blazor-error-ui" data-nosnippet> *@
-@*     An unhandled error has occurred. *@
-@*     <a href="." class="reload">Reload</a> *@
-@*     <span class="dismiss">🗙</span> *@
-@* </div> *@
+@code {
+
+    private MudTheme _customTheme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Secondary = "#ee1164"
+        },
+        PaletteDark = new PaletteDark() { 
+            Primary = "#ee1164" 
+        }
+    };
+}

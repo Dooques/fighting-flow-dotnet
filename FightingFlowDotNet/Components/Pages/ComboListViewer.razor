@@ -1,0 +1,103 @@
+﻿@page "/CombosFor/{Name}"
+
+@using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Reusable
+@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources.TekkenData
+@inject FirestoreGetter FirestoreGetter
+
+<PageTitle>Combo Viewer</PageTitle>
+
+<MudPaper Class="d-flex flex-row"
+          Style="background: inherit; color: inherit;">
+    <MudPaper
+        Style="width: 75%; background: inherit; color: inherit;"
+        class="py-3 mx-2">
+        <MudPaper 
+            Class="d-flex flex-column"
+            Style="background: inherit; color: inherit">
+            <MudPaper class="d-flex flex-row justify-content-center">
+                <NavLink href="@GetEditorUrl()">
+                    <MudButton Style="background: ">
+                        Create a Combo
+                    </MudButton>
+                </NavLink>
+            </MudPaper>
+            @if (ComboList.Count > 0)
+            {
+                @foreach (var combo in ComboList)
+                {
+                    <ComboDisplayer
+                        Combo="combo"
+                        ChosenFighter="@(ChosenFighter ?? new Fighter())"
+                        Username="@(GetUsername(combo.Combo.CreatedBy))"
+                        />
+                }
+            }
+            else
+            {
+                <p>No combos to be found... </p>
+            }
+        </MudPaper>
+    </MudPaper>
+
+    <div class="card bg-black w-25 mx-4">
+        <div class="card-img text-center">
+            <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+        </div>
+
+        <div class="card-body">
+            <h3 class="card-title text-white">@(ChosenFighter?.Name ?? "Invalid Character")</h3>
+            <p class="text-white">@((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)</p>
+            <p class="text-white">@(ChosenFighter?.FightingStyle)</p>
+            <p class="text-white">@(ChosenFighter?.Game)</p>
+        </div>
+    </div>
+</MudPaper>
+
+<script type="text/javascript">
+    ScrollElementIntoView = {}
+</script>
+
+@code {
+    [Parameter] public string? Name { get; set; }
+    private Fighter? ChosenFighter { get; set; }
+    private List<UserInfo> UsersList { get; set; } = [];
+
+    private List<ComboDisplay> ComboList { get; set; } = [];
+
+    protected override async Task OnInitializedAsync()
+    {
+        Console.WriteLine("Getting fighters");
+        ChosenFighter = TekkenFighters.Fighters.First(f => f.Name == Name);
+
+        Console.WriteLine($"ChosenFighter: {ChosenFighter.Name}");
+        
+        if (ChosenFighter == null) return;
+        
+        var comboList = await FirestoreGetter.GetCombos(ChosenFighter.Name);
+        ComboList.AddRange(
+            from combo in comboList
+            select new ComboDisplay(combo)
+        );
+        
+        UsersList = await FirestoreGetter.GetUsers();
+    }
+
+    private string GetUsername(string userId)
+    {
+        var authDetailsUsername = UsersList.FirstOrDefault(u => 
+            u.UserId == userId)?.Username;
+        return authDetailsUsername ?? "Invalid Username";
+    }
+
+    private string GetEditorUrl()
+    {
+        return $"/ComboEditor/{ChosenFighter?.Name}/false";
+    }
+
+    private string GetPhotoUrl()
+    {
+        return $"images/{ChosenFighter?.Name}.png";
+    }
+}
