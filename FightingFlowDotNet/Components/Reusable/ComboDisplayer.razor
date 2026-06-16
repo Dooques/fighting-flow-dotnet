@@ -2,10 +2,11 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @using Microsoft.IdentityModel.Tokens
 
-<div class="d-flex flex-column pb-4">
+<MudPaper Class="d-flex flex-column pb-4 gap-1 m-2 mt-2" Elevation="3"
+          Style="background: inherit; color: inherit;">
     <h4>@Combo.Combo.Title</h4>
 
-    <div class="d-flex flex-row flex-wrap gap-2 py-1">
+    <MudContainer class="d-flex flex-row flex-wrap gap-2 py-1 px-0 mx-0">
         @if (Combo.Combo.Moves.IsNullOrEmpty())
         {
             <p>No Moves found...</p>
@@ -25,29 +26,40 @@
                 }
             }
         }
-    </div>
+    </MudContainer>
+    
+    <MudDivider/>
 
-    <div class="d-flex flex-row justify-content-between align-content-center mt-2">
-        <div class="d-flex flex-column">
-            <p>Damage: @Combo.Combo.Damage</p>
-            <p>Created By: @Username</p>
-        </div>
-        <div class="d-flex flex-row align-content-start justify-content-center gap-3">
+    <MudContainer class="d-flex flex-row justify-space-between align-content-center mt-2 mx-0 px-0">
+        <MudElement class="d-flex flex-column">
+            <MudText>Damage: @Combo.Combo.Damage</MudText>
+            <MudText>Created By: @Username</MudText>
+        </MudElement>
+        
+        <MudElement class="d-flex flex-row align-content-start justify-content-center gap-3">
             <NavLink href="@GetEditorEditModeUrl()">
-                <button class="btn btn-secondary">Edit</button>
+                <MudButton Variant="Variant.Filled" Color="Color.Tertiary">
+                    Edit
+                </MudButton>
             </NavLink>
             <NavLink>
-                <button class="btn btn-primary">Share</button>
+                <MudButton
+                    Variant="Variant.Filled"
+                    Color="Color.Primary"
+                    class="btn btn-primary">
+                    Share
+                </MudButton>
             </NavLink>
-        </div>
-        <div>
-            <div class="d-flex flex-column gap-0 justify-content-center align-content-center">
-                <p class="">Ki: @Combo.Ki</p>
-                <img class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
-            </div>
-        </div>
-    </div>
-</div>
+        </MudElement>
+        
+        <MudElement>
+            <MudElement class="d-flex flex-column gap-0 justify-content-center align-content-center">
+                <MudText Typo="Typo.body2">Ki: @Combo.Ki</MudText>
+                <MudImage class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
+            </MudElement>
+        </MudElement>
+    </MudContainer>
+</MudPaper>
 
 @code {
     [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());

@@ -4,47 +4,49 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter fbGetter
 
-
 <PageTitle>Fighting Flow</PageTitle>
 
 <MudPaper
-    Class="d-flex flex-column align-items-center gap-5"
-    Style="background: inherit; color: inherit; padding-top: 20px;">
+    Class="d-flex flex-column align-items-center px-2 gap-5"
+    Style="background: black; color: white; padding-top: 20px;">
     
     @* Header *@
-    <MudText hidden="true"
+    <MudText 
+        hidden="true"
         Typo="Typo.h1"
-        Style="font-size: 32px; width: 250px;"
-        >Fighting <span style="color:#ee1164">Flow</span></MudText>
+        Style="font-size: 32px; width: 250px;">
+        Fighting <span style="color:#ee1164">Flow</span>
+    </MudText>
         
-    <MudPaper Class="d-flex flex-row gap-5" Style="background: inherit; color: inherit;">
+    <MudContainer Class="d-flex flex-row gap-5">
     @* Game Selector *@
-        <MudPaper Style="background: inherit; color: inherit; min-width:140px">
+        <MudElement Style="min-width:140px">
             <MudSelect 
                 T="string"
                 Label="Game Select" 
-                Style="background: inherit; color: inherit;"
+                Style="background: black; color: white;"
                 Dense="true"
                 AdornmentColor="Color.Primary"
                 @bind-Value="_gameSelected">
                 @foreach (var game in _gameList)
                 {
-                    <MudSelectItem T="string" Value="@(game)"/>
+                    <MudSelectItem 
+                        Style="background: black; color: white;" 
+                        T="string" 
+                        Value="@(game)"/>
                 }
             </MudSelect>
-        </MudPaper>
+        </MudElement>
     
     @* Subtitle *@
-        <MudPaper 
-            Class="d-flex flex-column justify-content-center align-content-center vh-50" 
-            Style="background: inherit; color: inherit;">
+        <MudContainer
+            Class="d-flex flex-column justify-content-center align-content-center vh-50">
             <MudText Typo="Typo.body2">
                 Load us up on your phone, tablet or second monitor and find your main. 
                 Catalogue combos and lab to your heart's content
             </MudText>
-        </MudPaper>
-    </MudPaper>
-</MudPaper>
+        </MudContainer>
+    </MudContainer>
 
 <MudGrid Spacing="2" Justify="Justify.Center">
     @foreach (var fighter in _fighters)
@@ -68,6 +70,7 @@
         </MudItem>
     }
 </MudGrid>
+</MudPaper>
 
 @code {
     private readonly List<Fighter> _fighters = TekkenFighters.Fighters;

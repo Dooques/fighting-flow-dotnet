@@ -8,21 +8,26 @@
 
 <PageTitle>Combo Viewer</PageTitle>
 
-<MudPaper Class="d-flex flex-row"
-          Style="background: inherit; color: inherit;">
-    <MudPaper
-        Style="width: 75%; background: inherit; color: inherit;"
-        class="py-3 mx-2">
-        <MudPaper 
-            Class="d-flex flex-column"
-            Style="background: inherit; color: inherit">
-            <MudPaper class="d-flex flex-row justify-content-center">
-                <NavLink href="@GetEditorUrl()">
-                    <MudButton Style="background: ">
-                        Create a Combo
-                    </MudButton>
-                </NavLink>
-            </MudPaper>
+<MudPaper
+    Class="d-flex flex-row px-3 rounded-0"
+    Style="background: black; color: white;"
+    Height="100vh" Width="100vw">
+    
+    <MudElement
+        Style="width: 75%;"
+        class="py-3">
+
+        <MudElement
+            Class="d-flex flex-column">
+            
+            <MudButton
+                Class="mx-5 my-5"
+                Variant="Variant.Filled"
+                Color="Color.Primary"
+                Href="@GetEditorUrl()">
+                Create a Combo
+            </MudButton>
+            
             @if (ComboList.Count > 0)
             {
                 @foreach (var combo in ComboList)
@@ -30,29 +35,46 @@
                     <ComboDisplayer
                         Combo="combo"
                         ChosenFighter="@(ChosenFighter ?? new Fighter())"
-                        Username="@(GetUsername(combo.Combo.CreatedBy))"
-                        />
+                        Username="@(GetUsername(combo.Combo.CreatedBy))"/>
                 }
             }
             else
             {
                 <p>No combos to be found... </p>
             }
-        </MudPaper>
-    </MudPaper>
+        </MudElement>
+    </MudElement>
 
-    <div class="card bg-black w-25 mx-4">
-        <div class="card-img text-center">
+    <MudCard
+        Class="mx-4"
+        Style="background: inherit; color: inherit">
+        <MudCardHeader
+            Class="card-img text-center"
+            Style="background: inherit; color: inherit;">
             <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
-        </div>
-
-        <div class="card-body">
-            <h3 class="card-title text-white">@(ChosenFighter?.Name ?? "Invalid Character")</h3>
-            <p class="text-white">@((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)</p>
-            <p class="text-white">@(ChosenFighter?.FightingStyle)</p>
-            <p class="text-white">@(ChosenFighter?.Game)</p>
-        </div>
-    </div>
+        </MudCardHeader>
+        
+        <MudCardContent
+            Style="background: inherit; color: inherit">
+            
+            <MudText
+                class="card-title text-white">
+                @(ChosenFighter?.Name ?? "Invalid Character")
+            </MudText>
+            
+            <MudText class="text-white">
+                @((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)
+            </MudText>
+            
+            <MudText class="text-white">
+                @(ChosenFighter?.FightingStyle)
+            </MudText>
+            
+            <MudText class="text-white">
+                @(ChosenFighter?.Game)
+            </MudText>
+        </MudCardContent>
+    </MudCard>
 </MudPaper>
 
 <script type="text/javascript">
