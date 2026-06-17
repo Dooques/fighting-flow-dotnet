@@ -1,24 +1,61 @@
 ﻿@page "/ComboEditor/{Name}/{EditMode:bool}/{ComboId}"
+
+@using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
+@using FightingFlowDotNet.Components.Reusable.Editor
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
+@inject FirestoreGetter FirestoreGetter
 
 <PageTitle>Combo Editor</PageTitle>
+<MudPaper  
+    Class="d-flex flex-column align-center px-2 gap-5"
+    Square="true"
+    Height="100vh"
+    Style="background: black;">
+    
+    <MudContainer 
+        Class="d-flex justify-center align-center flex-column gap-5"
+        Style="background: inherit">
+        <ComboDisplayNoButtons 
+            Combo="Combo" />
+        
+        <ComboMetaFields 
+            ComboTitle="ComboTitle" 
+            ComboDamage="ComboDamage" 
+            ComboDifficulty="ComboDifficulty" />
+    </MudContainer>
+</MudPaper>
 
-<ComboDisplayer Combo="Combo" ChosenFighter="@GetChosenFighter()"></ComboDisplayer>
 
 @code {
-    [Parameter] public string Name { get; set; } = "";
+    [Parameter] 
+    public string Name { get; set; } = "";
 
-    [Parameter] public bool EditMode { get; set; } = false;
+    [Parameter] 
+    public bool EditMode { get; set; }
 
-    [Parameter] public string ComboId { get; set; } = "";
+    [Parameter] 
+    public string ComboId { get; set; } = "";
 
-    public readonly ComboDisplay Combo = new(new Combo());
+    private string ComboTitle { get; set; } = "";
+    private int ComboDamage { get; set; }
+    private int ComboDifficulty { get; set; }
+
+    public ComboDisplay Combo { get; set; } = new(new Combo());
+
+    protected override async Task OnInitializedAsync()
+    {
+        Combo = new ComboDisplay(await GetComboFromFb());
+    }
 
     private Fighter GetChosenFighter()
     {
         return TekkenFighters.Fighters.First(f => f.Name == Name);
     }
 
+    private async Task<Combo> GetComboFromFb()
+    {
+        return await FirestoreGetter.GetCombo(Name, ComboId);
+    }
 }

@@ -37,6 +37,16 @@ public class FirestoreGetter(IConfiguration configuration)
         return combos;
     }
 
+    public async Task<Combo> GetCombo(string fighter, string comboId)
+    {
+        var comboCollection = await Db
+            .Collection("characters")
+            .Document(fighter)
+            .Collection("combos")
+            .Document(comboId).GetSnapshotAsync();
+        return comboCollection.ConvertTo<Combo>();
+    }
+
     public async Task<List<UserInfo>> GetUsers()
     {
         var userCollection = await Db.Collection("users").GetSnapshotAsync();

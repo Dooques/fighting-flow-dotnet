@@ -1,6 +1,6 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="_customTheme"/>
+<MudThemeProvider Theme="_customTheme" IsDarkMode="false"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
 
@@ -12,15 +12,12 @@
 </MudLayout>
 
 @code {
-
-    private MudTheme _customTheme = new MudTheme()
+    private readonly MudTheme _customTheme = new MudTheme()
     {
         PaletteLight = new PaletteLight()
         {
-            Secondary = "#ee1164"
-        },
-        PaletteDark = new PaletteDark() { 
-            Primary = "#ee1164" 
+            Primary = "#ee1164",
+            TextPrimary = "#ffffff",
         }
     };
 }

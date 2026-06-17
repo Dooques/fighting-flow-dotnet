@@ -16,10 +16,8 @@
     <MudElement
         Style="width: 75%;"
         class="py-3">
-
         <MudElement
             Class="d-flex flex-column">
-            
             <MudButton
                 Class="mx-5 my-5"
                 Variant="Variant.Filled"
@@ -32,7 +30,7 @@
             {
                 @foreach (var combo in ComboList)
                 {
-                    <ComboDisplayer
+                    <ComboDisplayWithButtons
                         Combo="combo"
                         ChosenFighter="@(ChosenFighter ?? new Fighter())"
                         Username="@(GetUsername(combo.Combo.CreatedBy))"/>
@@ -46,12 +44,12 @@
     </MudElement>
 
     <MudCard
-        Class="mx-4"
-        Style="background: inherit; color: inherit">
+        Class="mx-4 p-0"
+        Style="background: inherit; color: inherit; max-width: 600px;">
         <MudCardHeader
             Class="card-img text-center"
             Style="background: inherit; color: inherit;">
-            <img class="" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+            <img style="max-width: 600px;" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
         </MudCardHeader>
         
         <MudCardContent
@@ -82,7 +80,9 @@
 </script>
 
 @code {
-    [Parameter] public string? Name { get; set; }
+    [Parameter] 
+    public string? Name { get; set; }
+    
     private Fighter? ChosenFighter { get; set; }
     private List<UserInfo> UsersList { get; set; } = [];
 
@@ -98,6 +98,7 @@
         if (ChosenFighter == null) return;
         
         var comboList = await FirestoreGetter.GetCombos(ChosenFighter.Name);
+        
         ComboList.AddRange(
             from combo in comboList
             select new ComboDisplay(combo)
@@ -115,7 +116,7 @@
 
     private string GetEditorUrl()
     {
-        return $"/ComboEditor/{ChosenFighter?.Name}/false";
+        return $"/ComboEditor/{ChosenFighter?.Name}/false/1y8GcITqkVsGzjJQ3f2R";
     }
 
     private string GetPhotoUrl()

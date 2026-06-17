@@ -1,0 +1,38 @@
+﻿@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources.TekkenData
+@using Microsoft.IdentityModel.Tokens
+<MudContainer class="d-flex flex-row flex-wrap gap-2 py-1 px-0 mx-0">
+    @if (Combo.Combo.Moves.IsNullOrEmpty())
+    {
+        <p>No Moves found...</p>
+    }
+    else
+    {
+        foreach (var convertedMove in Combo.Combo.Moves.Select(GetMove))
+        {
+            if (convertedMove.Type is "Break" or "Mechanics Input" or "Character" or "Common" or "Stage")
+            {
+                <p class="my-auto">@convertedMove.Notation</p>
+            }
+            else
+            {
+                <img src="@GetMoveImage(convertedMove.Name)"
+                     alt="@convertedMove.Name" height="50" width="50"/>
+            }
+        }
+    }
+</MudContainer>
+@code {
+    [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());
+    private readonly List<Move> _moveList = TekkenMoves.Moves;
+
+   private Move GetMove(string note)
+   {
+       return _moveList.First(m => m.Notation == note);
+   }
+
+   private static string GetMoveImage(string name)
+   {
+       return $"./images/{name}.png";
+   }
+}

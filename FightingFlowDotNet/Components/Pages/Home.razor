@@ -1,14 +1,33 @@
 ﻿@page "/"
 @using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter fbGetter
+
+<style>
+    .mud-input-label {
+        color: white !important;
+    }
+    
+    .mud-input-slot {
+        color: white !important;
+    }
+    
+    .mud-input-outlined-border {
+        border-color: white;
+    }
+    
+    .mud-selected-item {
+        background: black !important;
+    }
+</style>
 
 <PageTitle>Fighting Flow</PageTitle>
 
 <MudPaper
     Class="d-flex flex-column align-items-center px-2 gap-5"
-    Style="background: black; color: white; padding-top: 20px;">
+    Style="background: black;">
     
     @* Header *@
     <MudText 
@@ -18,58 +37,47 @@
         Fighting <span style="color:#ee1164">Flow</span>
     </MudText>
         
-    <MudContainer Class="d-flex flex-row gap-5">
-    @* Game Selector *@
+    <MudContainer
+        Class="d-flex justify-center align-center flex-row gap-5">
         <MudElement Style="min-width:140px">
-            <MudSelect 
+            @* Game Selector *@
+            <MudSelect
                 T="string"
-                Label="Game Select" 
+                Variant="Variant.Outlined"
+                AdornmentColor="Color.Secondary"
+                Class="select"
+                Label="Game Select"
                 Style="background: black; color: white;"
                 Dense="true"
-                AdornmentColor="Color.Primary"
                 @bind-Value="_gameSelected">
                 @foreach (var game in _gameList)
                 {
-                    <MudSelectItem 
-                        Style="background: black; color: white;" 
-                        T="string" 
+                    <MudSelectItem
+                        Style="background: black;"
+                        T="string"
                         Value="@(game)"/>
                 }
             </MudSelect>
         </MudElement>
-    
-    @* Subtitle *@
-        <MudContainer
-            Class="d-flex flex-column justify-content-center align-content-center vh-50">
-            <MudText Typo="Typo.body2">
-                Load us up on your phone, tablet or second monitor and find your main. 
-                Catalogue combos and lab to your heart's content
-            </MudText>
-        </MudContainer>
+
+        @* Subtitle *@
+        <MudText
+            Typo="Typo.body2"
+            Style="color: white;">
+            Load us up on your phone, tablet or second monitor and find your main.
+            Catalogue combos and lab to your heart's content
+        </MudText>
+        
     </MudContainer>
 
-<MudGrid Spacing="2" Justify="Justify.Center">
-    @foreach (var fighter in _fighters)
-    {
-        <MudItem xs="6" sm="4" md="3" lg="2">
-            <MudCard
-                Style="color: white; background: inherit; width: 100%;"
-                Class="flex-shrink-1">
-                <MudNavLink Href=@GetName(fighter.Name) Class="p-0">
-                    <img 
-                        src="./images/@(fighter.ImageId).png"
-                        style="max-width: 100%; max-height: 200px; object-fit: contain" 
-                        alt="@(fighter.Name)"/>
-                    <MudCardContent>
-                        <MudText Typo="Typo.body2" Style="color: white">
-                            @fighter.Name
-                        </MudText>
-                    </MudCardContent>
-                </MudNavLink>
-            </MudCard>
-        </MudItem>
-    }
-</MudGrid>
+    <MudGrid Spacing="2" Justify="Justify.Center">
+        @foreach (var fighter in _fighters)
+        {
+            <MudItem xs="6" sm="4" md="3" lg="2">
+                <CharacterCard Fighter="@(fighter)"/>
+            </MudItem>
+        }
+    </MudGrid>
 </MudPaper>
 
 @code {
@@ -102,9 +110,5 @@
         _gameSelected = gameSelected;
     }
 
-    private string GetName(string name)
-    {
-        return "CombosFor/" + _fighters.First(fighter => fighter.Name == name).Name;
-    }
-
+    
 }

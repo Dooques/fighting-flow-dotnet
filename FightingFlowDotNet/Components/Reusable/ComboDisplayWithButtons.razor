@@ -2,31 +2,13 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @using Microsoft.IdentityModel.Tokens
 
-<MudPaper Class="d-flex flex-column pb-4 gap-1 m-2 mt-2" Elevation="3"
-          Style="background: inherit; color: inherit;">
+<MudPaper 
+    Class="d-flex flex-column pb-4 gap-1 m-2 mt-2" 
+    Elevation="3"
+    Style="background: inherit; color: inherit;">
     <h4>@Combo.Combo.Title</h4>
 
-    <MudContainer class="d-flex flex-row flex-wrap gap-2 py-1 px-0 mx-0">
-        @if (Combo.Combo.Moves.IsNullOrEmpty())
-        {
-            <p>No Moves found...</p>
-        }
-        else
-        {
-            foreach (var convertedMove in Combo.Combo.Moves.Select(GetMove))
-            {
-                if (convertedMove.Type is "Break" or "Mechanics Input" or "Character" or "Common" or "Stage")
-                {
-                    <p class="my-auto">@convertedMove.Notation</p>
-                }
-                else
-                {
-                    <img src="@GetMoveImage(convertedMove.Name)"
-                         alt="@convertedMove.Name" height="50" width="50"/>
-                }
-            }
-        }
-    </MudContainer>
+    <ComboDisplayNoButtons Combo="Combo"/>
     
     <MudDivider/>
 
@@ -46,7 +28,8 @@
                 <MudButton
                     Variant="Variant.Filled"
                     Color="Color.Primary"
-                    class="btn btn-primary">
+                    class="btn btn-primary"
+                    Href="@(GetEditorEditModeUrl())">
                     Share
                 </MudButton>
             </NavLink>
@@ -68,26 +51,8 @@
 
     [Parameter] public string Username { get; set; } = "";
 
-    private readonly List<Move> _moveList = TekkenMoves.Moves;
-
     private string GetEditorEditModeUrl()
     {
         return $"/ComboEditor/{ChosenFighter.Name}/true";
     }
-
-    private string GetEditorCreateModeUrl()
-    {
-        return $"/ComboEditor/{ChosenFighter.Name}/false";
-    }
-
-    private Move GetMove(string note)
-    {
-        return _moveList.First(m => m.Notation == note);
-    }
-
-    private static string GetMoveImage(string name)
-    {
-        return $"./images/{name}.png";
-    }
-
 }
