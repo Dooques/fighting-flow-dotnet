@@ -17,14 +17,21 @@
     <MudContainer 
         Class="d-flex justify-center align-center flex-column gap-5"
         Style="background: inherit">
-        <ComboDisplayNoButtons 
-            Combo="Combo" />
+        <ComboDisplayNoButtons Combo="Combo" />
+        
+        <ComboEditorButtons  />
         
         <ComboMetaFields 
             ComboTitle="ComboTitle" 
             ComboDamage="ComboDamage" 
             ComboDifficulty="ComboDifficulty" />
+        <MudDivider/>
     </MudContainer>
+    
+    @foreach (var type in _moveTypes)
+    {
+        <MoveSelector Moves="_moveList" Type="@(type)" CharacterName="@(Name)"/>
+    }
 </MudPaper>
 
 
@@ -41,6 +48,20 @@
     private string ComboTitle { get; set; } = "";
     private int ComboDamage { get; set; }
     private int ComboDifficulty { get; set; }
+
+    private readonly List<Move> _moveList = TekkenMoves.Moves;
+    private readonly List<string> _moveTypes =
+    [
+        "Misc",
+        "Modifier",
+        "Movement",
+        "Input",
+        "Character",
+        "Stances",
+        "Mechanics",
+        "Stage"
+        
+    ];
 
     public ComboDisplay Combo { get; set; } = new(new Combo());
 

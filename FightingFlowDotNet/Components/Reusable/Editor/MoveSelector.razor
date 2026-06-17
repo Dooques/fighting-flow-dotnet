@@ -1,6 +1,76 @@
 ﻿@using FightingFlowDotNet.Models
-<h3>MoveSelector</h3>
+
+<MudPaper
+    Class="px-3"
+    Square="true"
+    Style="background: inherit;">
+    
+    <MudText Typo="Typo.h5">
+        @Type
+    </MudText>
+    
+    <MudElement Class="d-flex flex-row flex-wrap gap-5">
+        @if (Type is "Break" or "Mechanics" or "Stances" or "Stage")
+        {
+            Console.WriteLine($"List length: {_filteredMoves.Count}");
+            foreach (var move in _filteredMoves)
+            {
+                Console.WriteLine($"    {move.Name}");
+                <p class="my-auto">@move.Name</p>
+            }
+        }
+        else
+        {
+            foreach (var move in _filteredMoves)
+            {
+                <img
+                    src="@GetMoveImage(move.Name)"
+                    alt="@move.Name"
+                    height="50" width="50"/>
+            }
+        }
+    </MudElement>
+</MudPaper>
+
 
 @code {
     [Parameter] public List<Move> Moves { get; set; } = [];
+    [Parameter] public string Type { get; set; } = "";
+    [Parameter] public string CharacterName { get; set; } = "";
+    private string TypeFilter { get; set; } = "";
+    
+    private List<Move> _filteredMoves = [];
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine($"Filtering moves for {Type}");
+        _filteredMoves = Type is "Character" ? 
+            FilterCharacterMoves(Moves) : FilterMoves(Moves);
+    }
+    
+    private List<Move> FilterMoves(List<Move> moves)
+    {
+        TypeFilter = Type switch
+        {
+            "Stances" => "Common",
+            "Mechanics" => "Mechanics Input",
+            _ => TypeFilter
+        };
+        return moves.FindAll(m => m.Type == TypeFilter);
+    }
+    
+    private List<Move> FilterCharacterMoves(List<Move> moves)
+    {
+        return moves.FindAll(m => m.Character == CharacterName);
+    }
+    
+    private Move GetMove(string note)
+    {
+        return Moves.First(m => m.Notation == note);
+    }
+
+    private static string GetMoveImage(string name)
+    {
+        return $"./images/{name}.png";
+    }
 }

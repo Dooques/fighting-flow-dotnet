@@ -8,6 +8,7 @@
         Variant="Variant.Outlined"
         Placeholder="Write a description of your combo"
         FullWidth="true"
+        MaxLength="50"
         @bind-Value="ComboTitle"></MudTextField>
         
     <MudTextField
@@ -24,6 +25,7 @@
             Size="Size.Large"></MudRating>
     </MudElement>
 </MudPaper>
+
 @code {
     [Parameter] public object ComboTitle { get; set; } = "";
     [Parameter] public object ComboDamage { get; set; } = "";
