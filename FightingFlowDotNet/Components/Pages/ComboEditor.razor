@@ -11,7 +11,7 @@
 <MudPaper  
     Class="d-flex flex-column align-center px-2 gap-5"
     Square="true"
-    Height="100vh"
+    Height="100%"
     Style="background: black;">
     
     <MudContainer 
@@ -22,16 +22,18 @@
         <ComboEditorButtons  />
         
         <ComboMetaFields 
-            ComboTitle="ComboTitle" 
-            ComboDamage="ComboDamage" 
-            ComboDifficulty="ComboDifficulty" />
+            ComboTitle="ComboTitle"
+            ComboDamage="ComboDamage"
+            ComboDifficulty="ComboDifficulty"/>
         <MudDivider/>
     </MudContainer>
+    <MudContainer Class="d-flex flex-column justify-start">
+        @foreach (var type in _moveTypes)
+        {
+            <MoveSelector Moves="_moveList" Type="@(type)" CharacterName="@(Name)"/>
+        }
+    </MudContainer>
     
-    @foreach (var type in _moveTypes)
-    {
-        <MoveSelector Moves="_moveList" Type="@(type)" CharacterName="@(Name)"/>
-    }
 </MudPaper>
 
 

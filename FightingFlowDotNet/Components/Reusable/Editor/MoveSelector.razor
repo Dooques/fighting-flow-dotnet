@@ -1,51 +1,83 @@
 ﻿@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources.TekkenData
+@if (Moves.Count > 0)
+{
+    <MudPaper
+        Class="px-3"
+        Square="true"
+        Style="background: inherit;">
 
-<MudPaper
-    Class="px-3"
-    Square="true"
-    Style="background: inherit;">
-    
-    <MudText Typo="Typo.h5">
-        @Type
-    </MudText>
-    
-    <MudElement Class="d-flex flex-row flex-wrap gap-5">
-        @if (Type is "Break" or "Mechanics" or "Stances" or "Stage")
-        {
-            Console.WriteLine($"List length: {_filteredMoves.Count}");
-            foreach (var move in _filteredMoves)
-            {
-                Console.WriteLine($"    {move.Name}");
-                <p class="my-auto">@move.Name</p>
-            }
-        }
-        else
-        {
-            foreach (var move in _filteredMoves)
-            {
-                <img
-                    src="@GetMoveImage(move.Name)"
-                    alt="@move.Name"
-                    height="50" width="50"/>
-            }
-        }
-    </MudElement>
-</MudPaper>
+        <MudText Typo="Typo.h5">
+            @Type
+        </MudText>
 
+        <MudElement
+            Class="d-flex flex-row flex-wrap gap-5 my-5">
+            @if (Type is "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage")
+            {
+                foreach (var move in _filteredMoves)
+                {
+                    <MudPaper
+                        Class="my-auto"
+                        Style=@($"background: {BackgroundColor}; padding: 5px;")>
+                        <MudText
+                            Typo="Typo.h6">
+                            @move.Name
+                        </MudText>
+                    </MudPaper>
+                }
+            }
+            else if (Type is "Misc")
+            {
+                foreach (var move in _miscMoves
+                             .Where(move => move.Name != "break"))
+                {
+                    <img src="@GetMoveImage(move.Name)"
+                         alt="@move.Name"
+                         height="50" width="50"/>
+                }
+            }
+            else
+            {
+                foreach (var move in _filteredMoves)
+                {
+                    <img src="@GetMoveImage(move.Name)"
+                         alt="@move.Name"
+                         height="50" width="50"/>
+                }
+            }
+        </MudElement>
+    </MudPaper>
+}
 
 @code {
     [Parameter] public List<Move> Moves { get; set; } = [];
     [Parameter] public string Type { get; set; } = "";
     [Parameter] public string CharacterName { get; set; } = "";
     private string TypeFilter { get; set; } = "";
+    private string BackgroundColor { get; set; } = "";
     
     private List<Move> _filteredMoves = [];
+    private List<Move> _miscMoves = CommonMoves.Moves;
 
     protected override void OnInitialized()
     {
-        Console.WriteLine($"Filtering moves for {Type}");
         _filteredMoves = Type is "Character" ? 
             FilterCharacterMoves(Moves) : FilterMoves(Moves);
+
+        BackgroundColor = Type switch
+        {
+            "Modifier" => Colors.Blue.Darken4,
+            "Stances" => Colors.Gray.Darken4,
+            "Character" => Colors.Red.Darken2,
+            "Mechanics" => Colors.Purple.Darken2,
+            "Stage" => Colors.Green.Darken2,
+            _ => ""
+        };
+        if (Type is "Misc")
+        {
+            Console.WriteLine(Moves.Count);
+        }
     }
     
     private List<Move> FilterMoves(List<Move> moves)
@@ -54,7 +86,7 @@
         {
             "Stances" => "Common",
             "Mechanics" => "Mechanics Input",
-            _ => TypeFilter
+            _ => Type
         };
         return moves.FindAll(m => m.Type == TypeFilter);
     }
