@@ -1,7 +1,10 @@
 ﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 @using Microsoft.IdentityModel.Tokens
-<MudContainer class="d-flex flex-row flex-wrap gap-2 py-1 px-0 mx-0">
+<Container 
+    Flex="Flex.Row"
+    Gap="Gap.Is2"
+    class="py-1 px-0 mx-0">
     @if (Combo.Combo.Moves.IsNullOrEmpty())
     {
         <p>No Moves found...</p>
@@ -21,7 +24,7 @@
             }
         }
     }
-</MudContainer>
+</Container>
 @code {
     [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());
     private readonly List<Move> _moveList = TekkenMoves.Moves;

@@ -1,84 +1,61 @@
 ﻿@page "/"
+@using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
-@inject FirestoreGetter fbGetter
-
-<style>
-    .mud-input-label {
-        color: white !important;
-    }
-    
-    .mud-input-slot {
-        color: white !important;
-    }
-    
-    .mud-input-outlined-border {
-        border-color: white;
-    }
-    
-    .mud-selected-item {
-        background: black !important;
-    }
-</style>
+@inject FirestoreGetter FbGetter
 
 <PageTitle>Fighting Flow</PageTitle>
 
-<MudPaper
-    Class="d-flex flex-column align-items-center px-2 gap-5"
-    Style="background: black;">
+<Div Flex="Flex.Column"
+     Gap="Gap.Is5">
     
-    @* Header *@
-    <MudText 
-        hidden="true"
-        Typo="Typo.h1"
-        Style="font-size: 32px; width: 250px;">
-        Fighting <span style="color:#ee1164">Flow</span>
-    </MudText>
-        
-    <MudContainer
-        Class="d-flex justify-center align-center flex-row gap-5">
-        <MudElement Style="min-width:140px">
-            @* Game Selector *@
-            <MudSelect
-                T="string"
-                Variant="Variant.Outlined"
-                AdornmentColor="Color.Secondary"
-                Class="select"
-                Label="Game Select"
-                Style="background: black; color: white;"
-                Dense="true"
-                @bind-Value="_gameSelected">
-                @foreach (var game in _gameList)
+    <Heading1 hidden="true">
+        Fighting <Span TextColor="TextColor.Primary">Flow</Span>
+    </Heading1>
+
+    <Div Flex="Flex.Row.JustifyContent.Center.AlignContent.Center"
+         Gap="Gap.Is5">
+        <Field Floating>
+            <FieldLabel>Game Select</FieldLabel>
+            <DropdownList TItem="string" TValue="string"
+                          Data="_gameList"
+                          TextField="@((item) => item)"
+                          ValueField="@(item => item)"
+                          @bind-Value="@_gameSelected"
+                          Color="Color.Dark"
+                          Class="m3-outlined-dropdown"
+                          Focus="true">
+                @if (!_gameSelected.IsNullOrEmpty())
                 {
-                    <MudSelectItem
-                        Style="background: black;"
-                        T="string"
-                        Value="@(game)"/>
+                    @_gameSelected
                 }
-            </MudSelect>
-        </MudElement>
+                else
+                {
+                    <Text>Game Select</Text>
+                }
+            </DropdownList>
+        </Field>
+        
 
         @* Subtitle *@
-        <MudText
-            Typo="Typo.body2"
-            Style="color: white;">
+        <Text TextColor="TextColor.Light">
             Load us up on your phone, tablet or second monitor and find your main.
             Catalogue combos and lab to your heart's content
-        </MudText>
-        
-    </MudContainer>
+        </Text>
 
-    <MudGrid Spacing="2" Justify="Justify.Center">
+    </Div>
+
+    <Div Flex="Flex.Row.Wrap.JustifyContent.Between.AlignContent.Around">
         @foreach (var fighter in _fighters)
         {
-            <MudItem xs="6" sm="4" md="3" lg="2">
-                <CharacterCard Fighter="@(fighter)"/>
-            </MudItem>
+            <Div Flex="Flex.Grow.Is1.Shrink.Is1">
+                <CharacterCard Fighter="@(fighter)"/>    
+            </Div>
         }
-    </MudGrid>
-</MudPaper>
+    </Div>
+</Div>
 
 @code {
     private readonly List<Fighter> _fighters = TekkenFighters.Fighters;

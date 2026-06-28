@@ -8,15 +8,14 @@
 @inject FirestoreGetter FirestoreGetter
 
 <PageTitle>Combo Editor</PageTitle>
-<MudPaper  
-    Class="d-flex flex-column align-center px-2 gap-5"
-    Square="true"
-    Height="100%"
-    Style="background: black;">
+
+<Container  
+    Flex="Flex.Column.AlignContent.Center"
+    Gap="Gap.Is5">
     
-    <MudContainer 
-        Class="d-flex justify-center align-center flex-column gap-5"
-        Style="background: inherit">
+    <Container
+        Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
+        Gap="Gap.Is5">
         <ComboDisplayNoButtons Combo="Combo" />
         
         <ComboEditorButtons  />
@@ -25,16 +24,16 @@
             ComboTitle="ComboTitle"
             ComboDamage="ComboDamage"
             ComboDifficulty="ComboDifficulty"/>
-        <MudDivider/>
-    </MudContainer>
-    <MudContainer Class="d-flex flex-column justify-start">
+        <Divider/>
+    </Container>
+    <Container Class="d-flex flex-column justify-start">
         @foreach (var type in _moveTypes)
         {
-            <MoveSelector Moves="_moveList" Type="@(type)" CharacterName="@(Name)"/>
+            <MoveSelector Moves="_moveList" Type="@type" CharacterName="@(Name)"/>
         }
-    </MudContainer>
+    </Container>
     
-</MudPaper>
+</Container>
 
 
 @code {

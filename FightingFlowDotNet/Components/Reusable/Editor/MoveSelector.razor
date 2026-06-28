@@ -2,52 +2,61 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @if (Moves.Count > 0)
 {
-    <MudPaper
+    <Div
         Class="px-3"
         Square="true"
         Style="background: inherit;">
 
-        <MudText Typo="Typo.h5">
+        <Text Typo="Typo.h5">
             @Type
-        </MudText>
+        </Text>
 
-        <MudElement
+        <Div
             Class="d-flex flex-row flex-wrap gap-5 my-5">
-            @if (Type is "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage")
+            @switch (Type)
             {
-                foreach (var move in _filteredMoves)
+                case "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage":
                 {
-                    <MudPaper
-                        Class="my-auto"
-                        Style=@($"background: {BackgroundColor}; padding: 5px;")>
-                        <MudText
-                            Typo="Typo.h6">
-                            @move.Name
-                        </MudText>
-                    </MudPaper>
+                    foreach (var move in _filteredMoves)
+                    {
+                        <Div
+                            Class="my-auto"
+                            Style=@($"background: {BackgroundColor}; padding: 5px;")>
+                            <Text
+                                Typo="Typo.h6">
+                                @move.Name
+                            </Text>
+                        </Div>
+                    }
+
+                    break;
+                }
+                case "Misc":
+                {
+                    foreach (var move in _miscMoves
+                                 .Where(move => move.Name != "break"))
+                    {
+                        <img src="@GetMoveImage(move.Name)"
+                             alt="@move.Name"
+                             height="50" width="50"/>
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    foreach (var move in _filteredMoves)
+                    {
+                        <img src="@GetMoveImage(move.Name)"
+                             alt="@move.Name"
+                             height="50" width="50"/>
+                    }
+
+                    break;
                 }
             }
-            else if (Type is "Misc")
-            {
-                foreach (var move in _miscMoves
-                             .Where(move => move.Name != "break"))
-                {
-                    <img src="@GetMoveImage(move.Name)"
-                         alt="@move.Name"
-                         height="50" width="50"/>
-                }
-            }
-            else
-            {
-                foreach (var move in _filteredMoves)
-                {
-                    <img src="@GetMoveImage(move.Name)"
-                         alt="@move.Name"
-                         height="50" width="50"/>
-                }
-            }
-        </MudElement>
-    </MudPaper>
+        </Div>
+    </Div>
 }
 
 @code {
@@ -58,22 +67,22 @@
     private string BackgroundColor { get; set; } = "";
     
     private List<Move> _filteredMoves = [];
-    private List<Move> _miscMoves = CommonMoves.Moves;
+    private readonly List<Move> _miscMoves = CommonMoves.Moves;
 
     protected override void OnInitialized()
     {
         _filteredMoves = Type is "Character" ? 
             FilterCharacterMoves(Moves) : FilterMoves(Moves);
 
-        BackgroundColor = Type switch
-        {
-            "Modifier" => Colors.Blue.Darken4,
-            "Stances" => Colors.Gray.Darken4,
-            "Character" => Colors.Red.Darken2,
-            "Mechanics" => Colors.Purple.Darken2,
-            "Stage" => Colors.Green.Darken2,
-            _ => ""
-        };
+        // BackgroundColor = Type switch
+        // {
+        //     "Modifier" => ,
+        //     "Stances" => Colors.Gray.Darken4,
+        //     "Character" => Colors.Red.Darken2,
+        //     "Mechanics" => Colors.Purple.Darken2,
+        //     "Stage" => Colors.Green.Darken2,
+        //     _ => ""
+        // };
         if (Type is "Misc")
         {
             Console.WriteLine(Moves.Count);

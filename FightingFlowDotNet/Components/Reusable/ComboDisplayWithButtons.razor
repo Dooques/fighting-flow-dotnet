@@ -2,21 +2,18 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @using Microsoft.IdentityModel.Tokens
 
-<MudPaper 
-    Class="d-flex flex-column pb-4 gap-1 m-2 mt-2" 
-    Elevation="3"
-    Style="background: inherit; color: inherit;">
-    <h4>@Combo.Combo.Title</h4>
+<Column Gap="Gap.Is1" Height="Height.Max100">
+    <Heading4>@Combo.Combo.Title</Heading4>
 
     <ComboDisplayNoButtons Combo="Combo"/>
     
-    <MudDivider/>
+    <Divider/>
 
-    <MudContainer class="d-flex flex-row justify-space-between align-content-center mt-2 mx-0 px-0">
-        <MudElement class="d-flex flex-column">
-            <MudText>Damage: @Combo.Combo.Damage</MudText>
-            <MudText>Created By: @Username</MudText>
-        </MudElement>
+    <Container class="d-flex flex-row justify-space-between align-content-center mt-2 mx-0 px-0">
+        <Div class="d-flex flex-column">
+            <Text>Damage: @Combo.Combo.Damage</Text>
+            <Text>Created By: @Username</Text>
+        </Div>
         
         <MudElement class="d-flex flex-row align-content-start justify-content-center gap-3">
             <NavLink href="@GetEditorEditModeUrl()">
@@ -41,8 +38,8 @@
                 <MudImage class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
             </MudElement>
         </MudElement>
-    </MudContainer>
-</MudPaper>
+    </Container>
+</Column>
 
 @code {
     [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());

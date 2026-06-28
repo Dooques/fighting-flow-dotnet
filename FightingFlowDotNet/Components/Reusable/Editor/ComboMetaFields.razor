@@ -1,34 +1,34 @@
-﻿<MudPaper
-    Class="d-flex flex-row justify-space-around align-center gap-5"
-    Width="100%"
-    Style="background: inherit">
-    <MudTextField 
+﻿<Div
+    Class="d-flex flex-row justify-space-around align-center gap-5">
+    <MemoInput 
+        
         Label="Title"
         Lines="1"
         Variant="Variant.Outlined"
         Placeholder="Write a description of your combo"
         FullWidth="true"
         MaxLength="50"
-        @bind-Value="ComboTitle"></MudTextField>
+        bind-Value="@ComboTitle"/>
         
-    <MudTextField
+    <MemoInput
         Label="Damage"
         Lines="1"
         Variant="Variant.Outlined"
-        @bind-Value="ComboDamage"
-        Placeholder="0"></MudTextField>
-    <MudElement
+        bind-Value="@ComboDamage"
+        Placeholder="0"/>
+    
+    <Div
         Class="d-flex flex-column">
-        <MudText>Difficulty</MudText>
-        <MudRating
-            @bind-SelectedValue="ComboDifficulty"
-            Size="Size.Large"></MudRating>
-    </MudElement>
-</MudPaper>
+        <Text>Difficulty</Text>
+        <Rating
+            bind-SelectedValue="ComboDifficulty"
+            Size="Size.Large"></Rating>
+    </Div>
+</Div>
 
 @code {
-    [Parameter] public object ComboTitle { get; set; } = "";
-    [Parameter] public object ComboDamage { get; set; } = "";
+    [Parameter] public string ComboTitle { get; set; } = "";
+    [Parameter] public string ComboDamage { get; set; } = "";
     [Parameter] public int ComboDifficulty { get; set; }
 
 }

@@ -1,6 +1,8 @@
+using Blazorise;
+using Blazorise.Bootstrap5;
+using Blazorise.Icons.FontAwesome;
 using FightingFlowDotNet.Clients;
 using FightingFlowDotNet.Components;
-using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddJsonFile("customsettings.json", optional: false, reloadOnChange: true);
@@ -14,7 +16,15 @@ builder.Services.AddScoped<FirebaseClientFactory>();
 builder.Services.AddScoped<UserData>();
 builder.Services.AddScoped<FirestoreGetter>();
 
-builder.Services.AddMudServices();
+builder.Services.AddBlazorise(options =>
+    {
+        options.Immediate = true;
+        options.ProductToken = builder.Environment.IsProduction() ? 
+            Environment.GetEnvironmentVariable("BLAZORKEY")?.Trim() : 
+            builder.Configuration["Blazorise:ProductKey"];
+    })
+    .AddBootstrap5Providers()
+    .AddFontAwesomeIcons();
 
 var app = builder.Build();
 

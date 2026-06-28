@@ -1,23 +1,19 @@
 ﻿@inherits LayoutComponentBase
 
-<MudThemeProvider Theme="_customTheme" IsDarkMode="false"/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
-
-<MudLayout>
-    <FlowAppBar/>
-    <MudMainContent>
-        @Body
-    </MudMainContent>
-</MudLayout>
-
-@code {
-    private readonly MudTheme _customTheme = new MudTheme()
-    {
-        PaletteLight = new PaletteLight()
-        {
-            Primary = "#ee1164",
-            TextPrimary = "#ffffff",
-        }
-    };
-}
+<Layout Background="Background.Dark"
+        TextColor="TextColor.Light"
+        Height="Height.Is100">
+    <Container Breakpoint="Breakpoint.Desktop">
+        <LayoutHeader>
+            <FlowAppBar/>    
+        </LayoutHeader>
+        
+        <LayoutContent>
+                @Body
+        </LayoutContent>
+        
+        <LayoutFooter>
+            
+        </LayoutFooter>
+    </Container>
+</Layout>

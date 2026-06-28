@@ -1,11 +1,36 @@
-﻿<MudThemeProvider/>
-<MudPopoverProvider/>
-<MudDialogProvider/>
-<MudSnackbarProvider/>
+﻿<Blazorise.ThemeProvider Theme="_theme">
+    <Router AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
+        <Found Context="routeData">
+            <RouteView RouteData="routeData" DefaultLayout="typeof(MainLayout)"/>
+            <FocusOnNavigate RouteData="routeData" Selector="h1"/>
+        </Found>
+    </Router>
+</Blazorise.ThemeProvider>
 
-<Router  AppAssembly="typeof(Program).Assembly" NotFoundPage="typeof(Pages.NotFound)">
-    <Found Context="routeData">
-        <RouteView RouteData="routeData" DefaultLayout="typeof(Layout.MainLayout)"/>
-        <FocusOnNavigate RouteData="routeData" Selector="h1"/>
-    </Found>
-</Router>
+@code {
+
+    private readonly Theme _theme = new Theme
+    {
+        ColorOptions = new ThemeColorOptions
+        {
+            Primary = "#ee1164",
+            Light = "#ffffff",
+            Dark = "#000000", 
+        },
+        BackgroundOptions = new ThemeBackgroundOptions
+        {
+            Dark = "#000000", 
+            Light = "#ffffff"  
+        },
+        TextColorOptions = new ThemeTextColorOptions
+        {
+            Primary = "#ee1164",
+            Light = "#ffffff",
+            Dark = "#000000", 
+        },
+        BorderOptions =  new ThemeBorderOptions
+        { 
+            
+        }
+    };
+}

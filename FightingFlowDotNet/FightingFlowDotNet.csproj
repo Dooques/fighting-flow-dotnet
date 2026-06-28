@@ -15,15 +15,16 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Blazorise" Version="2.2.1" />
+        <PackageReference Include="Blazorise.Bootstrap" Version="2.2.1" />
+        <PackageReference Include="Blazorise.Bootstrap5" Version="2.2.1" />
+        <PackageReference Include="Blazorise.Components" Version="2.2.1" />
+        <PackageReference Include="Blazorise.Icons.FontAwesome" Version="2.2.1" />
+        <PackageReference Include="Blazorise.Icons.Material" Version="2.2.1" />
         <PackageReference Include="FirebaseAuthentication.net" Version="4.1.0" />
         <PackageReference Include="Google.Apis.Auth" Version="1.74.0" />
         <PackageReference Include="Google.Cloud.Firestore" Version="4.2.0" />
-        <PackageReference Include="MudBlazor" Version="9.5.0" />
         <PackageReference Include="Supabase" Version="1.1.1" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="wwwroot\css\" />
     </ItemGroup>
 
 </Project>

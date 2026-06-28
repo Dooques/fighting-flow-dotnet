@@ -1,0 +1,45 @@
+/* Target the inner interactive element inside your custom class */
+.m3-outlined-dropdown :where(button, select, .dropdown-toggle) {
+    background-color: transparent !important;
+    color: #1c1b1f; /* M3 Baseline Dark text */
+    border: 2px solid #79747e !important; /* M3 Outline color */
+    border-radius: 100px !important; /* M3 fully rounded pill shape for buttons */
+    padding: 10px 24px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover State */
+.m3-outlined-dropdown :where(button, select, .dropdown-toggle):hover {
+    border-color: #ee1164 !important; /* M3 Outline Variant / Hover color */
+    color: #ee1164 !important; 
+}
+
+/* Focus / Active State (Changes to Primary Color) */
+.m3-outlined-dropdown :where(button, select, .dropdown-toggle):focus,
+.m3-outlined-dropdown :where(button, select, .dropdown-toggle):focus-within {
+    outline: none !important;
+    border-color: #ee1164 !important; /* M3 Baseline Primary Color */
+    border-width: 2px !important; /* M3 active outlines usually thicken slightly */
+    /* Optional: Adds a subtle focus ring typical of Material web components */
+    box-shadow: 0 0 0 1px #ee1164;
+}
+
+/* Target the dropdown list container */
+.m3-outlined-dropdown .dropdown-menu {
+    background-color: #000000 !important; /* Change this to your desired color */
+    border: 2px solid #79747e !important;  /* Optional: matches the M3 outline */
+    border-radius: 4px !important;         /* Optional: standard M3 menu rounding */
+    box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.15) !important; /* Optional: adds depth */
+}
+
+/* Optional: Style the individual items inside the list */
+.m3-outlined-dropdown .dropdown-item {
+    color: #ffffff !important; /* Text color for options */
+    background-color: transparent;
+}
+
+/* Optional: Style the hover state for items in the list */
+.m3-outlined-dropdown .dropdown-item:hover {
+    background-color: #e8def8 !important; /* M3 Primary container hover color */
+    color: #1d192b !important;
+}

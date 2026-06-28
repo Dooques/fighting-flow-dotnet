@@ -8,23 +8,17 @@
 
 <PageTitle>Combo Viewer</PageTitle>
 
-<MudPaper
-    Class="d-flex flex-row px-3 rounded-0"
-    Style="background: black; color: white;"
-    Height="100vh" Width="100vw">
-    
-    <MudElement
-        Style="width: 75%;"
-        class="py-3">
-        <MudElement
+<Row RowColumns="RowColumns.Are2">
+    <Column Width="Width.Is75">
+        <Div
             Class="d-flex flex-column">
-            <MudButton
+            <Button
                 Class="mx-5 my-5"
-                Variant="Variant.Filled"
+                Type="ButtonType.Link"
                 Color="Color.Primary"
-                Href="@GetEditorUrl()">
+                To="@GetEditorUrl()">
                 Create a Combo
-            </MudButton>
+            </Button>
             
             @if (ComboList.Count > 0)
             {
@@ -40,40 +34,43 @@
             {
                 <p>No combos to be found... </p>
             }
-        </MudElement>
-    </MudElement>
+        </Div>
+    </Column>
 
-    <MudCard
-        Class="mx-4 p-0"
-        Style="background: inherit; color: inherit; max-width: 600px;">
-        <MudCardHeader
-            Class="card-img text-center"
-            Style="background: inherit; color: inherit;">
-            <img style="max-width: 600px;" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
-        </MudCardHeader>
+    <Column Width="Width.Is25">
+        <Card
+            Class="mx-4 p-0"
+            Style="background: inherit; color: inherit; max-width: 600px;">
+            <CardHeader
+                Class="card-img text-center"
+                Style="background: inherit; color: inherit;">
+                <img style="max-width: 600px;" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+            </CardHeader>
         
-        <MudCardContent
-            Style="background: inherit; color: inherit">
+            <CardBody
+                Style="background: inherit; color: inherit">
             
-            <MudText
-                class="card-title text-white">
-                @(ChosenFighter?.Name ?? "Invalid Character")
-            </MudText>
+                <Text
+                    class="card-title text-white">
+                    @(ChosenFighter?.Name ?? "Invalid Character")
+                </Text>
             
-            <MudText class="text-white">
-                @((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)
-            </MudText>
+                <Text class="text-white">
+                    @((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)
+                </Text>
             
-            <MudText class="text-white">
-                @(ChosenFighter?.FightingStyle)
-            </MudText>
+                <Text class="text-white">
+                    @(ChosenFighter?.FightingStyle)
+                </Text>
             
-            <MudText class="text-white">
-                @(ChosenFighter?.Game)
-            </MudText>
-        </MudCardContent>
-    </MudCard>
-</MudPaper>
+                <Text class="text-white">
+                    @(ChosenFighter?.Game)
+                </Text>
+            </CardBody>
+        </Card>
+    </Column>
+    
+</Row>
 
 <script type="text/javascript">
     ScrollElementIntoView = {}
@@ -85,7 +82,6 @@
     
     private Fighter? ChosenFighter { get; set; }
     private List<UserInfo> UsersList { get; set; } = [];
-
     private List<ComboDisplay> ComboList { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
