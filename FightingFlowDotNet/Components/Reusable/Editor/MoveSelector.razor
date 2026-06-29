@@ -2,57 +2,60 @@
 @using FightingFlowDotNet.Resources.TekkenData
 @if (Moves.Count > 0)
 {
-    <Div
-        Class="px-3"
-        Square="true"
-        Style="background: inherit;">
-
-        <Text Typo="Typo.h5">
+    <Div>
+        <Heading5>
             @Type
-        </Text>
+        </Heading5>
 
-        <Div
-            Class="d-flex flex-row flex-wrap gap-5 my-5">
-            @switch (Type)
+        <Div Flex="Flex.Row.Wrap"
+             Gap="Gap.Is3">
+            @if (Type is "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage")
             {
-                case "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage":
+                foreach (var move in _filteredMoves)
                 {
-                    foreach (var move in _filteredMoves)
-                    {
-                        <Div
-                            Class="my-auto"
-                            Style=@($"background: {BackgroundColor}; padding: 5px;")>
-                            <Text
-                                Typo="Typo.h6">
-                                @move.Name
-                            </Text>
-                        </Div>
-                    }
-
-                    break;
+                    <Button Background=
+                            "@(
+                             Type switch 
+                             { 
+                                 "Character" => Background.Primary, 
+                                 "Mechanics" => Background.Secondary, 
+                                 "Modifier" => Background.Light, 
+                                 "Break" => Background.Info, 
+                                 "Stage" => Background.Success, 
+                                 "Stances" => Background.Danger, 
+                                 _ => Background.Dark
+                             })"
+                            Type="ButtonType.Button">
+                        <Text TextWeight="TextWeight.Bold">
+                            @move.Name
+                        </Text>
+                        </Button> 
                 }
-                case "Misc":
+            }
+            else
+            {
+                if (Type == "Misc")
                 {
                     foreach (var move in _miscMoves
                                  .Where(move => move.Name != "break"))
                     {
-                        <img src="@GetMoveImage(move.Name)"
-                             alt="@move.Name"
-                             height="50" width="50"/>
+                        <Button Type="ButtonType.Button">
+                            <img src="@GetMoveImage(move.Name)"
+                                 alt="@move.Name"
+                                 height="40" width="40"/>
+                        </Button>
                     }
-
-                    break;
                 }
-                default:
+                else
                 {
                     foreach (var move in _filteredMoves)
                     {
-                        <img src="@GetMoveImage(move.Name)"
-                             alt="@move.Name"
-                             height="50" width="50"/>
+                        <Button Type="ButtonType.Button">
+                            <img src="@GetMoveImage(move.Name)"
+                                 alt="@move.Name"
+                                 height="40" width="40"/>
+                        </Button>
                     }
-
-                    break;
                 }
             }
         </Div>
@@ -74,15 +77,6 @@
         _filteredMoves = Type is "Character" ? 
             FilterCharacterMoves(Moves) : FilterMoves(Moves);
 
-        // BackgroundColor = Type switch
-        // {
-        //     "Modifier" => ,
-        //     "Stances" => Colors.Gray.Darken4,
-        //     "Character" => Colors.Red.Darken2,
-        //     "Mechanics" => Colors.Purple.Darken2,
-        //     "Stage" => Colors.Green.Darken2,
-        //     _ => ""
-        // };
         if (Type is "Misc")
         {
             Console.WriteLine(Moves.Count);
@@ -114,4 +108,5 @@
     {
         return $"./images/{name}.png";
     }
+    
 }

@@ -9,31 +9,35 @@
 
 <PageTitle>Combo Editor</PageTitle>
 
-<Container  
+<Div  
     Flex="Flex.Column.AlignContent.Center"
-    Gap="Gap.Is5">
+    Gap="Gap.Is1"
+    Padding="Padding.Is5.FromBottom">
     
-    <Container
-        Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
-        Gap="Gap.Is5">
-        <ComboDisplayNoButtons Combo="Combo" />
+    <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
+               Gap="Gap.Is2">
         
-        <ComboEditorButtons  />
-        
-        <ComboMetaFields 
-            ComboTitle="ComboTitle"
-            ComboDamage="ComboDamage"
+        <ComboDisplayNoButtons Combo="Combo"/>
+
+        <ComboEditorButtons />
+
+        <ComboMetaFields
+            ComboTitle="@ComboTitle"
+            ComboDamage="@ComboDamage"
             ComboDifficulty="ComboDifficulty"/>
-        <Divider/>
-    </Container>
-    <Container Class="d-flex flex-column justify-start">
+    </Div>
+    
+    <Divider/>
+    
+    <Div Flex="Flex.Column.JustifyContent.Start"
+         Gap="Gap.Is3">
         @foreach (var type in _moveTypes)
         {
             <MoveSelector Moves="_moveList" Type="@type" CharacterName="@(Name)"/>
         }
-    </Container>
+    </Div>
     
-</Container>
+</Div>
 
 
 @code {
@@ -54,13 +58,13 @@
     private readonly List<string> _moveTypes =
     [
         "Misc",
-        "Modifier",
         "Movement",
         "Input",
         "Character",
         "Stances",
         "Mechanics",
-        "Stage"
+        "Stage",
+        "Modifier",
         
     ];
 

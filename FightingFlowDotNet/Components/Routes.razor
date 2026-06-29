@@ -9,28 +9,48 @@
 
 @code {
 
-    private readonly Theme _theme = new Theme
+    private readonly Theme _theme = new()
     {
         ColorOptions = new ThemeColorOptions
         {
             Primary = "#ee1164",
-            Light = "#ffffff",
-            Dark = "#000000", 
+            Secondary = "#6c1fb0",
+            Info = "#05d9e8",
+            Link = "#05d9e8",
+            Success = "#39ff14",
+            Warning = "#ffe600",
+            Danger = "#ff5400",
+            Light = "#f5f5fa",
+            Dark = "#0a0a0d"
         },
         BackgroundOptions = new ThemeBackgroundOptions
         {
-            Dark = "#000000", 
-            Light = "#ffffff"  
+            Primary = "#ee1164",
+            Secondary = "#6c1fb0",
+            Info = "#05d9e8",
+            Success = "#39ff14",
+            Warning = "#ffe600",
+            Danger = "#ff5400",
+            Light = "#f5f5fa",
+            Body = "#0a0a0d",
+            Dark = "#0a0a0d"
         },
         TextColorOptions = new ThemeTextColorOptions
         {
             Primary = "#ee1164",
-            Light = "#ffffff",
-            Dark = "#000000", 
+            Secondary = "#6c1fb0",
+            Info = "#05d9e8",
+            Success = "#39ff14",
+            Warning = "#ffe600",
+            Danger = "#ff5400",
+            Light = "#f5f5fa",
+            Dark = "#0a0a0d"
         },
-        BorderOptions =  new ThemeBorderOptions
-        { 
-            
+        BodyOptions = new ThemeBodyOptions
+        {
+            BackgroundColor = "#0a0a0d",
+            TextColor = "#f5f5fa"
         }
     };
+
 }

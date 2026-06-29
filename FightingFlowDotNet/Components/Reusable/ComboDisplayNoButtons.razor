@@ -1,10 +1,9 @@
 ﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 @using Microsoft.IdentityModel.Tokens
-<Container 
-    Flex="Flex.Row"
-    Gap="Gap.Is2"
-    class="py-1 px-0 mx-0">
+
+<Div Flex="Flex.Row.Wrap.AlignItems.Center"
+     Gap="Gap.Is2">
     @if (Combo.Combo.Moves.IsNullOrEmpty())
     {
         <p>No Moves found...</p>
@@ -13,18 +12,39 @@
     {
         foreach (var convertedMove in Combo.Combo.Moves.Select(GetMove))
         {
-            if (convertedMove.Type is "Break" or "Mechanics Input" or "Character" or "Common" or "Stage")
+            switch (convertedMove.Type)
             {
-                <p class="my-auto">@convertedMove.Notation</p>
-            }
-            else
-            {
-                <img src="@GetMoveImage(convertedMove.Name)"
-                     alt="@convertedMove.Name" height="50" width="50"/>
+                case "Break":
+                    <Text>
+                        @convertedMove.Notation
+                    </Text>
+                    break;
+                    
+                case "Mechanics Input" or "Character" or "Common" or "Stage":
+                    <Button Border="Border.Is0"
+                            Background="@(convertedMove.Type switch { 
+                            "Character" => Background.Primary, 
+                            "Mechanics Input" => Background.Secondary, 
+                            "Modifier" => Background.Light, 
+                            "Break" => Background.Info, 
+                            "Stage" => Background.Success, 
+                            "Stances" => Background.Danger, 
+                            _ => Background.Dark })"
+                            TextColor="TextColor.Dark"
+                            TextWeight="TextWeight.Bold">
+                        @convertedMove.Name
+                    </Button>
+                    break;
+                    
+                default:
+                    <img src="@GetMoveImage(convertedMove.Name)"
+                         alt="@convertedMove.Name" height="50" width="50"/>
+                    break;
             }
         }
     }
-</Container>
+</Div>
+
 @code {
     [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());
     private readonly List<Move> _moveList = TekkenMoves.Moves;

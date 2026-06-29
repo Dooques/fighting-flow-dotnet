@@ -9,35 +9,36 @@
     
     <Divider/>
 
-    <Container class="d-flex flex-row justify-space-between align-content-center mt-2 mx-0 px-0">
+    <Container Flex="Flex.Row.JustifyContent.Between.AlignContent.Center"
+               Gap="Gap.Is2">
         <Div class="d-flex flex-column">
             <Text>Damage: @Combo.Combo.Damage</Text>
             <Text>Created By: @Username</Text>
         </Div>
         
-        <MudElement class="d-flex flex-row align-content-start justify-content-center gap-3">
-            <NavLink href="@GetEditorEditModeUrl()">
-                <MudButton Variant="Variant.Filled" Color="Color.Tertiary">
+        <Div Flex="Flex.Row.AlignContent.Start.JustifyContent.Center"
+             Gap="Gap.Is3">
+            <NavLink href="">
+                <Button Type="ButtonType.Link" 
+                        To="@GetEditorEditModeUrl()"
+                        Color="Color.Secondary">
                     Edit
-                </MudButton>
+                </Button>
             </NavLink>
-            <NavLink>
-                <MudButton
-                    Variant="Variant.Filled"
-                    Color="Color.Primary"
-                    class="btn btn-primary"
-                    Href="@(GetEditorEditModeUrl())">
+                <Button Type="ButtonType.Link"
+                        Color="Color.Primary"
+                        TextColor="TextColor.Light"
+                        To="@(GetEditorEditModeUrl())">
                     Share
-                </MudButton>
-            </NavLink>
-        </MudElement>
+                </Button>
+        </Div>
         
-        <MudElement>
-            <MudElement class="d-flex flex-column gap-0 justify-content-center align-content-center">
-                <MudText Typo="Typo.body2">Ki: @Combo.Ki</MudText>
-                <MudImage class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
-            </MudElement>
-        </MudElement>
+        <Div>
+            <Button class="d-flex flex-column gap-0 justify-content-center align-content-center">
+                <Text Typo="Typo.body2">Ki: @Combo.Ki</Text>
+                <img class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
+            </Button>
+        </Div>
     </Container>
 </Column>
 

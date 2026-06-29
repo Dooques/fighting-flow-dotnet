@@ -1,34 +1,41 @@
-﻿<Div
-    Class="d-flex flex-row justify-space-around align-center gap-5">
-    <MemoInput 
+﻿<Div Flex="Flex.Row.JustifyContent.Between.AlignContent.Center"
+     Gap="Gap.Is5">
+    <Field Width="Width.Is50">
+        <FieldLabel>
+            Description
+        </FieldLabel>
         
-        Label="Title"
-        Lines="1"
-        Variant="Variant.Outlined"
-        Placeholder="Write a description of your combo"
-        FullWidth="true"
-        MaxLength="50"
-        bind-Value="@ComboTitle"/>
-        
-    <MemoInput
-        Label="Damage"
-        Lines="1"
-        Variant="Variant.Outlined"
-        bind-Value="@ComboDamage"
-        Placeholder="0"/>
-    
-    <Div
-        Class="d-flex flex-column">
-        <Text>Difficulty</Text>
-        <Rating
-            bind-SelectedValue="ComboDifficulty"
-            Size="Size.Large"></Rating>
-    </Div>
+        <MemoInput
+            Placeholder="Write a description of your combo"
+            MaxLength="50"
+            Rows="1"
+            bind-Value="@ComboTitle"/>
+    </Field>
+
+    <Field Width="Width.Is25">
+        <FieldLabel>Damage</FieldLabel>
+        <TextInput
+            bind-Value="@ComboDamageString"
+            MaskType="MaskType.Numeric"
+            @onchange="ParseComboDamage"
+            Placeholder="0"/>
+    </Field>
+
+    <Field Width="Width.Is25" Flex="Flex.Column">
+        <FieldLabel>Difficulty</FieldLabel>
+        <Rating bind-SelectedValue="ComboDifficulty"/>
+    </Field>
 </Div>
 
 @code {
     [Parameter] public string ComboTitle { get; set; } = "";
-    [Parameter] public string ComboDamage { get; set; } = "";
+    [Parameter] public string ComboDamageString { get; set; } = ""; 
+    [Parameter] public int ComboDamage { get; set; } = 0; 
     [Parameter] public int ComboDifficulty { get; set; }
+
+    private void ParseComboDamage()
+    {
+        ComboDamage = int.Parse(ComboDamageString);
+    }
 
 }
