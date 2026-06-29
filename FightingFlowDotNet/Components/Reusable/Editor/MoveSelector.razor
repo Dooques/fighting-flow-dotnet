@@ -1,4 +1,5 @@
-﻿@using FightingFlowDotNet.Models
+﻿@using System.Reflection.Metadata
+@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
 @if (Moves.Count > 0)
 {
@@ -9,56 +10,11 @@
 
         <Div Flex="Flex.Row.Wrap"
              Gap="Gap.Is3">
-            @if (Type is "Character" or "Modifier" or "Break" or "Mechanics" or "Stances" or "Stage")
-            {
-                foreach (var move in _filteredMoves)
+                @foreach (var move in _filteredMoves)
                 {
-                    <Button Background=
-                            "@(
-                             Type switch 
-                             { 
-                                 "Character" => Background.Primary, 
-                                 "Mechanics" => Background.Secondary, 
-                                 "Modifier" => Background.Light, 
-                                 "Break" => Background.Info, 
-                                 "Stage" => Background.Success, 
-                                 "Stances" => Background.Danger, 
-                                 _ => Background.Dark
-                             })"
-                            Type="ButtonType.Button">
-                        <Text TextWeight="TextWeight.Bold">
-                            @move.Name
-                        </Text>
-                        </Button> 
+                   <MoveButton Move="move" AddMove="HandleMove"></MoveButton> 
                 }
-            }
-            else
-            {
-                if (Type == "Misc")
-                {
-                    foreach (var move in _miscMoves
-                                 .Where(move => move.Name != "break"))
-                    {
-                        <Button Type="ButtonType.Button">
-                            <img src="@GetMoveImage(move.Name)"
-                                 alt="@move.Name"
-                                 height="40" width="40"/>
-                        </Button>
-                    }
-                }
-                else
-                {
-                    foreach (var move in _filteredMoves)
-                    {
-                        <Button Type="ButtonType.Button">
-                            <img src="@GetMoveImage(move.Name)"
-                                 alt="@move.Name"
-                                 height="40" width="40"/>
-                        </Button>
-                    }
-                }
-            }
-        </Div>
+                </Div >
     </Div>
 }
 
@@ -66,6 +22,9 @@
     [Parameter] public List<Move> Moves { get; set; } = [];
     [Parameter] public string Type { get; set; } = "";
     [Parameter] public string CharacterName { get; set; } = "";
+    
+    [Parameter] public EventCallback<Move> AddMove { get; set; }
+    
     private string TypeFilter { get; set; } = "";
     private string BackgroundColor { get; set; } = "";
     
@@ -76,10 +35,14 @@
     {
         _filteredMoves = Type is "Character" ? 
             FilterCharacterMoves(Moves) : FilterMoves(Moves);
+    }
 
-        if (Type is "Misc")
+    private async Task HandleMove(Move? move)
+    {
+        if (AddMove.HasDelegate && move != null)
         {
-            Console.WriteLine(Moves.Count);
+            Console.WriteLine($"Sending {move.Name} from MoveSelector");
+            await AddMove.InvokeAsync(move);
         }
     }
     

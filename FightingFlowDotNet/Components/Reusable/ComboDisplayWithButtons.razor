@@ -9,7 +9,7 @@
     
     <Divider/>
 
-    <Container Flex="Flex.Row.JustifyContent.Between.AlignContent.Center"
+    <Container Flex="Flex.Row.JustifyContent.Between.AlignItems.Center"
                Gap="Gap.Is2">
         <Div class="d-flex flex-column">
             <Text>Damage: @Combo.Combo.Damage</Text>
@@ -18,24 +18,22 @@
         
         <Div Flex="Flex.Row.AlignContent.Start.JustifyContent.Center"
              Gap="Gap.Is3">
-            <NavLink href="">
-                <Button Type="ButtonType.Link" 
-                        To="@GetEditorEditModeUrl()"
-                        Color="Color.Secondary">
-                    Edit
-                </Button>
-            </NavLink>
-                <Button Type="ButtonType.Link"
-                        Color="Color.Primary"
-                        TextColor="TextColor.Light"
-                        To="@(GetEditorEditModeUrl())">
-                    Share
-                </Button>
+            <Button Type="ButtonType.Link"
+                    To="@GetEditorEditModeUrl()"
+                    Color="Color.Secondary">
+                Edit
+            </Button>
+            <Button Type="ButtonType.Link"
+                    Color="Color.Primary"
+                    TextColor="TextColor.Light"
+                    To="@(GetEditorEditModeUrl())">
+                Share
+            </Button>
         </Div>
         
-        <Div>
-            <Button class="d-flex flex-column gap-0 justify-content-center align-content-center">
-                <Text Typo="Typo.body2">Ki: @Combo.Ki</Text>
+        <Div Flex="Flex.Column.AlignItems.Center.JustifyContent.Center">
+            <Text TextWeight="TextWeight.Bold">Ki: @Combo.Ki</Text>
+            <Button>
                 <img class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
             </Button>
         </Div>

@@ -1,4 +1,4 @@
-﻿@page "/CombosFor/{Name}"
+﻿@page "/{Name}"
 
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
@@ -10,13 +10,12 @@
 
 <Row RowColumns="RowColumns.Are2">
     <Column Width="Width.Is75">
-        <Div
-            Class="d-flex flex-column">
+        <Div Flex="Flex.Column">
             <Button
-                Class="mx-5 my-5"
                 Type="ButtonType.Link"
                 Color="Color.Primary"
                 TextColor="TextColor.Light"
+                Margin="Margin.Is2.OnY.Is5.OnX"
                 To="@GetEditorUrl()">
                 Create a Combo
             </Button>
@@ -25,7 +24,7 @@
             {
                 @foreach (var combo in ComboList)
                 {
-                    <Div Margin="Margin.Is2.FromTop">
+                    <Div Margin="Margin.Is4.FromTop">
                         <ComboDisplayWithButtons
                             Combo="combo"
                             ChosenFighter="@(ChosenFighter ?? new Fighter())"
@@ -42,9 +41,7 @@
 
     <Column Width="Width.Is25">
         <Card Background="Background.Dark">
-            <CardHeader
-                Class="card-img text-center"
-                Style="background: inherit; color: inherit;">
+            <CardHeader TextAlignment="TextAlignment.Center">
                 <img style="height: 200px; max-width: 600px;" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
             </CardHeader>
         
@@ -113,7 +110,7 @@
 
     private string GetEditorUrl()
     {
-        return $"/ComboEditor/{ChosenFighter?.Name}/false/1y8GcITqkVsGzjJQ3f2R";
+        return $"/Editor/{ChosenFighter?.Name}/1y8GcITqkVsGzjJQ3f2R";
     }
 
     private string GetPhotoUrl()

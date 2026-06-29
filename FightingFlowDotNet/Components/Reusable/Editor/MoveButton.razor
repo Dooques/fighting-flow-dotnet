@@ -1,0 +1,55 @@
+﻿@using FightingFlowDotNet.Models
+@if (Move is { Type: "Character" or "Modifier" or "Mechanics Input" or "Common" or "Stage" })
+{
+    <Button Background=
+            "@(
+             Move?.Type switch 
+             {
+                "Character" => Background.Primary,
+                "Mechanics Input" => Background.Secondary,
+                "Modifier" => Background.Light,
+                "Break" => Background.Info,
+                "Stage" => Background.Success,
+                "Common" => Background.Danger,
+                _ => Background.Dark
+            })"
+            Type="ButtonType.Button"
+            @onclick="HandleMoveClicked">
+        <Text TextWeight="TextWeight.Bold">
+            @Move?.Name
+        </Text>
+    </Button>
+}
+else
+{
+    <Button Type="ButtonType.Button">
+        <img src="@GetMoveImage(Move.Name)"
+             alt="@Move.Name"
+             height="40" width="40"
+             @onclick="HandleMoveClicked"/>
+    </Button>
+}
+
+@code {
+    
+    [Parameter] public Move? Move { get; set; }
+    [Parameter] public EventCallback<Move> AddMove { get; set; }
+
+    private async Task HandleMoveClicked()
+    {
+        if (AddMove.HasDelegate && Move != null)
+        {
+            Console.WriteLine($"Sending {Move.Name} from MoveButton");
+            await AddMove.InvokeAsync(Move);
+        }
+        else
+        {
+            Console.WriteLine("Move is null");
+        }
+    }
+    
+    private static string GetMoveImage(string name)
+    {
+        return $"./images/{name}.png";
+    }
+}
