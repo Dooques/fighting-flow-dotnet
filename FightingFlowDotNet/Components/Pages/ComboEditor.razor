@@ -1,5 +1,6 @@
 ﻿@page "/Editor/{Name}/{ComboId}"
 
+@using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Components.Reusable.Editor
@@ -15,10 +16,12 @@
     
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
                Gap="Gap.Is2">
+        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
         
-        <ComboDisplayNoButtons Combo="Combo"/>
-
-        <ComboEditorButtons />
+        <ComboEditorButtons DeleteMove="DeleteMove" 
+                            AddBreak="AddBreak"
+                            ClearMoves="ClearMoves"
+                            SaveCombo="SaveCombo"/>
 
         <ComboMetaFields
             ComboTitle="@ComboTitle"
@@ -61,14 +64,14 @@
         "Mechanics",
         "Stage",
         "Modifier",
-        
     ];
 
-    public ComboDisplay Combo { get; set; } = new(new Combo());
+    public DisplayCombo DisplayCombo { get; set; } = new(new Combo());
 
     protected override async Task OnInitializedAsync()
     {
-        Combo = new ComboDisplay(await GetComboFromFb());
+        var combo = await GetComboFromFb();
+        DisplayCombo = new DisplayCombo(combo);
     }
 
     private Fighter GetChosenFighter()
@@ -81,17 +84,48 @@
         return await FirestoreGetter.GetCombo(Name, ComboId);
     }
 
+    private async Task SaveCombo()
+    {
+        await FirestoreGetter.SaveCombo(DisplayCombo, 
+            DisplayCombo.Combo.Character, DisplayCombo.Combo.Id);
+    }
+
     public void AddMove(Move? move)
     {
         try
         {
             if (move is null) throw new ArgumentException("Move is null");
-            Console.WriteLine($"Adding {move?.Name} to Combo");
-            Combo.Combo.Moves.Add(move?.Notation);
+            Console.WriteLine($"Adding {move.Name} to Combo");
+            DisplayCombo.Combo.Moves.Add(move.Notation);
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
+    }
+
+    public void DeleteMove()
+    {
+        try
+        {
+            Console.WriteLine(DisplayCombo.Combo.Moves.Count);
+            if (DisplayCombo.Combo.Moves.IsNullOrEmpty()) 
+                throw new IndexOutOfRangeException("List is empty");
+            DisplayCombo.Combo.Moves.RemoveAt(DisplayCombo.Combo.Moves.Count - 1);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
+
+    public void AddBreak()
+    {
+        DisplayCombo.Combo.Moves.Add("►");
+    }
+
+    public void ClearMoves()
+    {
+        DisplayCombo.Combo.Moves.Clear();
     }
 }

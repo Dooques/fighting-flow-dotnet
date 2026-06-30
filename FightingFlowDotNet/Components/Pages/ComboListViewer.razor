@@ -16,7 +16,7 @@
                 Color="Color.Primary"
                 TextColor="TextColor.Light"
                 Margin="Margin.Is2.OnY.Is5.OnX"
-                To="@GetEditorUrl()">
+                To="@GetCreatorUrl()">
                 Create a Combo
             </Button>
             
@@ -26,7 +26,7 @@
                 {
                     <Div Margin="Margin.Is4.FromTop">
                         <ComboDisplayWithButtons
-                            Combo="combo"
+                            DisplayCombo="combo"
                             ChosenFighter="@(ChosenFighter ?? new Fighter())"
                             Username="@(GetUsername(combo.Combo.CreatedBy))"/>
                     </Div>
@@ -80,7 +80,7 @@
     
     private Fighter? ChosenFighter { get; set; }
     private List<UserInfo> UsersList { get; set; } = [];
-    private List<ComboDisplay> ComboList { get; set; } = [];
+    private List<DisplayCombo> ComboList { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -95,7 +95,7 @@
         
         ComboList.AddRange(
             from combo in comboList
-            select new ComboDisplay(combo)
+            select new DisplayCombo(combo)
         );
         
         UsersList = await FirestoreGetter.GetUsers();
@@ -111,6 +111,11 @@
     private string GetEditorUrl()
     {
         return $"/Editor/{ChosenFighter?.Name}/1y8GcITqkVsGzjJQ3f2R";
+    }
+    
+    private string GetCreatorUrl()
+    {
+        return $"/Editor/{ChosenFighter?.Name}/new";
     }
 
     private string GetPhotoUrl()

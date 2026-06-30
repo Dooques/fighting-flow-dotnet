@@ -4,13 +4,13 @@
 
 <Div Flex="Flex.Row.Wrap.AlignItems.Center"
      Gap="Gap.Is2">
-    @if (Combo.Combo.Moves.IsNullOrEmpty())
+    @if (DisplayCombo?.Combo.Moves is null || !DisplayCombo.Combo.Moves.Any())
     {
         <p>No Moves found...</p>
     }
     else
     {
-        foreach (var convertedMove in Combo.Combo.Moves.Select(GetMove))
+        foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
         {
             switch (convertedMove.Type)
             {
@@ -46,7 +46,7 @@
 </Div>
 
 @code {
-    [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());
+    [Parameter] public DisplayCombo? DisplayCombo { get; set; } = new(new Combo());
     private readonly List<Move> _moveList = TekkenMoves.Moves;
 
    private Move GetMove(string note)

@@ -12,7 +12,8 @@
              Gap="Gap.Is3">
                 @foreach (var move in _filteredMoves)
                 {
-                   <MoveButton Move="move" AddMove="HandleMove"></MoveButton> 
+                    <MoveButton Move="move" 
+                                AddMove="HandleAddMove"/> 
                 }
                 </Div >
     </Div>
@@ -37,7 +38,7 @@
             FilterCharacterMoves(Moves) : FilterMoves(Moves);
     }
 
-    private async Task HandleMove(Move? move)
+    private async Task HandleAddMove(Move? move)
     {
         if (AddMove.HasDelegate && move != null)
         {

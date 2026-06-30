@@ -1,10 +1,12 @@
-﻿<Div Flex="Flex.Row">
+﻿@using System.Reflection.Metadata
+<Div Flex="Flex.Row">
     <Button
         Color="Color.Light"
         Width="Width.Is25"
         Margin="Margin.Is4.FromEnd"
         Padding="Padding.Is3.OnX"
         TextWeight="TextWeight.Bold"
+        Clicked="AddBreak"
         Outline>
         Break
     </Button>
@@ -14,7 +16,9 @@
             Margin="Margin.Is4.FromEnd"
             Padding="Padding.Is3.OnX"
             TextWeight="TextWeight.Bold"
-            Outline>
+            Clicked="HandleDelete"
+            Outline
+            >
         Delete
     </Button>
     
@@ -23,6 +27,7 @@
             Margin="Margin.Is4.FromEnd"
             Padding="Padding.Is3.OnX"
             TextWeight="TextWeight.Bold"
+            Clicked="ClearMoves"
             Outline>
         Clear
     </Button>
@@ -30,11 +35,47 @@
     <Button Color="Color.Primary"
             Width="Width.Is25"
             Padding="Padding.Is3.OnX"
-            TextWeight="TextWeight.Bold">
+            TextWeight="TextWeight.Bold"
+            Clicked="SaveCombo">
         Save
     </Button>
 </Div>
 
 @code {
+    [Parameter] public EventCallback DeleteMove {get; set; }
+    [Parameter] public EventCallback AddBreak { get; set; }
+    [Parameter] public EventCallback ClearMoves { get; set; }
+    [Parameter] public EventCallback SaveCombo { get; set; }
+
+    private async Task HandleDelete()
+    {
+        if (DeleteMove.HasDelegate)
+        {
+            await DeleteMove.InvokeAsync();
+        }
+    }
     
+    private async Task HandleBreak()
+    {
+        if (DeleteMove.HasDelegate)
+        {
+            await AddBreak.InvokeAsync();
+        }
+    }
+    
+    private async Task HandleClear()
+    {
+        if (ClearMoves.HasDelegate)
+        {
+            await ClearMoves.InvokeAsync();
+        }
+    }
+
+    private async Task HandleSave()
+    {
+        if (AddBreak.HasDelegate)
+        {
+            await AddBreak.InvokeAsync();
+        }
+    }
 }

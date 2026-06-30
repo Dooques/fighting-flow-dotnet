@@ -14,7 +14,7 @@
                 _ => Background.Dark
             })"
             Type="ButtonType.Button"
-            @onclick="HandleMoveClicked">
+            @onclick="HandleAddMove">
         <Text TextWeight="TextWeight.Bold">
             @Move?.Name
         </Text>
@@ -26,7 +26,7 @@ else
         <img src="@GetMoveImage(Move.Name)"
              alt="@Move.Name"
              height="40" width="40"
-             @onclick="HandleMoveClicked"/>
+             @onclick="HandleAddMove"/>
     </Button>
 }
 
@@ -34,8 +34,9 @@ else
     
     [Parameter] public Move? Move { get; set; }
     [Parameter] public EventCallback<Move> AddMove { get; set; }
+    
 
-    private async Task HandleMoveClicked()
+    private async Task HandleAddMove()
     {
         if (AddMove.HasDelegate && Move != null)
         {

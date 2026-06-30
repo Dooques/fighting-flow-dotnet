@@ -3,36 +3,36 @@
 @using Microsoft.IdentityModel.Tokens
 
 <Column Gap="Gap.Is1" Height="Height.Max100">
-    <Heading4>@Combo.Combo.Title</Heading4>
+    <Heading4>@DisplayCombo?.Combo.Title</Heading4>
 
-    <ComboDisplayNoButtons Combo="Combo"/>
+    <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
     
     <Divider/>
 
     <Container Flex="Flex.Row.JustifyContent.Between.AlignItems.Center"
                Gap="Gap.Is2">
         <Div class="d-flex flex-column">
-            <Text>Damage: @Combo.Combo.Damage</Text>
+            <Text>Damage: @DisplayCombo?.Combo.Damage</Text>
             <Text>Created By: @Username</Text>
         </Div>
         
         <Div Flex="Flex.Row.AlignContent.Start.JustifyContent.Center"
              Gap="Gap.Is3">
             <Button Type="ButtonType.Link"
-                    To="@GetEditorEditModeUrl()"
+                    To="@HandleNavigation()"
                     Color="Color.Secondary">
                 Edit
             </Button>
             <Button Type="ButtonType.Link"
                     Color="Color.Primary"
                     TextColor="TextColor.Light"
-                    To="@(GetEditorEditModeUrl())">
+                    To="#">
                 Share
             </Button>
         </Div>
         
         <Div Flex="Flex.Column.AlignItems.Center.JustifyContent.Center">
-            <Text TextWeight="TextWeight.Bold">Ki: @Combo.Ki</Text>
+            <Text TextWeight="TextWeight.Bold">Ki: @DisplayCombo?.Ki</Text>
             <Button>
                 <img class="img" src="images/p.png" height="32" width="32" alt="Like Button"/>
             </Button>
@@ -41,14 +41,13 @@
 </Column>
 
 @code {
-    [Parameter] public ComboDisplay Combo { get; set; } = new(new Combo());
-
+    [Parameter] public DisplayCombo? DisplayCombo { get; set; } = new(new Combo());
     [Parameter] public Fighter ChosenFighter { get; set; } = new();
-
     [Parameter] public string Username { get; set; } = "";
+    [Parameter] public EventCallback GetEditorUrl { get; set; }
 
-    private string GetEditorEditModeUrl()
+    private string HandleNavigation()
     {
-        return $"/ComboEditor/{ChosenFighter.Name}/true";
+        return $"/Editor/{ChosenFighter.Name}/{DisplayCombo?.Combo.Id}";
     }
 }

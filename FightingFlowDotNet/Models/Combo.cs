@@ -21,7 +21,7 @@ public class Combo
     [FirestoreProperty("moves")] public List<string> Moves { get; set; } = [];
 }
 
-public class ComboDisplay(Combo combo)
+public class DisplayCombo(Combo combo)
 {
     public Combo Combo { get; set; } = combo;
     public bool AreOptionsRevealed { get; set; }
