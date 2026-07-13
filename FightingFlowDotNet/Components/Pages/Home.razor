@@ -3,6 +3,7 @@
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources
 @using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FbGetter
 
@@ -22,7 +23,7 @@
                           Data="_gameList"
                           TextField="@((item) => item)"
                           ValueField="@(item => item)"
-                          @bind-Value="@_gameSelected"
+                          ValueChanged="UpdateGameSelected"
                           Color="Color.Dark"
                           Class="m3-outlined-dropdown"
                           Focus="true">
@@ -47,7 +48,7 @@
     </Div>
 
     <Div Flex="Flex.Row.Wrap.JustifyContent.Between.AlignContent.Around">
-        @foreach (var fighter in _fighters)
+        @foreach (var fighter in Fighters)
         {
             <Div Flex="Flex.Grow.Is1.Shrink.Is1">
                 <CharacterCard Fighter="@(fighter)"/>    
@@ -57,7 +58,7 @@
 </Div>
 
 @code {
-    private readonly List<Fighter> _fighters = TekkenFighters.Fighters;
+    private IReadOnlyList<Fighter> Fighters { get; set; } = Tekken8.Fighters;
     private bool _dropDownSelected = false;
     private string _gameSelected = "Tekken 8";
 
@@ -81,10 +82,16 @@
         _dropDownSelected = false;
     }
 
-    private void UpdateGameSelected(string gameSelected)
+    private void UpdateGameSelected(string newGame)
     {
-        _gameSelected = gameSelected;
+        _gameSelected = newGame;
+        Console.WriteLine($"Switched to {_gameSelected}");
+        Fighters = _gameSelected switch
+        {
+            "Tekken 8" => Tekken8.Fighters,
+            "Street Fighter 6" => StreetFighter6.Fighters,
+            "Mortal Kombat 1" => MortalKombat1.Fighters,
+            _ => []
+        };
     }
-
-    
 }

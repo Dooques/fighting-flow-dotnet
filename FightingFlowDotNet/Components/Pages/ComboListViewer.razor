@@ -1,10 +1,12 @@
-﻿@page "/{Name}"
+﻿@page "/{Game}/{Name}"
 
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources
 @using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FirestoreGetter
+@inject NavigationManager Navigation
 
 <PageTitle>Combo Viewer</PageTitle>
 
@@ -77,6 +79,7 @@
 @code {
     [Parameter] 
     public string? Name { get; set; }
+    public string? Game { get; set; }
     
     private Fighter? ChosenFighter { get; set; }
     private List<UserInfo> UsersList { get; set; } = [];
@@ -85,9 +88,24 @@
     protected override async Task OnInitializedAsync()
     {
         Console.WriteLine("Getting fighters");
-        ChosenFighter = TekkenFighters.Fighters.First(f => f.Name == Name);
 
-        Console.WriteLine($"ChosenFighter: {ChosenFighter.Name}");
+        try
+        {
+            ChosenFighter = Game switch
+            {
+                "T8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Name),
+                "SF6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Name),
+                "MK1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Name),
+                _ => throw new ArgumentOutOfRangeException(nameof(Game), Game, null)
+            };
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+            Navigation.NavigateTo("/");
+        }
+
+        Console.WriteLine($"ChosenFighter: {ChosenFighter?.Name}");
         
         if (ChosenFighter == null) return;
         

@@ -5,6 +5,7 @@
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Components.Reusable.Editor
 @using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources
 @using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FirestoreGetter
 
@@ -53,7 +54,7 @@
     private int ComboDamage { get; set; }
     private int ComboDifficulty { get; set; }
 
-    private readonly List<Move> _moveList = TekkenMoves.Moves;
+    private readonly List<Move> _moveList = Tekken8.Moves;
     private readonly List<string> _moveTypes =
     [
         "Misc",
@@ -76,7 +77,7 @@
 
     private Fighter GetChosenFighter()
     {
-        return TekkenFighters.Fighters.First(f => f.Name == Name);
+        return Tekken8.Fighters.First(f => f.Name == Name);
     }
 
     private async Task<Combo> GetComboFromFb()
