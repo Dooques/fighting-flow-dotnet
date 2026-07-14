@@ -6,20 +6,8 @@ public static class Tekken8
 {
     public static List<Fighter> Fighters { get; set; } =
     [
-        new Fighter
-        {
-            Name = "Alisa",
-            ImageId = "alisa",
-            FightingStyle = "Thruster-Based High-Mobility Fighting Style",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Anna",
-            ImageId = "anna",
-            FightingStyle = "Aikido based techniques and Koppojutsu based Assassination Arts",
-            Game = "Tekken 8"
-        },
+        new Fighter { Name = "Alisa", ImageId = "alisa", FightingStyle = "Thruster-Based High-Mobility Fighting Style", Game = "Tekken 8" },
+        new Fighter { Name = "Anna", ImageId = "anna", FightingStyle = "Aikido based techniques and Koppojutsu based Assassination Arts", Game = "Tekken 8" },
         new Fighter
         {
             Name = "Asuka",
@@ -125,7 +113,7 @@ public static class Tekken8
             FightingStyle = "Mishima Style Fighting Karate",
             Game = "Tekken 8"
         },
-        new Fighter
+        new()
         {
             Name = "King",
             ImageId = "king",

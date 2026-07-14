@@ -1,6 +1,8 @@
 ﻿@using System.Reflection.Metadata
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources.TekkenData
+
+
 @if (Moves.Count > 0)
 {
     <Div>
@@ -10,13 +12,12 @@
 
         <Div Flex="Flex.Row.Wrap"
              Gap="Gap.Is3">
-                @foreach (var move in _filteredMoves)
-                {
-                    <MoveButton Move="move" 
-                                AddMove="HandleAddMove"/> 
-                }
-                </Div >
-    </Div>
+            @foreach (var move in _filteredMoves)
+            {
+                <MoveButton Move="move" AddMove="HandleAddMove"/> 
+            }
+        </Div >
+    </Div> 
 }
 
 @code {
@@ -34,8 +35,14 @@
 
     protected override void OnInitialized()
     {
-        _filteredMoves = Type is "Character" ? 
-            FilterCharacterMoves(Moves) : FilterMoves(Moves);
+        if (Type is "Character" || Type is "Special" || Type is "Super Art" || Type is "Fatal Blow")
+        {
+            _filteredMoves = FilterCharacterMoves(Moves);
+        }
+        else
+        {
+            _filteredMoves = FilterMoves(Moves);
+        }
     }
 
     private async Task HandleAddMove(Move? move)
@@ -52,7 +59,7 @@
         TypeFilter = Type switch
         {
             "Stances" => "Common",
-            "Mechanics" => "Mechanics Input",
+            "Mechanics" or "Mechanic" => "Mechanics Input",
             _ => Type
         };
         return moves.FindAll(m => m.Type == TypeFilter);
@@ -60,7 +67,7 @@
     
     private List<Move> FilterCharacterMoves(List<Move> moves)
     {
-        return moves.FindAll(m => m.Character == CharacterName);
+        return moves.FindAll(m => m.Character == CharacterName &&  m.Type == Type);
     }
     
     private Move GetMove(string note)

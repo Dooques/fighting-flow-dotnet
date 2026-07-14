@@ -37,7 +37,6 @@
                 }
             </DropdownList>
         </Field>
-        
 
         @* Subtitle *@
         <Text TextColor="TextColor.Light">
@@ -47,12 +46,10 @@
 
     </Div>
 
-    <Div Flex="Flex.Row.Wrap.JustifyContent.Between.AlignContent.Around">
+    <Div Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem;">
         @foreach (var fighter in Fighters)
         {
-            <Div Flex="Flex.Grow.Is1.Shrink.Is1">
-                <CharacterCard Fighter="@(fighter)"/>    
-            </Div>
+                <CharacterCard Fighter="@(fighter)"/>
         }
     </Div>
 </Div>
@@ -85,7 +82,8 @@
     private void UpdateGameSelected(string newGame)
     {
         _gameSelected = newGame;
-        Console.WriteLine($"Switched to {_gameSelected}");
+        Console.WriteLine($"Switched to {newGame}");
+        Console.WriteLine($"New Value:  {_gameSelected}");
         Fighters = _gameSelected switch
         {
             "Tekken 8" => Tekken8.Fighters,

@@ -5,7 +5,7 @@ namespace FightingFlowDotNet.Resources;
 
 public static class StreetFighter6
 {
-    public static readonly IReadOnlyList<Fighter> Fighters =
+    public static readonly List<Fighter> Fighters =
     [
         new Fighter { Name = "A.K.I.", ImageId = "aki", FightingStyle = "Snake Kung Fu", Game = "Street Fighter 6", CombosById = [] },
         new Fighter { Name = "Akuma", ImageId = "akuma", FightingStyle = " Satsui no Hado, Ansatsuken", Game = "Street Fighter 6", CombosById = [] },
@@ -36,19 +36,19 @@ public static class StreetFighter6
         new Fighter { Name = "Zangief", ImageId = "zangief", FightingStyle = "Mix of Russian and American pro wrestling", Game = "Street Fighter 6", CombosById = [] }
     ];
 
-    public static IReadOnlyList<Move> Moves =
+    public static readonly List<Move> Moves =
     [
         // Classic Inputs
         new Move(name: "lp", notation: "lp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
+        new Move(name: "mp", notation: "mp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
+        new Move(name: "hp", notation: "hp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "lk", notation: "lk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
+        new Move(name: "mk", notation: "mk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
+        new Move(name: "hk", notation: "hk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "p", notation: "p", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "k", notation: "k", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
-        new Move(name: "mp", notation: "mp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
-        new Move(name: "mk", notation: "mk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "pp", notation: "pp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "kk", notation: "kk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
-        new Move(name: "hp", notation: "hp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
-        new Move(name: "hk", notation: "hk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "ppp", notation: "ppp", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
         new Move(name: "kkk", notation: "kkk", type: "SF Classic", character: "Generic", game: "Street Fighter 6", sf6Type: Sf6Type.Classic),
 
@@ -80,11 +80,7 @@ public static class StreetFighter6
         new Move(name: "hcf", notation: "hcf", type: "Movement", character: "Generic", game: "Street Fighter 6"),
         new Move(name: "hcb", notation: "bd", type: "Movement", character: "Generic", game: "Street Fighter 6"),
         new Move(name: "fc", notation: "fc", type: "Movement", character: "Generic", game: "Street Fighter 6"),
-        new Move(name: "dp", notation: "dp", type: "Movement", character: "Generic", game: "Street Fighter 6")
-    ];
-
-    public static IReadOnlyList<Move> CharacterMoves =
-    [
+        new Move(name: "dp", notation: "dp", type: "Movement", character: "Generic", game: "Street Fighter 6"),
         // A.K.I.
         new Move(name: "Nightshade Pulse", notation: "Nightshade Pulse", type: "Special", character: "A.K.I.", game: "Street Fighter 6"),
         new Move(name: "Orchid Spring", notation: "Orchid Spring", type: "Special", character: "A.K.I.", game: "Street Fighter 6"),

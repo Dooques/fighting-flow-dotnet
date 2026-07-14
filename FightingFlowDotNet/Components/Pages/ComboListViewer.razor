@@ -22,7 +22,7 @@
                 Create a Combo
             </Button>
             
-            @if (ComboList.Count > 0)
+            @if (ComboList.Any())
             {
                 @foreach (var combo in ComboList)
                 {
@@ -44,28 +44,37 @@
     <Column Width="Width.Is25">
         <Card Background="Background.Dark">
             <CardHeader TextAlignment="TextAlignment.Center">
-                <img style="height: 200px; max-width: 600px;" src="@(GetPhotoUrl())" alt="@ChosenFighter?.Name"/>
+                <Div>
+                    <CardImage Source="@GetPhotoUrl()"
+                               Height="Height.Px().Min(100)"
+                               Width="Width.Max100"
+                               Style="object-fit: contain;"
+                               Alt="@ChosenFighter?.Name"/>
+                </Div>
             </CardHeader>
         
-            <CardBody
-                Style="background: inherit; color: inherit">
-            
-                <Text
-                    class="card-title text-white">
+            <CardBody>
+                <CardTitle Size="HeadingSize.Is5"
+                           TextColor="TextColor.Light">
                     @(ChosenFighter?.Name ?? "Invalid Character")
-                </Text>
-            
-                <Text class="text-white">
-                    @((ChosenFighter?.Bio == "") ? "No bio provided" : ChosenFighter?.Bio)
-                </Text>
-            
-                <Text class="text-white">
-                    @(ChosenFighter?.FightingStyle)
-                </Text>
-            
-                <Text class="text-white">
-                    @(ChosenFighter?.Game)
-                </Text>
+                </CardTitle>
+                <Div Flex="Flex.Column" >
+
+                    @if (ChosenFighter?.Bio.Length > 0)
+                    {
+                        <Text>
+                            @(ChosenFighter?.Bio)
+                        </Text>
+                    }
+
+                    <Text class="text-white">
+                        @(ChosenFighter?.FightingStyle)
+                    </Text>
+
+                    <Text class="text-white">
+                        @(ChosenFighter?.Game)
+                    </Text>
+                </Div>
             </CardBody>
         </Card>
     </Column>
@@ -79,6 +88,7 @@
 @code {
     [Parameter] 
     public string? Name { get; set; }
+    [Parameter]
     public string? Game { get; set; }
     
     private Fighter? ChosenFighter { get; set; }
@@ -102,7 +112,7 @@
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            Navigation.NavigateTo("/");
+            Navigation.NavigateTo("");
         }
 
         Console.WriteLine($"ChosenFighter: {ChosenFighter?.Name}");
@@ -128,16 +138,16 @@
 
     private string GetEditorUrl()
     {
-        return $"/Editor/{ChosenFighter?.Name}/1y8GcITqkVsGzjJQ3f2R";
+        return $"/Editor/{Game}/{ChosenFighter?.Name}/1y8GcITqkVsGzjJQ3f2R";
     }
     
     private string GetCreatorUrl()
     {
-        return $"/Editor/{ChosenFighter?.Name}/new";
+        return $"/Editor/{Game}/{ChosenFighter?.Name}/new";
     }
 
     private string GetPhotoUrl()
     {
-        return $"images/{ChosenFighter?.Name}.png";
+        return $"./images/{ChosenFighter?.ImageId}.png";
     }
 }

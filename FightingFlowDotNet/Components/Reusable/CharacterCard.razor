@@ -1,19 +1,24 @@
 ﻿@using FightingFlowDotNet.Models
-
-<Card Flex="Flex.Shrink.Is1.Grow.Is1"
-      Background="Background.Transparent">
-    <Anchor To="@(GetListViewerUrl())" TextDecoration="TextDecoration.None">
-        <img
-            src="./images/@(Fighter.ImageId).png"
-            style="max-width: 200px; max-height: 100%; object-fit: contain" 
-            alt="@(Fighter.Name)"/>
-        <CardBody>
-            <Text TextColor="TextColor.Light">
+    <Card Flex="Flex.Shrink.Is1.Grow.Is1.AlignContent.Center.JustifyContent.Center"
+          Background="Background.Dark"
+          Height="Height.Is100"
+          Width="Width.Is100">
+        <Anchor To="@(GetListViewerUrl())" TextDecoration="TextDecoration.None">
+            <Div Height="Height.Px(200)"
+                 Width="Width.Is100"
+                 Overflow="Overflow.Hidden">
+                <CardImage
+                    Source="@GetImageSource()"
+                    Style="width: 100%; height: 100%; object-fit: contain; object-position: center;"
+                    Alt="@(Fighter.Name)"/>
+            </Div>
+            <CardTitle Size="HeadingSize.Is5"
+                       TextColor="TextColor.Light"
+                       TextAlignment="TextAlignment.Center">
                 @Fighter.Name
-            </Text>
-        </CardBody>
-    </Anchor>
-</Card>
+            </CardTitle>
+        </Anchor>
+    </Card>
 
 @code {
     [Parameter]
@@ -21,6 +26,18 @@
 
     private string GetListViewerUrl()
     {
-        return Fighter.Name;
+        var game = Fighter.Game switch
+        {
+            "Street Fighter 6" => "SF6",
+            "Tekken 8" => "T8",
+            "Mortal Kombat 1" => "MK1",
+            _ => null
+        };
+        return $"{game}/{Fighter.Name}";
+    }
+
+    private string GetImageSource()
+    {
+        return $"./images/{Fighter.ImageId}.png";
     }
 }

@@ -1,40 +1,46 @@
 ﻿@using FightingFlowDotNet.Models
-@if (Move is { Type: "Character" or "Modifier" or "Mechanics Input" or "Common" or "Stage" })
+@if (Move is { Type: "Character" or "Special" or "Modifier" or "Mechanics Input" or 
+         "Mechanic" or "Common" or "Stage" or "Super Art" or "Fatal Blow" or "Text Input" })
 {
     <Button Background=
             "@(
              Move?.Type switch 
              {
-                "Character" => Background.Primary,
-                "Mechanics Input" => Background.Secondary,
+                "Character" or "Super Art" or "Fatal Blow" => Background.Primary,
+                "Mechanics Input" or "Special" => Background.Secondary,
                 "Modifier" => Background.Light,
                 "Break" => Background.Info,
                 "Stage" => Background.Success,
-                "Common" => Background.Danger,
+                "Common" or "Mechanic" or "Text Input" => Background.Danger,
                 _ => Background.Dark
             })"
             Type="ButtonType.Button"
             @onclick="HandleAddMove">
-        <Text TextWeight="TextWeight.Bold">
-            @Move?.Name
-        </Text>
+        <Text TextWeight="TextWeight.Bold">@Move?.Name</Text>
     </Button>
 }
 else
 {
-    <Button Type="ButtonType.Button">
-        <img src="@GetMoveImage(Move.Name)"
-             alt="@Move.Name"
-             height="40" width="40"
-             @onclick="HandleAddMove"/>
-    </Button>
+    @if (Move != null)
+    {
+        <Button Type="ButtonType.Button">
+            <img src="@GetMoveImage(Move.Name)"
+                 alt="@Move.Name"
+                 height="40" width="40"
+                 @onclick="HandleAddMove"/>
+        </Button>
+    }
 }
 
 @code {
     
     [Parameter] public Move? Move { get; set; }
     [Parameter] public EventCallback<Move> AddMove { get; set; }
-    
+
+    protected override void OnInitialized()
+    {
+        Console.WriteLine($"{Move?.Name} / {Move?.Type}");
+    }
 
     private async Task HandleAddMove()
     {

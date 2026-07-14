@@ -41,7 +41,7 @@
 </Column>
 
 @code {
-    [Parameter] public DisplayCombo? DisplayCombo { get; set; } = new(new Combo());
+    [Parameter] public DisplayCombo? DisplayCombo { get; set; }
     [Parameter] public Fighter ChosenFighter { get; set; } = new();
     [Parameter] public string Username { get; set; } = "";
     [Parameter] public EventCallback GetEditorUrl { get; set; }

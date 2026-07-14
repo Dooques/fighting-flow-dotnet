@@ -1,62 +1,108 @@
 ﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
-@using Microsoft.IdentityModel.Tokens
 
-<Div Flex="Flex.Row.Wrap.AlignItems.Center"
-     Gap="Gap.Is2">
-    @if (DisplayCombo?.Combo.Moves is null || !DisplayCombo.Combo.Moves.Any())
-    {
-        <p>No Moves found...</p>
-    }
-    else
-    {
-        foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
+
+@if (DisplayCombo?.Combo.Moves == null)
+{
+    <Text>Loading Moves...</Text>
+}
+else
+{
+    <Div Flex="Flex.Row.Wrap.AlignItems.Center"
+         Gap="Gap.Is2">
+        @if (DisplayCombo?.Combo.Moves == null || !DisplayCombo.Combo.Moves.Any())
         {
-            switch (convertedMove.Type)
+            <p>No Moves found...</p>
+        }
+        else
+        {
+            foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
             {
-                case "Break":
-                    <Text>
-                        @convertedMove.Notation
-                    </Text>
-                    break;
-                    
-                case "Mechanics Input" or "Character" or "Common" or "Stage":
-                    <Button Border="Border.Is0"
-                            Background="@(convertedMove.Type switch { 
-                            "Character" => Background.Primary, 
-                            "Mechanics Input" => Background.Secondary, 
-                            "Modifier" => Background.Light, 
-                            "Break" => Background.Info, 
-                            "Stage" => Background.Success, 
-                            "Stances" => Background.Danger, 
-                            _ => Background.Dark })"
-                            TextColor="TextColor.Dark"
-                            TextWeight="TextWeight.Bold">
-                        @convertedMove.Name
-                    </Button>
-                    break;
-                    
-                default:
-                    <img src="@GetMoveImage(convertedMove.Name)"
-                         alt="@convertedMove.Name" height="50" width="50"/>
-                    break;
+                Console.WriteLine($"Move: {convertedMove?.Name}, {convertedMove?.Type}");
+                switch (convertedMove?.Type)
+                {
+                    case "Break":
+                        <Text>@convertedMove.Notation</Text>
+                        break;
+
+                    case "Mechanics Input" or "Mechanic" or "Character" or "Common" or "Stage" or "Special":
+                        <Button Border="Border.Is0"
+                                Background="@GetMoveBackgroundColor(convertedMove.Type)"
+                                TextColor="@GetMoveTextColor(convertedMove.Type)"
+                                TextWeight="TextWeight.Bold">
+                            @convertedMove.Name
+                        </Button>
+                        break;
+
+                    default:
+                        if (convertedMove != null)
+                        {
+                            <img src="@GetMoveImage(convertedMove.Name)"
+                                 alt="@convertedMove.Name"
+                                 height="50" width="50"/>
+                        }
+                        break;
+                }
             }
         }
-    }
-</Div>
+    </Div>
+}
 
 @code {
-    [Parameter] public DisplayCombo? DisplayCombo { get; set; } = new(new Combo());
-    private readonly List<Move> _moveList = Tekken8.Moves;
+    [Parameter]
+    public DisplayCombo? DisplayCombo { get; set; }
+    
+    private List<Move>? _moveList = [];
 
-   private Move GetMove(string note)
-   {
-       return _moveList.First(m => m.Notation == note);
-   }
+    protected override void OnParametersSet()
+    {
+        if (DisplayCombo != null)
+        {
+            _moveList = DisplayCombo?.Combo.Game switch
+            {
+                "Tekken 8" => Tekken8.Moves,
+                "Street Fighter 6" => StreetFighter6.Moves,
+                "Mortal Kombat 1" => MortalKombat1.Moves,
+                _ => []
+            };
+        }
+    }
+
+    private Move? GetMove(string note)
+    { 
+        if (_moveList == null || string.IsNullOrEmpty(note)) return null;
+        try
+        {
+            return _moveList.FirstOrDefault(m => m.Notation == note);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+    }
+    
+    private static string GetMoveBackgroundColor(string? type) => type switch
+    {
+        "Character" => "#ee1164",       // Custom Primary (Pink/Magenta)
+        "Mechanics Input" => "#6c1fb0", // Custom Secondary (Purple)
+        "Modifier" => "#f5f5fa",        // Custom Light (Off-White)
+        "Break" => "#05d9e8",           // Custom Info/Link (Cyan)
+        "Stage" => "#39ff14",           // Custom Success (Neon Green)
+        "Stances" => "#ff5400",         // Custom Danger (Orange)
+        _ => "#0a0a0d"                  // Custom Dark (Deep Black)
+    };
+    
+    private static string GetMoveTextColor(string? type) => type switch
+    {
+        "Modifier" => "#0a0a0d",        // Use dark text on off-white backgrounds
+        "Stage" => "#0a0a0d",           // Use dark text on bright neon green
+        "Break" => "#0a0a0d",           // Use dark text on bright neon cyan
+        _ => "#ffffff"                  // Use white text for purple, pink, and orange
+    };
 
    private static string GetMoveImage(string name)
    {
-       return $"./images/{name}.png";
+       return $"images/{name}.png";
    }
 }

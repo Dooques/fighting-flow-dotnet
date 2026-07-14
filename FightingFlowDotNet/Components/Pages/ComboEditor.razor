@@ -1,4 +1,4 @@
-﻿@page "/Editor/{Name}/{ComboId}"
+﻿@page "/Editor/{Game}/{Name}/{ComboId}"
 
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
@@ -17,7 +17,6 @@
     
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
                Gap="Gap.Is2">
-        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
         
         <ComboEditorButtons DeleteMove="DeleteMove" 
                             AddBreak="AddBreak"
@@ -34,7 +33,7 @@
     
     <Div Flex="Flex.Column.JustifyContent.Start"
          Gap="Gap.Is3">
-        @foreach (var type in _moveTypes)
+        @foreach (var type in _types)
         {
             <MoveSelector Moves="_moveList" 
                           Type="@type" 
@@ -47,6 +46,7 @@
 
 @code {
     [Parameter] public string Name { get; set; } = "";
+    [Parameter] public string Game { get; set; } = "";
     [Parameter] public bool EditMode { get; set; }
     [Parameter] public string ComboId { get; set; } = "";
 
@@ -54,24 +54,36 @@
     private int ComboDamage { get; set; }
     private int ComboDifficulty { get; set; }
 
-    private readonly List<Move> _moveList = Tekken8.Moves;
-    private readonly List<string> _moveTypes =
-    [
-        "Misc",
-        "Movement",
-        "Input",
-        "Character",
-        "Stances",
-        "Mechanics",
-        "Stage",
-        "Modifier",
-    ];
+    private List<Move> _moveList = [];
+    private List<string> _types = []; 
+    private readonly List<string> _moveTypesT8 = 
+        ["Misc", "Movement", "Input", "Character", "Stances", "Mechanics", "Stage", "Modifier"];
+    private readonly List<string> _moveTypesSf6 = 
+        ["Movement", "SF Classic", "SF Modern", "Mechanic", "Stage", "Special", "Super Art"];
+    private readonly List<string> _moveTypesMk1 = 
+        ["Input", "Movement", "Text Input", "Special", "Fatal Blow"];
 
-    public DisplayCombo DisplayCombo { get; set; } = new(new Combo());
+    private DisplayCombo DisplayCombo { get; set; } = new(new Combo());
 
     protected override async Task OnInitializedAsync()
     {
         var combo = await GetComboFromFb();
+        switch (Game) 
+        {
+            case "T8":
+                _moveList = Tekken8.Moves;
+                _types = _moveTypesT8;
+                break;
+            case "SF6":
+                _moveList = StreetFighter6.Moves;
+                _types = _moveTypesSf6;
+                break;
+            case "MK1":
+                _moveList = MortalKombat1.Moves;
+                _types = _moveTypesMk1;
+                break;
+        }
+
         DisplayCombo = new DisplayCombo(combo);
     }
 
