@@ -1,4 +1,5 @@
 ﻿using FightingFlowDotNet.Models;
+using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 
 namespace FightingFlowDotNet.Clients;
@@ -8,7 +9,8 @@ public class FirestoreGetter(IConfiguration configuration)
     private FirestoreDb Db { get; set; } = new FirestoreDbBuilder
     {
         ProjectId = configuration["Firebase:projectId"],
-        DatabaseId = configuration["Firebase:Database"]
+        DatabaseId = configuration["Firebase:Database"],
+        Credential = GoogleCredential.FromJson(configuration["GoogleCloud:ServiceAccountJson"])
     }.Build();
 
     public async Task<List<Fighter>> GetFighters(string game)
