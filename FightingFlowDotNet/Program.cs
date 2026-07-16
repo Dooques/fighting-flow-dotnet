@@ -5,7 +5,10 @@ using FightingFlowDotNet.Clients;
 using FightingFlowDotNet.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Configuration.AddJsonFile("customsettings.json", optional: false, reloadOnChange: true);
+if (builder.Environment.IsDevelopment())
+{
+    builder.Configuration.AddJsonFile("customsettings.json", optional: false, reloadOnChange: true);
+}
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
