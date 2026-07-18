@@ -11,6 +11,6 @@ public static class GoogleCredentialFactory
             ? GoogleCredential.FromJson(JsonSerializer.Serialize(configuration
                 .GetSection("GoogleCloud:ServiceAccountJson")
                 .Get<Dictionary<string, string>>()))
-            : GoogleCredential.FromJson(configuration["GoogleCloud:ServiceAccountKey"]);
+            : GoogleCredential.FromJson(configuration["GoogleCloud:ServiceAccountJson"]);
     }
 }
