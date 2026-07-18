@@ -11,5 +11,9 @@ export function initFirebase(config) {
 export async function signInWithGoogle() {
     const provider = new GoogleAuthProvider();
     const result = await signInWithPopup(auth, provider);
-    return await result.user.getIdToken();
+    const idToken =await result.user.getIdToken();
+    
+    const response = await fetch("/auth/signin-google", 
+        { method: "POST", body: idToken });
+    return response.ok
 }
