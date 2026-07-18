@@ -2,72 +2,158 @@
 @using FightingFlowDotNet.Clients
 @inject NavigationManager Navigation
 @inject FirebaseClientFactory FirebaseClientFactory
-@inject IConfiguration Configuration
+@inject IJSRuntime Js
+@inject IConfiguration Config
 
-@if (_signUp)
-{
-    <h3 class="text-white text-center">Sign Up</h3>
-}
-else
-{
-    <h3 class="text-white text-center">Sign In</h3>
-}
-
-<div class="container-fluid text-white w-50">
-    <div class="form-group">
-        <label>Username</label>
-        <input type="text" @bind="_username" class="form-control"/>
-    </div>
-    <div class="form-group mt-2">
-        <label>Password</label>
-        <input type="password" @bind="_password" class="form-control"/>
-    </div>
+<Div>
     @if (_signUp)
     {
-        <label>Email</label>
-        <input type="email" class="form-control"/>
-
-        <label>Date of Birth</label>
-        <input type="date" class="form-control"/>
-
-        <label>Name</label>
-        <input type="text" class="form-control"/>
+        <Heading3>Sign Up</Heading3>
     }
-</div>
-<div class="container-fluid">
-    <div class="d-flex flex-row justify-content-center">
-        <div class="flex-item">
-            @if (_signUp)
-            {
-                <button class="btn btn-primary mt-3" @onclick="TriggerSignUp">Sign In</button>
-                <button class="btn btn-success mt-3 ms-3" @onclick="SignUpWithEmail">Sign Up</button>
-            }
-            else
-            {
-                <button class="btn btn-primary mt-3" @onclick="SignInWitEmail">Sign In</button>
-                <button class="btn btn-light mt-3 ms-3" @onclick="TriggerSignUp">Sign Up</button>
-            }
-        </div>
-    </div>
-</div>
+    else
+    {
+        <Heading3>Sign In</Heading3>
+    }
 
+    <Fields>
+        <FieldSet Horizontal>
+            <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromStart">
+                <FieldLabel>Username</FieldLabel>
+                <FieldBody>
+                    <TextInput @bind-Value="@_username"/>
+                </FieldBody>
+            </Field>
 
+            <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromEnd">
+                <FieldLabel>Password</FieldLabel>
+                <FieldBody>
+                    <TextInput Role="TextRole.Password"
+                               @bind-Value="@_password"/>
+                </FieldBody>
+            </Field>
+        </FieldSet>
 
-@if (!string.IsNullOrEmpty(_errorMessage))
-{
-    <p class="text-danger mt-2">@_errorMessage</p>
-}
+        @if (_signUp)
+        {
+            <FieldSet Horizontal>
+                <Field ColumnSize="ColumnSize.Is6"
+                       Padding="Padding.Is2.FromStart">
+                    <FieldLabel>Name</FieldLabel>
+                    <FieldBody>
+                        <TextInput @bind-Value="@_name"/>
+                    </FieldBody>
+                </Field>
+            
+                <Field ColumnSize="ColumnSize.Is6"
+                       Padding="Padding.Is2.FromEnd">
+                    <FieldLabel>Email</FieldLabel>
+                    <FieldBody>
+                        <TextInput Role="TextRole.Email"
+                                   @bind-Value="_email"/>
+                    </FieldBody>
+                </Field>
+            </FieldSet>
+
+            <FieldSet Horizontal>
+                <Field ColumnSize="ColumnSize.Is12" Padding="Padding.Is2.OnX">
+                    <FieldLabel>Date of Birth</FieldLabel>
+                    <Addons>
+                        <Addon>
+                            <DatePicker @bind-Value="_dob" 
+                                        Background="Background.Light"/>
+                        </Addon>
+                        <Addon>
+                            <Button Background="Background.Light">
+                                <Icon Name="IconName.CalendarDay"/>
+                            </Button>
+                        </Addon>
+                    </Addons>
+                </Field>
+            </FieldSet>
+        }
+    </Fields>
+    
+    <Div>
+        @if (_signUp)
+        {
+            <Button Color="Color.Primary"
+                    TextColor="TextColor.Light"
+                    @onclick="@SignUpWithEmail"
+                    Margin="Margin.Is4.FromEnd">
+                Sign Up
+            </Button>
+            
+            <Button Color="Color.Secondary"
+                    TextColor="TextColor.Light"
+                    @onclick="@TriggerSignUp">
+                Show Sign In
+            </Button>
+        }
+        else
+        {
+            <Button Color="Color.Primary"
+                    @onclick="@SignInWitEmail"
+                    Margin="Margin.Is4.FromEnd">
+                Sign In
+            </Button>
+            
+            <Button Color="Color.Secondary"
+                    @onclick="@TriggerSignUp">
+                Show Sign Up
+            </Button>
+        }
+        
+    </Div>
+        <Button Color="Color.Success"
+                Margin="Margin.Is4.FromTop"
+                Clicked="@SignInWithGoogle">
+            Sign In With Google
+        </Button>
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <Text>@_errorMessage</Text>
+    }
+</Div>
 
 @code {
     private string _username = "";
     private string _email = "";
     private string _password = "";
     private string _name = "";
-    private string _dob = "";
+    private DateTime _dob = DateTime.Now;
     private DateTime _dateCreated = DateTime.Now;
     
     private string _errorMessage = "";
     private bool _signUp = false;
+
+    private IJSObjectReference? _firebaseModule;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _firebaseModule = await Js.InvokeAsync<IJSObjectReference>(
+                "import", "./js/firebaseAuth.js");
+
+            await _firebaseModule.InvokeAsync<IJSObjectReference>("initFirebase", new
+            {
+                apiKey = Config["Firebase:ApiKey"],
+                authDomain = Config["Firebase:AuthDomain"],
+                projectId = Config["Firebase:ProjectId"],
+                storageBucket = Config["Firebase:StorageBucket"],
+                messageSenderId = Config["Firebase:MessageSenderId"],
+                appId = Config["Firebase:AppId"],
+            });
+        }
+    }
+
+    private async Task SignInWithGoogle()
+    {
+        if (_firebaseModule is null) return;
+        var idToken = await _firebaseModule.InvokeAsync<string>("signInWithGoogle");
+        Console.WriteLine($"Got Firebase Id Token: {idToken}");
+    }
 
     private void TriggerSignUp()
     {
@@ -93,6 +179,7 @@ else
     {
         var client = FirebaseClientFactory.GetAuthClient();
         Console.WriteLine("Client Created");
+        
         try
         {
             Console.WriteLine("Calling supabase.Auth.SignIn");

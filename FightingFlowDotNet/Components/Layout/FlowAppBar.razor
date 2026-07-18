@@ -1,4 +1,5 @@
-﻿<Bar Breakpoint="Breakpoint.Mobile">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<Bar Breakpoint="Breakpoint.Mobile">
     <BarBrand>
         <BarItem>
             <BarLink To="/">
@@ -18,12 +19,26 @@
             </BarLink>    
         </BarItem>
 
-        <BarItem>
-            <BarLink To="profile">
-                <Button TextColor="TextColor.Light">
-                    Profile    
-                </Button>
-            </BarLink>
-        </BarItem>
+        <AuthorizeView>
+            <Authorized>
+                <BarItem>
+                    <BarLink To="profile">
+                        <Button TextColor="TextColor.Light">
+                            Profile    
+                        </Button>
+                    </BarLink>
+                </BarItem>
+            </Authorized>
+            
+            <NotAuthorized>
+                <BarItem>
+                    <BarLink To="login">
+                        <Button TextColor="TextColor.Light">
+                            Login    
+                        </Button>
+                    </BarLink>
+                </BarItem>
+            </NotAuthorized>
+        </AuthorizeView>
     </BarEnd>
 </Bar>
