@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using FightingFlowDotNet.Clients.Helper;
 using FightingFlowDotNet.Models;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
@@ -11,16 +12,7 @@ public class FirestoreGetter(IConfiguration configuration, IHostEnvironment env)
     {
         ProjectId = configuration["Firebase:projectId"],
         DatabaseId = configuration["Firebase:Database"],
-        
-        Credential = env.IsDevelopment() ? 
-            GoogleCredential
-                .FromJson(
-                    JsonSerializer.Serialize(
-                        configuration.GetSection("GoogleCloud:ServiceAccountJson")
-                            .Get<Dictionary<string, string>>())) 
-            : 
-            GoogleCredential
-                .FromJson(configuration["GoogleCloud:ServiceAccountKey"])
+        Credential = GoogleCredentialFactory.Create(configuration, env)
     }.Build();
     
     

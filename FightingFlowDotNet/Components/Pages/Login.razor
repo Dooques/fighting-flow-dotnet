@@ -151,8 +151,15 @@
     private async Task SignInWithGoogle()
     {
         if (_firebaseModule is null) return;
-        var idToken = await _firebaseModule.InvokeAsync<string>("signInWithGoogle");
-        Console.WriteLine($"Got Firebase Id Token: {idToken}");
+        var success= await _firebaseModule.InvokeAsync<bool>("signInWithGoogle");
+        if (success)
+        {
+            Navigation.NavigateTo("/", forceLoad: true);
+        }
+        else
+        {
+            _errorMessage = "Google sign-in failed.";
+        }
     }
 
     private void TriggerSignUp()
