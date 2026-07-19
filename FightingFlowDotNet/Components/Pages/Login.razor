@@ -1,7 +1,12 @@
 ﻿@page "/login"
+@using System.Text.Json
 @using FightingFlowDotNet.Clients
+@using Firebase.Auth
+@using Models
+@using UserInfo = Firebase.Auth.UserInfo
+
 @inject NavigationManager Navigation
-@inject FirebaseClientFactory FirebaseClientFactory
+@inject FirestoreGetter Getter 
 @inject IJSRuntime Js
 @inject IConfiguration Config
 
@@ -32,12 +37,22 @@
             <FieldSet Horizontal>
                 <Field ColumnSize="ColumnSize.Is6"
                        Padding="Padding.Is2.FromStart">
+                    <FieldLabel>Confirm Password</FieldLabel>
+                    <FieldBody>
+                        <TextInput @bind-Value="@_confirmPassword"/>
+                    </FieldBody>
+                </Field>
+                
+                <Field ColumnSize="ColumnSize.Is6"
+                       Padding="Padding.Is2.FromStart">
                     <FieldLabel>Name</FieldLabel>
                     <FieldBody>
                         <TextInput @bind-Value="@_name"/>
                     </FieldBody>
                 </Field>
+            </FieldSet>
             
+            <FieldSet Horizontal>
                 <Field ColumnSize="ColumnSize.Is6"
                        Padding="Padding.Is2.FromEnd">
                     <FieldLabel>Email</FieldLabel>
@@ -46,14 +61,12 @@
                                    @bind-Value="_email"/>
                     </FieldBody>
                 </Field>
-            </FieldSet>
 
-            <FieldSet Horizontal>
-                <Field ColumnSize="ColumnSize.Is12" Padding="Padding.Is2.OnX">
+                <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromStart">
                     <FieldLabel>Date of Birth</FieldLabel>
                     <Addons>
                         <Addon>
-                            <DatePicker @bind-Value="_dob" 
+                            <DatePicker @bind-Value="_dob"
                                         Background="Background.Light"/>
                         </Addon>
                         <Addon>
@@ -98,22 +111,24 @@
         }
         
     </Div>
-        <Button Color="Color.Success"
-                Margin="Margin.Is4.FromTop"
-                Clicked="@SignInWithGoogle">
-            Sign In With Google
-        </Button>
-
-    @if (!string.IsNullOrEmpty(_errorMessage))
-    {
-        <Text>@_errorMessage</Text>
-    }
+    <Button Color="Color.Success"
+            Margin="Margin.Is4.FromTop"
+            Clicked="@SignInWithGoogle">
+        Sign In With Google
+    </Button>
+    <Div>
+        @if (!string.IsNullOrEmpty(_errorMessage))
+        { 
+            <Text>@_errorMessage</Text> 
+        }
+    </Div>
 </Div>
 
 @code {
     private string _username = "";
     private string _email = "";
     private string _password = "";
+    private string _confirmPassword = "";
     private string _name = "";
     private DateTime _dob = DateTime.Now;
     private DateTime _dateCreated = DateTime.Now;
@@ -123,6 +138,11 @@
 
     private IJSObjectReference? _firebaseModule;
 
+    private void TriggerSignUp()
+    {
+        _signUp = !_signUp;
+    }
+    
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
@@ -162,49 +182,81 @@
             Console.WriteLine(ex.Message);
         }
     }
-
-    private void TriggerSignUp()
-    {
-        _signUp = !_signUp;
-    }
-
+    
     private async Task SignUpWithEmail()
     {
-        Console.WriteLine("Attempting to sign in with email");
         if (_firebaseModule is null) return;
+        if (_password != _confirmPassword)
+        {
+            _errorMessage = "Passwords do not match";
+            return;
+        }
+        
+        var userAuth = new AuthoriseUser
+        {
+            Password = _password,
+            CustomUserInfo = new CustomUserInfo 
+            { 
+                UserId = Guid.NewGuid().ToString(),
+                Username = _username,
+                ProfilePic = "",
+                Name = _name,
+                Email = _email,
+                DateCreated = _dateCreated.ToShortDateString(),
+                Dob =  _dob.ToShortDateString(),
+                LikedCombos = [],
+                CharacterList = []
+            }};
 
         try
         {
-            var success = _firebaseModule.InvokeAsync<bool>("signUpWithEmailAndPassword");
+            var success = await _firebaseModule.InvokeAsync<bool>(
+                "createAccountWithEmailAndPassword", userAuth);
             if (success)
             {
-                
                 Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                _errorMessage = "Sign up failed...";
             }
         }
         catch (Exception ex)
         {
-            _errorMessage = ex.Message;
+            _errorMessage = "Something went wrong";
+            Console.WriteLine(ex);
         }
     }
 
     private async Task SignInWitEmail()
     {
-        var client = FirebaseClientFactory.GetAuthClient();
-        Console.WriteLine("Client Created");
-        
+        if (_firebaseModule is null) return;
+
+        var user = await Getter.FindUserByUsername(_username);
+
+        if (user is null)
+        {
+            _errorMessage = "No user found...";
+            return;
+        }
+
         try
         {
-            Console.WriteLine("Calling supabase.Auth.SignIn");
-            var session = await client.SignInWithEmailAndPasswordAsync(_email, _password);
-            Console.WriteLine($"Session Created: {session.User.Credential.IdToken ?? "invalid token"}");
-            Console.WriteLine("Session Created, navigating to home");
-            Navigation.NavigateTo("/");
+            var success = await _firebaseModule.InvokeAsync<bool>(
+                "signinWithEmailAndPassword", user.Email, _password);
+            if (success)
+            {
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                _errorMessage = "Something went wrong...";
+            }
         }
         catch (Exception ex)
         {
-            _errorMessage = ex.Message;
-            Console.WriteLine($"Exception occured: {_errorMessage}");
+            Console.WriteLine(ex.Message);
         }
+
     }
 }

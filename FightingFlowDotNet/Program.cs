@@ -5,8 +5,11 @@ using Blazorise.Icons.FontAwesome;
 using FightingFlowDotNet.Clients;
 using FightingFlowDotNet.Clients.Helper;
 using FightingFlowDotNet.Components;
+using FightingFlowDotNet.Models;
+using Firebase.Auth;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
+using Google.Api;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
@@ -97,6 +100,20 @@ app.MapPost("auth/signout", async (HttpContext http) =>
 {
     await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Ok();
+});
+
+app.MapPost("auth/signup", async (AuthoriseUser user, FirebaseAuth fbAuth, FirestoreGetter fGetter) =>
+{
+    var userRecord = await fbAuth.CreateUserAsync(new UserRecordArgs
+    {
+        Email = user.CustomUserInfo.Email,
+        Password = user.Password
+    });
+
+    await fGetter.PostUser(user.CustomUserInfo);
+
+    var customToken = await fbAuth.CreateCustomTokenAsync(userRecord.Uid);
+    return Results.Ok(new { customToken});
 });
 
 app.Run();
