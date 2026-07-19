@@ -24,15 +24,14 @@ builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 builder.Services.AddSingleton(sp =>
 {
-    var credenntial = GoogleCredentialFactory.Create(
+    var credential = GoogleCredentialFactory.Create(
         sp.GetRequiredService<IConfiguration>(),
         sp.GetRequiredService<IHostEnvironment>());
     
-    return FirebaseApp.Create(new AppOptions { Credential = credenntial });
+    return FirebaseApp.Create(new AppOptions { Credential = credential });
 });
 
-builder.Services.AddSingleton(sp => 
-    FirebaseAuth.GetAuth(sp.GetRequiredService<FirebaseApp>()));
+builder.Services.AddSingleton(sp => FirebaseAuth.GetAuth(sp.GetRequiredService<FirebaseApp>()));
 
 builder.Services.AddScoped<FirebaseAuthVerifier>();
 builder.Services.AddScoped<FirebaseClientFactory>();
@@ -67,8 +66,6 @@ if (!app.Environment.IsDevelopment())
 app.UseStatusCodePagesWithReExecute("/not-found", createScopeForStatusCodePages: true);
 app.UseHttpsRedirection();
 
-app.UseAntiforgery();
-
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseAntiforgery();
@@ -77,7 +74,7 @@ app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.MapPost("/auth/signin-google", async (HttpContext http, FirebaseAuthVerifier verifier) =>
+app.MapPost("/auth/signin", async (HttpContext http, FirebaseAuthVerifier verifier) =>
 {
     using var reader = new StreamReader(http.Request.Body);
     var idToken = await reader.ReadToEndAsync();
@@ -93,6 +90,12 @@ app.MapPost("/auth/signin-google", async (HttpContext http, FirebaseAuthVerifier
     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
+    return Results.Ok();
+});
+
+app.MapPost("auth/signout", async (HttpContext http) =>
+{
+    await http.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
     return Results.Ok();
 });
 

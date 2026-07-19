@@ -1,8 +1,68 @@
 ﻿@page "/Profile"
-<Heading Size="HeadingSize.Is3">Profile</Heading>
+@using Blazorise.Extensions
+@using FightingFlowDotNet.Clients
+@using Firebase.Auth
 
-<Text>Under construction...</Text>
+@inject FirebaseClientFactory FirebaseClientFactory
+@inject NavigationManager Navigation
+@inject IJSRuntime Js
+@inject IConfiguration Config
+
+<Div Flex="Flex.Column">
+    <Heading Size="HeadingSize.Is3">Your Profile</Heading>
+
+    <Text>Under construction...</Text>
+    
+    <Button Color="Color.Secondary"
+            @onclick="Logout"
+            Width="Width.Is25"
+            Margin="Margin.Is2.FromTop">
+        Logout
+    </Button>
+    
+    @if (!_errorMessage.IsNullOrEmpty())
+    {
+        <Text>@(_errorMessage)</Text>
+    }
+</Div>
 
 @code {
+    private IJSObjectReference? _firebaseModule { get; set; }
+    private string _errorMessage { get; set; } = "";
     
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            _firebaseModule = await Js.InvokeAsync<IJSObjectReference>(
+                "import", "./js/firebaseAuth.js");
+
+            await _firebaseModule.InvokeAsync<IJSObjectReference>("initFirebase", new
+            {
+                apiKey = Config["Firebase:ApiKey"],
+                authDomain = Config["Firebase:AuthDomain"],
+                projectId = Config["Firebase:ProjectId"],
+                storageBucket = Config["Firebase:StorageBucket"],
+                messageSenderId = Config["Firebase:MessageSenderId"],
+                appId = Config["Firebase:AppId"],
+            });
+        }
+    }
+
+    private async Task Logout()
+    {
+        if (_firebaseModule != null)
+        {
+            try {
+                Console.WriteLine("Logging out...");
+                await _firebaseModule.InvokeVoidAsync("signOut");
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            catch (Exception ex)
+            {
+                _errorMessage = "Logout has failed...";
+                Console.WriteLine(ex.Message);
+            }
+        } 
+    }
 }
