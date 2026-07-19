@@ -6,14 +6,8 @@
 @inject IConfiguration Config
 
 <Div>
-    @if (_signUp)
-    {
-        <Heading3>Sign Up</Heading3>
-    }
-    else
-    {
-        <Heading3>Sign In</Heading3>
-    }
+    @if (_signUp) { <Heading3>Sign Up</Heading3> }
+    else { <Heading3>Sign In</Heading3> }
 
     <Fields>
         <FieldSet Horizontal>
@@ -151,14 +145,21 @@
     private async Task SignInWithGoogle()
     {
         if (_firebaseModule is null) return;
-        var success= await _firebaseModule.InvokeAsync<bool>("signInWithGoogle");
-        if (success)
+        try
         {
-            Navigation.NavigateTo("/", forceLoad: true);
+            var success = await _firebaseModule.InvokeAsync<bool>("signInWithGoogle");
+            if (success)
+            {
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
+            else
+            {
+                _errorMessage = "Google sign-in failed.";
+            }
         }
-        else
+        catch (Exception ex)
         {
-            _errorMessage = "Google sign-in failed.";
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -170,15 +171,20 @@
     private async Task SignUpWithEmail()
     {
         Console.WriteLine("Attempting to sign in with email");
-        var client = FirebaseClientFactory.GetAuthClient();
+        if (_firebaseModule is null) return;
+
         try
         {
-            await client.CreateUserWithEmailAndPasswordAsync(_email, _password);
+            var success = _firebaseModule.InvokeAsync<bool>("signUpWithEmailAndPassword");
+            if (success)
+            {
+                
+                Navigation.NavigateTo("/", forceLoad: true);
+            }
         }
         catch (Exception ex)
         {
             _errorMessage = ex.Message;
-            Console.WriteLine(ex.Message);
         }
     }
 
@@ -190,7 +196,6 @@
         try
         {
             Console.WriteLine("Calling supabase.Auth.SignIn");
-            // Call Supabase auth using C#
             var session = await client.SignInWithEmailAndPasswordAsync(_email, _password);
             Console.WriteLine($"Session Created: {session.User.Credential.IdToken ?? "invalid token"}");
             Console.WriteLine("Session Created, navigating to home");
