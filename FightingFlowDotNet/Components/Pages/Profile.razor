@@ -20,24 +20,24 @@
         Logout
     </Button>
     
-    @if (!_errorMessage.IsNullOrEmpty())
+    @if (!ErrorMessage.IsNullOrEmpty())
     {
-        <Text>@(_errorMessage)</Text>
+        <Text>@(ErrorMessage)</Text>
     }
 </Div>
 
 @code {
-    private IJSObjectReference? _firebaseModule { get; set; }
-    private string _errorMessage { get; set; } = "";
+    private IJSObjectReference? FirebaseModule { get; set; }
+    private string ErrorMessage { get; set; } = "";
     
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
-            _firebaseModule = await Js.InvokeAsync<IJSObjectReference>(
+            FirebaseModule = await Js.InvokeAsync<IJSObjectReference>(
                 "import", "./js/firebaseAuth.js");
 
-            await _firebaseModule.InvokeAsync<IJSObjectReference>("initFirebase", new
+            await FirebaseModule.InvokeAsync<IJSObjectReference>("initFirebase", new
             {
                 apiKey = Config["Firebase:ApiKey"],
                 authDomain = Config["Firebase:AuthDomain"],
@@ -51,16 +51,15 @@
 
     private async Task Logout()
     {
-        if (_firebaseModule != null)
+        if (FirebaseModule != null)
         {
             try {
-                Console.WriteLine("Logging out...");
-                await _firebaseModule.InvokeVoidAsync("signOut");
+                await FirebaseModule.InvokeVoidAsync("signOut");
                 Navigation.NavigateTo("/", forceLoad: true);
             }
             catch (Exception ex)
             {
-                _errorMessage = "Logout has failed...";
+                ErrorMessage = "Logout has failed...";
                 Console.WriteLine(ex.Message);
             }
         } 

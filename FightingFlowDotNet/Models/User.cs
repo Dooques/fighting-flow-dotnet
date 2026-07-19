@@ -3,9 +3,9 @@
 namespace FightingFlowDotNet.Models;
 
 [FirestoreData]
-public class UserInfo
+public class CustomUserInfo
 {
-    public UserInfo() {}
+    public CustomUserInfo() {}
     [FirestoreProperty("userId")] 
     public string UserId { get; set; } = "";
     [FirestoreProperty("username")] 
@@ -14,10 +14,12 @@ public class UserInfo
     public string ProfilePic { get; set; } = "";
     [FirestoreProperty("name")] 
     public string Name { get; set; } = "";
+    [FirestoreProperty("email")]
+    public string Email { get; set; } = "";
     [FirestoreProperty("date_created")] 
     public string DateCreated { get; set; } = "";
     [FirestoreProperty("dob")] 
-    public string DoB { get; set; } = "";
+    public string Dob { get; set; } = "";
     [FirestoreProperty("liked_combos")] 
     public List<string> LikedCombos { get; set; } = [];
     [FirestoreProperty("character_list")] 
@@ -26,6 +28,6 @@ public class UserInfo
 
 public class AuthoriseUser
 {
-    public UserInfo UserInfo { get; set; } = new();
+    public CustomUserInfo CustomUserInfo { get; set; } = new();
     public string Password { get; set; } = "";
 }
