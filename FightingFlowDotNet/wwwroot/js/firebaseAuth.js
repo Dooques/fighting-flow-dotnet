@@ -17,7 +17,11 @@ export function initFirebase(config) {
 }
 
 async function postIdTokenToServer(idToken) {
-    const response = await fetch("/auth/signin", { method: "POST", body: idToken });
+    const response = await fetch("/auth/signin", 
+        { 
+            method: "POST", 
+            body: idToken 
+        });
     return response.ok;
 }
 

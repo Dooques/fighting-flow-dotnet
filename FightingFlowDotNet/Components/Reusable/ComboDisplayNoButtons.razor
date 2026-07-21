@@ -1,5 +1,7 @@
-﻿@using FightingFlowDotNet.Models
+﻿@using System.Text.Json
+@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
+@using FightingFlowDotNet.Resources.TekkenData
 
 
 @if (DisplayCombo?.Combo.Moves == null)
@@ -19,13 +21,16 @@ else
             foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
             {
                 Console.WriteLine($"Move: {convertedMove?.Name}, {convertedMove?.Type}");
+                var text = convertedMove?.Notation;
                 switch (convertedMove?.Type)
                 {
                     case "Break":
-                        <Text>@convertedMove.Notation</Text>
+                        <Span TextColor="TextColor.Info">
+                            @(text)
+                        </Span>
                         break;
 
-                    case "Mechanics Input" or "Mechanic" or "Character" or "Common" or "Stage" or "Special":
+                    case "Mechanics Input" or "Mechanic" or "Character" or "Mishima" or "Common" or "Stage" or "Special":
                         <Button Border="Border.Is0"
                                 Background="@GetMoveBackgroundColor(convertedMove.Type)"
                                 TextColor="@GetMoveTextColor(convertedMove.Type)"
@@ -56,16 +61,17 @@ else
 
     protected override void OnParametersSet()
     {
-        if (DisplayCombo != null)
+        if (DisplayCombo == null) return;
+        
+        _moveList = DisplayCombo?.Combo.Game switch
         {
-            _moveList = DisplayCombo?.Combo.Game switch
-            {
-                "Tekken 8" => Tekken8.Moves,
-                "Street Fighter 6" => StreetFighter6.Moves,
-                "Mortal Kombat 1" => MortalKombat1.Moves,
-                _ => []
-            };
-        }
+            "Tekken 8" => Tekken8.Moves,
+            "Street Fighter 6" => StreetFighter6.Moves,
+            "Mortal Kombat 1" => MortalKombat1.Moves,
+            _ => []
+        };
+        
+        _moveList.AddRange(CommonMoves.Moves);
     }
 
     private Move? GetMove(string note)
@@ -82,23 +88,25 @@ else
         }
     }
     
-    private static string GetMoveBackgroundColor(string? type) => type switch
+    private static Background GetMoveBackgroundColor(string? type) => type switch
     {
-        "Character" => "#ee1164",       // Custom Primary (Pink/Magenta)
-        "Mechanics Input" => "#6c1fb0", // Custom Secondary (Purple)
-        "Modifier" => "#f5f5fa",        // Custom Light (Off-White)
-        "Break" => "#05d9e8",           // Custom Info/Link (Cyan)
-        "Stage" => "#39ff14",           // Custom Success (Neon Green)
-        "Stances" => "#ff5400",         // Custom Danger (Orange)
-        _ => "#0a0a0d"                  // Custom Dark (Deep Black)
+        "Character" or "Mishima" => 
+            Background.Primary,         // Custom Primary (Pink/Magenta)
+        "Mechanics Input" => 
+            Background.Secondary,       // Custom Secondary (Purple)
+        "Modifier" => Background.Light, // Custom Light (Off-White)
+        "Break" => Background.Info,           // Custom Info/Link (Cyan)
+        "Stage" => Background.Success,           // Custom Success (Neon Green)
+        "Stances" => Background.Danger,         // Custom Danger (Orange)
+        _ =>  Background.Dark                 // Custom Dark (Deep Black)
     };
     
-    private static string GetMoveTextColor(string? type) => type switch
+    private static TextColor GetMoveTextColor(string? type) => type switch
     {
-        "Modifier" => "#0a0a0d",        // Use dark text on off-white backgrounds
-        "Stage" => "#0a0a0d",           // Use dark text on bright neon green
-        "Break" => "#0a0a0d",           // Use dark text on bright neon cyan
-        _ => "#ffffff"                  // Use white text for purple, pink, and orange
+        "Modifier" => TextColor.Dark,        // Use dark text on off-white backgrounds
+        "Stage" => TextColor.Dark,           // Use dark text on bright neon green
+        "Break" => TextColor.Dark,           // Use dark text on bright neon cyan
+        _ => TextColor.Light                  // Use white text for purple, pink, and orange
     };
 
    private static string GetMoveImage(string name)
