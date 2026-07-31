@@ -69,8 +69,8 @@ else
             "Mortal Kombat 1" => MortalKombat1.Moves,
             _ => []
         };
-        
-        _moveList.AddRange(CommonMoves.Moves);
+        if (!CommonMoves.Moves.All(x => _moveList.Contains(x)))
+            _moveList.AddRange(CommonMoves.Moves);
     }
 
     private Move? GetMove(string note)
