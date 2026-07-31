@@ -78,7 +78,8 @@ else
         if (_moveList == null || string.IsNullOrEmpty(note)) return null;
         try
         {
-            return _moveList.FirstOrDefault(m => m.Notation == note);
+            var move = _moveList.FirstOrDefault(m => m.Notation == note);
+            return move;
         }
         catch (Exception ex)
         {
