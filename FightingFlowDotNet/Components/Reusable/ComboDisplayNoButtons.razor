@@ -20,7 +20,6 @@ else
         {
             foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
             {
-                Console.WriteLine($"Move: {convertedMove?.Name}, {convertedMove?.Type}");
                 var text = convertedMove?.Notation;
                 switch (convertedMove?.Type)
                 {
