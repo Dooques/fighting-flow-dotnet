@@ -1,5 +1,4 @@
-﻿@using System.Text.Json
-@using FightingFlowDotNet.Models
+﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
 @using FightingFlowDotNet.Resources.TekkenData
 
@@ -20,7 +19,6 @@ else
         {
             foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
             {
-                Console.WriteLine($"Move: {convertedMove?.Name}, {convertedMove?.Type}");
                 var text = convertedMove?.Notation;
                 switch (convertedMove?.Type)
                 {
@@ -70,16 +68,17 @@ else
             "Mortal Kombat 1" => MortalKombat1.Moves,
             _ => []
         };
-        
-        _moveList.AddRange(CommonMoves.Moves);
+        if (!CommonMoves.Moves.All(x => _moveList.Contains(x)))
+            _moveList.AddRange(CommonMoves.Moves);
     }
 
     private Move? GetMove(string note)
-    { 
+    {
         if (_moveList == null || string.IsNullOrEmpty(note)) return null;
         try
         {
-            return _moveList.FirstOrDefault(m => m.Notation == note);
+            var move = _moveList.FirstOrDefault(m => m.Notation == note);
+            return move;
         }
         catch (Exception ex)
         {

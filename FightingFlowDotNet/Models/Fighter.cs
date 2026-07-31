@@ -2,6 +2,16 @@
 
 public class Fighter
 {
+    public Fighter() { }
+
+    public Fighter(string name, string imageId, string fightingStyle, string game)
+    {
+        Name = name;
+        ImageId = imageId;
+        FightingStyle = fightingStyle;
+        Game = game;
+    }
+
     public string Id { get; set; } = "";
     public string Name { get; set; } = "";
     public string Bio { get; set; } = "";

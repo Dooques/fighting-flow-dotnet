@@ -136,14 +136,9 @@
         return authDetailsUsername ?? "Invalid Username";
     }
 
-    private string GetEditorUrl()
-    {
-        return $"/Editor/{Game}/{ChosenFighter?.Name}/1y8GcITqkVsGzjJQ3f2R";
-    }
-    
     private string GetCreatorUrl()
     {
-        return $"/Editor/{Game}/{ChosenFighter?.Name}/new";
+        return $"/Editor/{Game}/{ChosenFighter?.Name}/new/False";
     }
 
     private string GetPhotoUrl()

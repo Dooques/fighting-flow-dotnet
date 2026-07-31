@@ -6,253 +6,43 @@ public static class Tekken8
 {
     public static List<Fighter> Fighters { get; set; } =
     [
-        new Fighter { Name = "Alisa", ImageId = "alisa", FightingStyle = "Thruster-Based High-Mobility Fighting Style", Game = "Tekken 8" },
-        new Fighter { Name = "Anna", ImageId = "anna", FightingStyle = "Aikido based techniques and Koppojutsu based Assassination Arts", Game = "Tekken 8" },
-        new Fighter
-        {
-            Name = "Asuka",
-            ImageId = "asuka",
-            FightingStyle = "Kazama Style Traditional Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Azucena",
-            ImageId = "azucena",
-            FightingStyle = "Mixed Martial Arts (Striker)",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Bryan",
-            ImageId = "bryan",
-            FightingStyle = "Kickboxing",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Claudio",
-            ImageId = "claudio",
-            FightingStyle = "Sirius Exorcist Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Clive",
-            ImageId = "clive",
-            FightingStyle = "Dominant",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Devil Jin",
-            ImageId = "devil_jin",
-            FightingStyle = "Unknown",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Dragunov",
-            ImageId = "dragunov",
-            FightingStyle = "White Reaper",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Eddy",
-            ImageId = "eddy",
-            FightingStyle = "Capoeira",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Feng",
-            ImageId = "feng",
-            FightingStyle = "Taijiquan",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Heihachi",
-            ImageId = "heihachi",
-            FightingStyle = "Mishima Style Fighting Karate",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Hwoarang",
-            ImageId = "hwoarang",
-            FightingStyle = "Taekwondo",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Jack-8",
-            ImageId = "jack_8",
-            FightingStyle = "High Tech Annihilator",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Jin",
-            ImageId = "jin",
-            FightingStyle = "Karate based on Kyokushin style infused with Devil Gene",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Jun",
-            ImageId = "jun",
-            FightingStyle = "Kazama Style Traditional Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Kazuya",
-            ImageId = "kazuya",
-            FightingStyle = "Mishima Style Fighting Karate",
-            Game = "Tekken 8"
-        },
-        new()
-        {
-            Name = "King",
-            ImageId = "king",
-            FightingStyle = "Pro Wrestling",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Kuma",
-            ImageId = "kuma",
-            FightingStyle = "Heihachi-style Improved Kuma Shinken",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Lars",
-            ImageId = "lars",
-            FightingStyle = "Tekken Forces Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Law",
-            ImageId = "law",
-            FightingStyle = "Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Lee",
-            ImageId = "lee",
-            FightingStyle = "Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Leo",
-            ImageId = "leo",
-            FightingStyle = "Baji Quan",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Leroy",
-            ImageId = "leroy",
-            FightingStyle = "Wing Chun",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Lidia",
-            ImageId = "lidia",
-            FightingStyle = "Traditional Karate",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Lili",
-            ImageId = "lili",
-            FightingStyle = "Self-Taught Style",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Nina",
-            ImageId = "nina",
-            FightingStyle = "Assassination Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Panda",
-            ImageId = "panda",
-            FightingStyle = "Heihachi-style Improved Kuma Shinken",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Paul",
-            ImageId = "paul",
-            FightingStyle = "Integrated Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Raven",
-            ImageId = "raven",
-            FightingStyle = "Ninjutsu",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Reina",
-            ImageId = "reina",
-            FightingStyle = "Taido and Mishima-Style Karate",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Shaheen",
-            ImageId = "shaheen",
-            FightingStyle = "Close Quarters Combat",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Steve",
-            ImageId = "steve",
-            FightingStyle = "Boxing",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Victor",
-            ImageId = "victor",
-            FightingStyle = "Super Spy CQB",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Xiaoyu",
-            ImageId = "xiaoyu",
-            FightingStyle = "Chinese Martial Arts",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Yoshimitsu",
-            ImageId = "yoshimitsu",
-            FightingStyle = "Advanced Manji Ninjutsu",
-            Game = "Tekken 8"
-        },
-        new Fighter
-        {
-            Name = "Zafina",
-            ImageId = "zafina",
-            FightingStyle = "Ancient Assassination Arts",
-            Game = "Tekken 8"
-        }
+        new(name: "Alisa", imageId: "alisa", fightingStyle: "Thruster-Based High-Mobility Fighting Style", game: "Tekken 8"),
+        new(name: "Anna", imageId: "anna", fightingStyle: "Aikido based techniques and Koppojutsu based Assassination Arts", game: "Tekken 8"),
+        new(name: "Asuka", imageId: "asuka", fightingStyle: "Kazama Style Traditional Martial Arts", game: "Tekken 8"),
+        new(name: "Azucena", imageId: "azucena", fightingStyle: "Mixed Martial Arts (Striker)", game: "Tekken 8"),
+        new(name: "Bryan", imageId: "bryan", fightingStyle: "Kickboxing", game: "Tekken 8"),
+        new(name: "Claudio", imageId: "claudio", fightingStyle: "Sirius Exorcist Arts", game: "Tekken 8"),
+        new(name: "Clive", imageId: "clive", fightingStyle: "Dominant", game: "Tekken 8"),
+        new(name: "Devil Jin", imageId: "devil_jin", fightingStyle: "Unknown", game: "Tekken 8"),
+        new(name: "Dragunov", imageId: "dragunov", fightingStyle: "White Reaper", game: "Tekken 8"),
+        new(name: "Eddy", imageId: "eddy", fightingStyle: "Capoeira", game: "Tekken 8"),
+        new(name: "Feng", imageId: "feng", fightingStyle: "Taijiquan", game: "Tekken 8"),
+        new(name: "Heihachi", imageId: "heihachi", fightingStyle: "Mishima Style Fighting Karate", game: "Tekken 8"),
+        new(name: "Hwoarang", imageId: "hwoarang", fightingStyle: "Taekwondo", game: "Tekken 8"),
+        new(name: "Jack-8", imageId: "jack_8", fightingStyle: "High Tech Annihilator", game: "Tekken 8"),
+        new(name: "Jin", imageId: "jin", fightingStyle: "Karate based on Kyokushin style infused with Devil Gene", game: "Tekken 8"),
+        new(name: "Jun", imageId: "jun", fightingStyle: "Kazama Style Traditional Martial Arts", game: "Tekken 8"),
+        new(name: "Kazuya", imageId: "kazuya", fightingStyle: "Mishima Style Fighting Karate", game: "Tekken 8"),
+        new(name: "King", imageId: "king", fightingStyle: "Pro Wrestling", game: "Tekken 8"),
+        new(name: "Kuma", imageId: "kuma", fightingStyle: "Heihachi-style Improved Kuma Shinken", game: "Tekken 8"),
+        new(name: "Lars", imageId: "lars", fightingStyle: "Tekken Forces Martial Arts", game: "Tekken 8"),
+        new(name: "Law", imageId: "law", fightingStyle: "Martial Arts", game: "Tekken 8"),
+        new(name: "Lee", imageId: "lee", fightingStyle: "Martial Arts", game: "Tekken 8"),
+        new(name: "Leo", imageId: "leo", fightingStyle: "Baji Quan", game: "Tekken 8"),
+        new(name: "Leroy", imageId: "leroy", fightingStyle: "Wing Chun", game: "Tekken 8"),
+        new(name: "Lidia", imageId: "lidia", fightingStyle: "Traditional Karate", game: "Tekken 8"),
+        new(name: "Lili", imageId: "lili", fightingStyle: "Self-Taught Style", game: "Tekken 8"),
+        new(name: "Nina", imageId: "nina", fightingStyle: "Assassination Arts", game: "Tekken 8"),
+        new(name: "Panda", imageId: "panda", fightingStyle: "Heihachi-style Improved Kuma Shinken", game: "Tekken 8"),
+        new(name: "Paul", imageId: "paul", fightingStyle: "Integrated Martial Arts", game: "Tekken 8"),
+        new(name: "Raven", imageId: "raven", fightingStyle: "Ninjutsu", game: "Tekken 8"),
+        new(name: "Reina", imageId: "reina", fightingStyle: "Taido and Mishima-Style Karate", game: "Tekken 8"),
+        new(name: "Shaheen", imageId: "shaheen", fightingStyle: "Close Quarters Combat", game: "Tekken 8"),
+        new(name: "Steve", imageId: "steve", fightingStyle: "Boxing", game: "Tekken 8"),
+        new(name: "Victor", imageId: "victor", fightingStyle: "Super Spy CQB", game: "Tekken 8"),
+        new(name: "Xiaoyu", imageId: "xiaoyu", fightingStyle: "Chinese Martial Arts", game: "Tekken 8"),
+        new(name: "Yoshimitsu", imageId: "yoshimitsu", fightingStyle: "Advanced Manji Ninjutsu", game: "Tekken 8"),
+        new(name: "Zafina", imageId: "zafina", fightingStyle: "Ancient Assassination Arts", game: "Tekken 8")
     ];
     
      public static readonly List<Move> Moves =
@@ -281,14 +71,10 @@ public static class Tekken8
         new Move(name: "one_plus_four", notation: "1+4", type: "Input", character: "Generic", game: "Tekken 8"),
         new Move(name: "two_plus_three", notation: "2+3", type: "Input", character: "Generic", game: "Tekken 8"),
         new Move(name: "one_plus_two_plus_three", notation: "1+2+3", type: "Input", character: "Generic", game: "Tekken 8"),
-        new Move(name: "one_plus_two_plus_four", notation: "1+2+4", type: "Input", character: "Generic",
-            game: "Tekken 8"),
-        new Move(name: "one_plus_three_plus_four", notation: "1+3+4", type: "Input", character: "Generic",
-            game: "Tekken 8"),
-        new Move(name: "two_plus_three_plus_four", notation: "2+3+4", type: "Input", character: "Generic",
-            game: "Tekken 8"),
-        new Move(name: "one_plus_two_plus_three_plus_four", notation: "1+2+3+4", type: "Input", character: "Generic",
-            game: "Tekken 8"),
+        new Move(name: "one_plus_two_plus_four", notation: "1+2+4", type: "Input", character: "Generic", game: "Tekken 8"),
+        new Move(name: "one_plus_three_plus_four", notation: "1+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
+        new Move(name: "two_plus_three_plus_four", notation: "2+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
+        new Move(name: "one_plus_two_plus_three_plus_four", notation: "1+2+3+4", type: "Input", character: "Generic", game: "Tekken 8"),
 
         // Modifiers
         new Move(name: "Hold", notation: "h", type: "Modifier", character: "Generic", game: "Tekken 8"),
@@ -308,11 +94,9 @@ public static class Tekken8
         new Move(name: "Low Parry", notation: "l/p", type: "Common", character: "Generic", game: "Tekken"),
 
         // Mechanics
-        new Move(name: "Heat Burst", notation: "h/burst", type: "Mechanics Input", character: "Generic",
-            game: "Tekken"),
+        new Move(name: "Heat Burst", notation: "h/burst", type: "Mechanics Input", character: "Generic", game: "Tekken"),
         new Move(name: "Heat Dash", notation: "h/dash", type: "Mechanic Input", character: "Generic", game: "Tekken"),
-        new Move(name: "During Heat", notation: "in heat", type: "Mechanics Input", character: "Generic",
-            game: "Tekken"),
+        new Move(name: "During Heat", notation: "in heat", type: "Mechanics Input", character: "Generic", game: "Tekken"),
         new Move(name: "Rage Art", notation: "rage", type: "Mechanics Input", character: "Generic", game: "Tekken"),
 
         // Stage
