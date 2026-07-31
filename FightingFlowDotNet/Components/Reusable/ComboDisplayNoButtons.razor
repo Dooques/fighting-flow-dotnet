@@ -1,5 +1,4 @@
-﻿@using System.Text.Json
-@using FightingFlowDotNet.Models
+﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
 @using FightingFlowDotNet.Resources.TekkenData
 
@@ -74,7 +73,7 @@ else
     }
 
     private Move? GetMove(string note)
-    { 
+    {
         if (_moveList == null || string.IsNullOrEmpty(note)) return null;
         try
         {
