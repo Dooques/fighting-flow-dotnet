@@ -4,52 +4,41 @@
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FbGetter
 
 <PageTitle>Fighting Flow</PageTitle>
 
 <Div Flex="Flex.Column"
-     Gap="Gap.Is5">
+     Gap="Gap.Is1">
     
     <Heading1 hidden="true">
         Fighting <Span TextColor="TextColor.Primary">Flow</Span>
     </Heading1>
 
-    <Div Flex="Flex.Row.JustifyContent.Center.AlignContent.Center"
-         Gap="Gap.Is5">
-        <Field Floating>
-            <DropdownList TItem="string" TValue="string"
-                          Data="_gameList"
-                          TextField="@((item) => item)"
-                          ValueField="@(item => item)"
-                          ValueChanged="UpdateGameSelected"
-                          Color="Color.Dark"
-                          Class="m3-outlined-dropdown"
-                          Focus="true">
-                @if (!_gameSelected.IsNullOrEmpty())
-                {
-                    @_gameSelected
-                }
-                else
-                {
-                    <Text>Game Select</Text>
-                }
-            </DropdownList>
-        </Field>
-
-        @* Subtitle *@
-        <Text TextColor="TextColor.Light">
-            Load us up on your phone, tablet or second monitor and find your main.
-            Catalogue combos and lab to your heart's content
-        </Text>
-
-    </Div>
+    <Field Floating>
+        <DropdownList TItem="string" TValue="string"
+                      Data="_gameList"
+                      TextField="@((item) => item)"
+                      ValueField="@(item => item)"
+                      ValueChanged="UpdateGameSelected"
+                      Color="Color.Dark"
+                      Class="m3-outlined-dropdown"
+                      Focus="true">
+            @if (!_gameSelected.IsNullOrEmpty())
+            {
+                @_gameSelected
+            }
+            else
+            {
+                <Text>Game Select</Text>
+            }
+        </DropdownList>
+    </Field>
 
     <Div Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem;">
         @foreach (var fighter in Fighters)
         {
-                <CharacterCard Fighter="@(fighter)"/>
+            <CharacterCard Fighter="@(fighter)"/>
         }
     </Div>
 </Div>
