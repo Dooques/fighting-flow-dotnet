@@ -1,4 +1,4 @@
-﻿@page "/Editor/{Game}/{Name}/{ComboId}/{EditMode}"
+﻿@page "/Editor/{Game}/{Fighter}/{ComboId}/{EditMode:bool}"
 
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
@@ -6,38 +6,38 @@
 @using FightingFlowDotNet.Components.Reusable.Editor
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FirestoreGetter
 
 <PageTitle>Combo Editor</PageTitle>
 
 <Div Flex="Flex.Column.AlignContent.Center"
-     Gap="Gap.Is1"
+     Gap="Gap.Is2"
      Padding="Padding.Is5.FromBottom">
-    
+
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
-               Gap="Gap.Is2">
-        
-        <ComboEditorButtons DeleteMove="DeleteMove" 
+         Gap="Gap.Is3">
+
+        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
+
+        <ComboEditorButtons DeleteMove="DeleteMove"
                             AddBreak="AddBreak"
                             ClearMoves="ClearMoves"
                             SaveCombo="SaveCombo"/>
 
-        <ComboMetaFields
-            ComboTitle="@ComboTitle"
-            ComboDamage="@ComboDamage"
-            ComboDifficulty="ComboDifficulty"/>
+        <ComboMetaFields ComboTitle="@ComboTitle"
+                         ComboDamage="@ComboDamage"
+                         ComboDifficulty="ComboDifficulty"/>
     </Div>
-    
+
     <Divider/>
-    
+
     <Div Flex="Flex.Column.JustifyContent.Start"
          Gap="Gap.Is3">
         @foreach (var type in _types)
         {
-            <MoveSelector Moves="_moveList" 
-                          Type="@type" 
-                          CharacterName="@(Name)" 
+            <MoveSelector Moves="_moveList"
+                          Type="@type"
+                          CharacterName="@(Fighter)"
                           AddMove="AddMove"/>
         }
     </Div>
@@ -46,56 +46,71 @@
 
 @code {
     [Parameter] public string Game { get; set; } = "";
-    [Parameter] public string Name { get; set; } = "";
+    [Parameter] public string Fighter { get; set; } = "";
     [Parameter] public string ComboId { get; set; } = "";
-    [Parameter] public string EditMode { get; set; } = "";
+    [Parameter] public bool EditMode { get; set; }
 
     private string ComboTitle { get; set; } = "";
-    private int ComboDamage { get; set; }
-    private int ComboDifficulty { get; set; }
+    private int ComboDamage { get; set; } = 0;
+    private int ComboDifficulty { get; set; } = 0;
 
     private List<Move> _moveList = [];
-    private List<string> _types = []; 
-    private readonly List<string> _moveTypesT8 = 
+    private List<string> _types = [];
+    private readonly List<string> _moveTypesT8 =
         ["Misc", "Movement", "Input", "Character", "Stances", "Mechanics", "Stage", "Modifier"];
-    private readonly List<string> _moveTypesSf6 = 
+    private readonly List<string> _moveTypesSf6 =
         ["Movement", "SF Classic", "SF Modern", "Mechanic", "Stage", "Special", "Super Art"];
-    private readonly List<string> _moveTypesMk1 = 
+    private readonly List<string> _moveTypesMk1 =
         ["Input", "Movement", "Text Input", "Special", "Fatal Blow"];
 
     private DisplayCombo DisplayCombo { get; set; } = new(new Combo());
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        var combo = await GetComboFromFb();
-        switch (Game) 
+        if (EditMode)
         {
-            case "T8":
+            var combo = await GetComboFromFb();
+            DisplayCombo = new DisplayCombo(combo);
+        }
+        else
+        {
+            DisplayCombo = new DisplayCombo(new Combo
+            {
+                    Fighter = Fighter,
+                    Game = Game,
+                    CreatedBy = "Unknown User",
+                    CreatedOn = DateOnly.FromDateTime(DateTime.Now).ToShortDateString(),
+                    ControlType = Game,
+            });
+
+        }
+
+        switch (Game)
+        {
+            case "Tekken 8":
                 _moveList = Tekken8.Moves;
                 _types = _moveTypesT8;
                 break;
-            case "SF6":
+            case "Street Fighter 6":
                 _moveList = StreetFighter6.Moves;
                 _types = _moveTypesSf6;
                 break;
-            case "MK1":
+            case "Mortal Kombat 1":
                 _moveList = MortalKombat1.Moves;
                 _types = _moveTypesMk1;
                 break;
         }
-
-        DisplayCombo = new DisplayCombo(combo);
     }
 
     private async Task<Combo> GetComboFromFb()
     {
-        return await FirestoreGetter.GetCombo(Name, ComboId);
+        return await FirestoreGetter.GetCombo(Fighter, ComboId);
     }
 
     private async Task SaveCombo()
     {
-        await FirestoreGetter.SaveCombo(DisplayCombo, 
-            DisplayCombo.Combo.Character, DisplayCombo.Combo.Id);
+        await FirestoreGetter.SaveCombo(DisplayCombo,
+            DisplayCombo.Combo.Fighter, DisplayCombo.Combo.Id);
     }
 
     public void AddMove(Move? move)
@@ -117,7 +132,7 @@
         try
         {
             Console.WriteLine(DisplayCombo.Combo.Moves.Count);
-            if (DisplayCombo.Combo.Moves.IsNullOrEmpty()) 
+            if (DisplayCombo.Combo.Moves.IsNullOrEmpty())
                 throw new IndexOutOfRangeException("List is empty");
             DisplayCombo.Combo.Moves.RemoveAt(DisplayCombo.Combo.Moves.Count - 1);
         }

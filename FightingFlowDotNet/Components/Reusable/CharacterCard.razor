@@ -26,14 +26,7 @@
 
     private string GetListViewerUrl()
     {
-        var game = Fighter.Game switch
-        {
-            "Street Fighter 6" => "SF6",
-            "Tekken 8" => "T8",
-            "Mortal Kombat 1" => "MK1",
-            _ => null
-        };
-        return $"{game}/{Fighter.Name}";
+        return $"{Fighter.Game}/{Fighter.Name}";
     }
 
     private string GetImageSource()

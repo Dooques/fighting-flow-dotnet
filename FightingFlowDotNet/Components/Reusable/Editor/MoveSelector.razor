@@ -1,8 +1,5 @@
-﻿@using System.Reflection.Metadata
-@using FightingFlowDotNet.Models
+﻿@using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
-
 
 @if (Moves.Count > 0)
 {
@@ -15,7 +12,7 @@
              Gap="Gap.Is3">
             @foreach (var move in _filteredMoves)
             {
-                <MoveButton Move="move" AddMove="HandleAddMove"/> 
+                <MoveButton Move="move" AddMove="HandleAddMove"/>
             }
         </Div >
     </Div> 
@@ -25,25 +22,17 @@
     [Parameter] public List<Move> Moves { get; set; } = [];
     [Parameter] public string Type { get; set; } = "";
     [Parameter] public string CharacterName { get; set; } = "";
-    
     [Parameter] public EventCallback<Move> AddMove { get; set; }
     
     private string TypeFilter { get; set; } = "";
-    private string BackgroundColor { get; set; } = "";
     
     private List<Move> _filteredMoves = [];
     private readonly List<Move> _miscMoves = CommonMoves.Moves;
 
     protected override void OnInitialized()
     {
-        if (Type is "Character" || Type is "Special" || Type is "Super Art" || Type is "Fatal Blow")
-        {
-            _filteredMoves = FilterCharacterMoves(Moves);
-        }
-        else
-        {
-            _filteredMoves = FilterMoves(Moves);
-        }
+        _filteredMoves = Type is "Character" or "Special" or "Super Art" or "Fatal Blow" 
+            ? FilterCharacterMoves(Moves) : FilterMoves(Moves);
     }
 
     private async Task HandleAddMove(Move? move)
