@@ -11,7 +11,8 @@
 
 <Row RowColumns="RowColumns.Are2">
     <Column Width="Width.Is75">
-        <Div Flex="Flex.Column">
+        <Div Flex="Flex.Column"
+             Margin="Margin.Is4.FromBottom">
             <Button
                 Type="ButtonType.Link"
                 Color="Color.Primary"
@@ -22,21 +23,21 @@
             </Button>
 
             @if (ComboList.Any())
-            {
-                @foreach (var combo in ComboList)
+            { 
+                @foreach (var combo in ComboList) 
                 {
-                    <Div Margin="Margin.Is4.FromTop">
+                    <Div Margin="Margin.Is4.FromTop"
+                         Border="Border.Is2.Rounded.Light"
+                         Shadow="Shadow.Small"
+                         Padding="Padding.Is2">
                         <ComboDisplayWithButtons
                             DisplayCombo="combo"
                             ChosenFighter="@(ChosenFighter ?? new Fighter())"
                             Username="@(GetUsername(combo.Combo.CreatedBy))"/>
-                    </Div>
-                }
+                    </Div> 
+                } 
             }
-            else
-            {
-                <p>No combos to be found... </p>
-            }
+            else { <p>No combos to be found... </p> }
         </Div>
     </Column>
 
@@ -51,7 +52,7 @@
                                Alt="@ChosenFighter?.Name"/>
                 </Div>
             </CardHeader>
-
+        
             <CardBody>
                 <CardTitle Size="HeadingSize.Is5"
                            TextColor="TextColor.Light">
@@ -77,7 +78,7 @@
             </CardBody>
         </Card>
     </Column>
-
+    
 </Row>
 
 <script type="text/javascript">
@@ -85,11 +86,11 @@
 </script>
 
 @code {
-    [Parameter]
+    [Parameter] 
     public string? Name { get; set; }
     [Parameter]
     public string? Game { get; set; }
-
+    
     private Fighter? ChosenFighter { get; set; }
     private List<CustomUserInfo> UsersList { get; set; } = [];
     private List<DisplayCombo> ComboList { get; set; } = [];
@@ -113,22 +114,22 @@
         }
 
         Console.WriteLine($"ChosenFighter: {ChosenFighter?.Name}");
-
+        
         if (ChosenFighter == null) return;
-
+        
         var comboList = await FirestoreGetter.GetCombos(ChosenFighter.Name);
-
+        
         ComboList.AddRange(
             from combo in comboList
             select new DisplayCombo(combo)
         );
-
+        
         UsersList = await FirestoreGetter.GetUsers();
     }
 
     private string GetUsername(string userId)
     {
-        var authDetailsUsername = UsersList.FirstOrDefault(u =>
+        var authDetailsUsername = UsersList.FirstOrDefault(u => 
             u.UserId == userId)?.Username;
         return authDetailsUsername ?? "Invalid Username";
     }

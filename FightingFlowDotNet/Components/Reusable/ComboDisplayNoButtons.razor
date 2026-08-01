@@ -32,7 +32,8 @@ else
                         <Button Border="Border.Is0"
                                 Background="@GetMoveBackgroundColor(convertedMove.Type)"
                                 TextColor="@GetMoveTextColor(convertedMove.Type)"
-                                TextWeight="TextWeight.Bold">
+                                TextWeight="TextWeight.Bold"
+                                Padding="Padding.Is1">
                             @convertedMove.Name
                         </Button>
                         break;
@@ -42,7 +43,7 @@ else
                         {
                             <img src="@GetMoveImage(convertedMove.Name)"
                                  alt="@convertedMove.Name"
-                                 height="50" width="50"/>
+                                 height="40" width="40"/>
                         }
                         break;
                 }
