@@ -70,6 +70,8 @@ else
         };
         if (!CommonMoves.Moves.All(x => _moveList.Contains(x)))
             _moveList.AddRange(CommonMoves.Moves);
+
+        Console.WriteLine($"{DisplayCombo?.Combo.Game} Moves selected");
     }
 
     private Move? GetMove(string note)

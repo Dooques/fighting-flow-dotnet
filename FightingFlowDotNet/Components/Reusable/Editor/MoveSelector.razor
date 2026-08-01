@@ -12,6 +12,7 @@
              Gap="Gap.Is3">
             @foreach (var move in _filteredMoves)
             {
+                Console.WriteLine($"Move: {move.Name}");
                 <MoveButton Move="move" AddMove="HandleAddMove"/>
             }
         </Div >

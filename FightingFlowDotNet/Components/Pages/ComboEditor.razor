@@ -1,5 +1,6 @@
 ﻿@page "/Editor/{Game}/{Fighter}/{ComboId}/{EditMode:bool}"
 
+@using System.Text.Json
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
@@ -35,6 +36,7 @@
          Gap="Gap.Is3">
         @foreach (var type in _types)
         {
+            Console.WriteLine($"Populating Type: {type}");
             <MoveSelector Moves="_moveList"
                           Type="@type"
                           CharacterName="@(Fighter)"
@@ -100,6 +102,12 @@
                 _types = _moveTypesMk1;
                 break;
         }
+
+        Console.WriteLine($"Game: {Game}");
+        Console.WriteLine($"Move Types : {JsonSerializer.Serialize(_types)}");
+        Console.WriteLine($"Combo:  {JsonSerializer.Serialize(DisplayCombo)}");
+        Console.WriteLine($"Moves:  {JsonSerializer.Serialize(_moveList)}");
+
     }
 
     private async Task<Combo> GetComboFromFb()
@@ -120,6 +128,8 @@
             if (move is null) throw new ArgumentException("Move is null");
             Console.WriteLine($"Adding {move.Name} to Combo");
             DisplayCombo.Combo.Moves.Add(move.Notation);
+            Console.WriteLine($"{DisplayCombo.Combo.Moves.Last()} Added");
+            Console.WriteLine($"Moves: {JsonSerializer.Serialize(DisplayCombo.Combo.Moves)}");
         }
         catch (Exception e)
         {
