@@ -12,7 +12,7 @@ public class FirestoreGetter(IConfiguration configuration, IHostEnvironment env)
     private FirestoreDb Db { get; set; } = new FirestoreDbBuilder
     {
         ProjectId = configuration["Firebase:projectId"],
-        DatabaseId = configuration["Firebase:Database"],
+        DatabaseId = configuration["Firebase:DatabaseId"],
         Credential = GoogleCredentialFactory.Create(configuration, env)
     }.Build();
     
@@ -20,7 +20,8 @@ public class FirestoreGetter(IConfiguration configuration, IHostEnvironment env)
 
     public async Task<List<Fighter>> GetFighters(string game)
     {
-        var fighterCollection = await Db.Collection("characters").GetSnapshotAsync();
+        var fighterCollection = await Db.Collection("characters")
+            .GetSnapshotAsync();
         List<Fighter> fighters = [];
         fighters.AddRange(
             from document in fighterCollection.Documents 
