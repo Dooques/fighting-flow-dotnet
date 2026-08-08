@@ -1,8 +1,5 @@
-﻿using System.Text.Json;
-using FightingFlowDotNet.Clients.Helper;
+﻿using FightingFlowDotNet.Clients.Helper;
 using FightingFlowDotNet.Models;
-using Firebase.Auth;
-using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 
 namespace FightingFlowDotNet.Clients;

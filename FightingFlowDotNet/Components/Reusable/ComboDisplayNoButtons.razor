@@ -17,22 +17,35 @@ else
         }
         else
         {
+            MoveIndex = 0;
             foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
             {
                 var text = convertedMove?.Notation;
+                var moveIndex = MoveIndex;
+                var panelBackground = moveIndex == EditorIndex && ItemSelected 
+                    ? SelectedMoveBackground 
+                    : UnselectedMoveBackground;
                 switch (convertedMove?.Type)
                 {
                     case "Break":
-                        <Span TextColor="TextColor.Info">
-                            @(text)
-                        </Span>
+                        <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
+                                Padding="Padding.Is1"
+                                Disabled="@(!EditMode)"
+                                Class="move-btn"
+                                Style="@($"background-color: {panelBackground};")">
+                            <Span TextColor="TextColor.Info">
+                                @(text)
+                            </Span>
+                        </Button> 
                         break;
 
                     case "Mechanics Input" or "Mechanic" or "Character" or "Mishima" or "Common" or "Stage" or "Special":
-                        <Button Border="Border.Is0"
-                                Background="@GetMoveBackgroundColor(convertedMove.Type)"
+                        <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
                                 TextColor="@GetMoveTextColor(convertedMove.Type)"
                                 TextWeight="TextWeight.Bold"
+                                Style="@($"background-color: {panelBackground};")"
+                                Class="move-btn"
+                                Disabled="@(!EditMode)"
                                 Padding="Padding.Is1">
                             @convertedMove.Name
                         </Button>
@@ -41,12 +54,19 @@ else
                     default:
                         if (convertedMove != null)
                         {
-                            <img src="@GetMoveImage(convertedMove.Name)"
-                                 alt="@convertedMove.Name"
-                                 height="40" width="40"/>
+                            <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
+                                    Padding="Padding.Is1"
+                                    Disabled="@(!EditMode)"
+                                    Class="move-btn"
+                                    Style="@($"background-color: {panelBackground};")">
+                                <img src="@GetMoveImage(convertedMove.Name)"
+                                     alt="@convertedMove.Name"
+                                     height="40" width="40"/>
+                            </Button>
                         }
                         break;
                 }
+                MoveIndex++;
             }
         }
     </Div>
@@ -55,32 +75,28 @@ else
 @code {
     [Parameter]
     public DisplayCombo? DisplayCombo { get; set; }
-    
-    private List<Move>? _moveList = [];
+    [Parameter]
+    public EventCallback<int> UpdateEditorIndex { get; set; }
+    [Parameter]
+    public int EditorIndex { get; set; }
+    [Parameter]
+    public bool ItemSelected { get; set; }
+    [Parameter] 
+    public List<Move> MoveList { get; set; } = [];
+    [Parameter]
+    public bool EditMode { get; set; }
 
-    protected override void OnParametersSet()
-    {
-        if (DisplayCombo == null) return;
-        
-        _moveList = DisplayCombo?.Combo.Game switch
-        {
-            "Tekken 8" => Tekken8.Moves,
-            "Street Fighter 6" => StreetFighter6.Moves,
-            "Mortal Kombat 1" => MortalKombat1.Moves,
-            _ => []
-        };
-        if (!CommonMoves.Moves.All(x => _moveList.Contains(x)))
-            _moveList.AddRange(CommonMoves.Moves);
+    private int MoveIndex { get; set; }
 
-        Console.WriteLine($"{DisplayCombo?.Combo.Game} Moves selected");
-    }
+    private const string SelectedMoveBackground = "#26262e";
+    private const string UnselectedMoveBackground = "#0a0a0d";
 
     private Move? GetMove(string note)
     {
-        if (_moveList == null || string.IsNullOrEmpty(note)) return null;
+        if (string.IsNullOrEmpty(note)) return null;
         try
         {
-            var move = _moveList.FirstOrDefault(m => m.Notation == note);
+            var move = MoveList.FirstOrDefault(m => m.Notation == note);
             return move;
         }
         catch (Exception ex)
@@ -89,18 +105,24 @@ else
             return null;
         }
     }
+
+    private async Task UpdateEditorIndexCallback(int index)
+    {
+        if (UpdateEditorIndex.HasDelegate)
+        {
+            await UpdateEditorIndex.InvokeAsync(index);
+        }
+    }
     
     private static Background GetMoveBackgroundColor(string? type) => type switch
     {
-        "Character" or "Mishima" => 
-            Background.Primary,         // Custom Primary (Pink/Magenta)
-        "Mechanics Input" => 
-            Background.Secondary,       // Custom Secondary (Purple)
-        "Modifier" => Background.Light, // Custom Light (Off-White)
-        "Break" => Background.Info,           // Custom Info/Link (Cyan)
-        "Stage" => Background.Success,           // Custom Success (Neon Green)
-        "Stances" => Background.Danger,         // Custom Danger (Orange)
-        _ =>  Background.Dark                 // Custom Dark (Deep Black)
+        "Character" or "Mishima" => Background.Primary, // Custom Primary (Pink/Magenta)
+        "Mechanics Input" => Background.Secondary,      // Custom Secondary (Purple)
+        "Modifier" => Background.Light,                 // Custom Light (Off-White)
+        "Break" => Background.Info,                     // Custom Info/Link (Cyan)
+        "Stage" => Background.Success,                  // Custom Success (Neon Green)
+        "Stances" => Background.Danger,                 // Custom Danger (Orange)
+        _ =>  Background.Dark                           // Custom Dark (Deep Black)
     };
     
     private static TextColor GetMoveTextColor(string? type) => type switch

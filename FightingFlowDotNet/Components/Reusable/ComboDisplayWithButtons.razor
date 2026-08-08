@@ -4,7 +4,9 @@
 <Column Gap="Gap.Is1" Height="Height.Max100">
     <Heading4>@DisplayCombo?.Combo.Title</Heading4>
 
-    <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
+    <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
+                           MoveList="MoveList"
+                           EditMode="false"/>
     
     <Divider/>
 
@@ -40,10 +42,16 @@
 </Column>
 
 @code {
-    [Parameter] public DisplayCombo? DisplayCombo { get; set; }
-    [Parameter] public Fighter ChosenFighter { get; set; } = new();
-    [Parameter] public string Username { get; set; } = "";
-    [Parameter] public EventCallback GetEditorUrl { get; set; }
+    [Parameter] 
+    public DisplayCombo? DisplayCombo { get; set; }
+    [Parameter] 
+    public Fighter ChosenFighter { get; set; } = new();
+    [Parameter] 
+    public string Username { get; set; } = "";
+    [Parameter] 
+    public EventCallback GetEditorUrl { get; set; }
+    [Parameter] 
+    public List<Move> MoveList { get; set; } = [];
 
     protected override Task OnInitializedAsync()
     {

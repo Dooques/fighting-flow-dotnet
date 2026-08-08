@@ -3,6 +3,7 @@
 @using System.Text.Json
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Helpers
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Components.Reusable.Editor
 @using FightingFlowDotNet.Models
@@ -18,7 +19,12 @@
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
          Gap="Gap.Is3">
 
-        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"/>
+        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
+                               UpdateEditorIndex="UpdateEditorIndex"
+                               EditorIndex="EditorIndex"
+                               ItemSelected="ItemSelected"
+                               MoveList="_moveList"
+                               EditMode="true"/>
 
         <ComboEditorButtons DeleteMove="DeleteMove"
                             AddBreak="AddBreak"
@@ -36,7 +42,6 @@
          Gap="Gap.Is3">
         @foreach (var type in _types)
         {
-            Console.WriteLine($"Populating Type: {type}");
             <MoveSelector Moves="_moveList"
                           Type="@type"
                           CharacterName="@(Fighter)"
@@ -52,23 +57,31 @@
     [Parameter] public string ComboId { get; set; } = "";
     [Parameter] public bool EditMode { get; set; }
 
+    private string LastComboId { get; set; } = "";
+    private bool _lastEditMode;
+
     private string ComboTitle { get; set; } = "";
     private int ComboDamage { get; set; } = 0;
     private int ComboDifficulty { get; set; } = 0;
 
+    private int EditorIndex { get; set; }
+    private bool ItemSelected { get; set; } = false;
+
     private List<Move> _moveList = [];
     private List<string> _types = [];
-    private readonly List<string> _moveTypesT8 =
-        ["Misc", "Movement", "Input", "Character", "Stances", "Mechanics", "Stage", "Modifier"];
-    private readonly List<string> _moveTypesSf6 =
-        ["Movement", "SF Classic", "SF Modern", "Mechanic", "Stage", "Special", "Super Art"];
-    private readonly List<string> _moveTypesMk1 =
-        ["Input", "Movement", "Text Input", "Special", "Fatal Blow"];
 
     private DisplayCombo DisplayCombo { get; set; } = new(new Combo());
 
     protected override async Task OnParametersSetAsync()
     {
+        if (ComboId == LastComboId && EditMode == _lastEditMode)
+        {
+            return;
+        }
+        
+        LastComboId = ComboId;
+        _lastEditMode = EditMode;
+        
         if (EditMode)
         {
             var combo = await GetComboFromFb();
@@ -87,28 +100,28 @@
                 ControlType = Game
             });
         }
+        
+        EditorIndex = DisplayCombo.Combo.Moves.Count - 1;
 
-        switch (Game)
+        _moveList = ListPopulator.ReturnMoveList(Game);
+        _types = ListPopulator.ReturnTypes(Game);
+
+        // Console.WriteLine($"Game: {Game}");
+        // Console.WriteLine($"Move Types : {JsonSerializer.Serialize(_types)}");
+        // Console.WriteLine($"Combo:  {JsonSerializer.Serialize(DisplayCombo)}");
+        // Console.WriteLine($"Moves:  {JsonSerializer.Serialize(_moveList)}");
+
+    }
+
+    private void UpdateEditorIndex(int index)
+    {
+        if (index == EditorIndex && ItemSelected)
         {
-            case "Tekken 8":
-                _moveList = Tekken8.Moves;
-                _types = _moveTypesT8;
-                break;
-            case "Street Fighter 6":
-                _moveList = StreetFighter6.Moves;
-                _types = _moveTypesSf6;
-                break;
-            case "Mortal Kombat 1":
-                _moveList = MortalKombat1.Moves;
-                _types = _moveTypesMk1;
-                break;
+            ItemSelected = false;
+            return;
         }
-
-        Console.WriteLine($"Game: {Game}");
-        Console.WriteLine($"Move Types : {JsonSerializer.Serialize(_types)}");
-        Console.WriteLine($"Combo:  {JsonSerializer.Serialize(DisplayCombo)}");
-        Console.WriteLine($"Moves:  {JsonSerializer.Serialize(_moveList)}");
-
+        EditorIndex = index;
+        ItemSelected = true;
     }
 
     private async Task<Combo> GetComboFromFb()
@@ -127,8 +140,18 @@
         try
         {
             if (move is null) throw new ArgumentException("Move is null");
-            Console.WriteLine($"Adding {move.Name} to Combo");
-            DisplayCombo.Combo.Moves.Add(move.Notation);
+            
+            if (ItemSelected)
+            {
+                Console.WriteLine($"Adding {move.Name} to Combo at the {EditorIndex} index");
+                DisplayCombo.Combo.Moves.Insert(EditorIndex + 1, move.Notation);
+            }
+            else
+            {
+                Console.WriteLine($"Adding {move.Name} to end of Combo");
+                DisplayCombo.Combo.Moves.Add(move.Notation);
+            }
+
             Console.WriteLine($"{DisplayCombo.Combo.Moves.Last()} Added");
             Console.WriteLine($"Moves: {JsonSerializer.Serialize(DisplayCombo.Combo.Moves)}");
         }
@@ -145,7 +168,8 @@
             Console.WriteLine(DisplayCombo.Combo.Moves.Count);
             if (DisplayCombo.Combo.Moves.IsNullOrEmpty())
                 throw new IndexOutOfRangeException("List is empty");
-            DisplayCombo.Combo.Moves.RemoveAt(DisplayCombo.Combo.Moves.Count - 1);
+            DisplayCombo.Combo.Moves.RemoveAt(
+                ItemSelected ? EditorIndex : DisplayCombo.Combo.Moves.Count - 1);
         }
         catch (Exception e)
         {
@@ -155,6 +179,11 @@
 
     public void AddBreak()
     {
+        if (ItemSelected)
+        {
+            DisplayCombo.Combo.Moves.Insert(EditorIndex + 1, "►");
+            return;
+        }
         DisplayCombo.Combo.Moves.Add("►");
     }
 

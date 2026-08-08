@@ -12,7 +12,6 @@
              Gap="Gap.Is3">
             @foreach (var move in _filteredMoves)
             {
-                Console.WriteLine($"Move: {move.Name}");
                 <MoveButton Move="move" AddMove="HandleAddMove"/>
             }
         </Div >
@@ -28,7 +27,6 @@
     private string TypeFilter { get; set; } = "";
     
     private List<Move> _filteredMoves = [];
-    private readonly List<Move> _miscMoves = CommonMoves.Moves;
 
     protected override void OnInitialized()
     {

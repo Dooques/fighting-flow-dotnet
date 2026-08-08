@@ -1,6 +1,7 @@
 ﻿@page "/{Game}/{Name}"
 
 @using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Helpers
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
@@ -33,7 +34,8 @@
                         <ComboDisplayWithButtons
                             DisplayCombo="combo"
                             ChosenFighter="@(ChosenFighter ?? new Fighter())"
-                            Username="@(GetUsername(combo.Combo.CreatedBy))"/>
+                            Username="@(GetUsername(combo.Combo.CreatedBy))"
+                            MoveList="MoveList"/>
                     </Div> 
                 } 
             }
@@ -94,24 +96,17 @@
     private Fighter? ChosenFighter { get; set; }
     private List<CustomUserInfo> UsersList { get; set; } = [];
     private List<DisplayCombo> ComboList { get; set; } = [];
+    private List<Move> MoveList { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        try
+        ChosenFighter = Game switch
         {
-            ChosenFighter = Game switch
-            {
-                "Tekken 8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Name),
-                "Street Fighter6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Name),
-                "Mortal Kombat 1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Name),
-                _ => throw new ArgumentOutOfRangeException(nameof(Game), Game, null)
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            Navigation.NavigateTo("");
-        }
+            "Tekken 8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Name),
+            "Street Fighter 6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Name),
+            "Mortal Kombat 1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Name),
+            _ => throw new ArgumentOutOfRangeException(nameof(Game), Game, null)
+        };
 
         Console.WriteLine($"ChosenFighter: {ChosenFighter?.Name}");
         
@@ -125,6 +120,7 @@
         );
         
         UsersList = await FirestoreGetter.GetUsers();
+        MoveList = ListPopulator.ReturnMoveList(Game);
     }
 
     private string GetUsername(string userId)
