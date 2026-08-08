@@ -49,7 +49,7 @@
 @code {
     [Parameter] public string Game { get; set; } = "";
     [Parameter] public string Fighter { get; set; } = "";
-    [Parameter] public string ComboId { get; set; } = "";
+    [Parameter] public string ComboId { get; set; } = Guid.NewGuid().ToString();
     [Parameter] public bool EditMode { get; set; }
 
     private string ComboTitle { get; set; } = "";
