@@ -49,7 +49,7 @@
 @code {
     [Parameter] public string Game { get; set; } = "";
     [Parameter] public string Fighter { get; set; } = "";
-    [Parameter] public string ComboId { get; set; } = Guid.NewGuid().ToString();
+    [Parameter] public string ComboId { get; set; } = "";
     [Parameter] public bool EditMode { get; set; }
 
     private string ComboTitle { get; set; } = "";
@@ -78,13 +78,14 @@
         {
             DisplayCombo = new DisplayCombo(new Combo
             {
-                    Fighter = Fighter,
-                    Game = Game,
-                    CreatedBy = "Unknown User",
-                    CreatedOn = DateOnly.FromDateTime(DateTime.Now).ToShortDateString(),
-                    ControlType = Game,
+                Id = Guid.NewGuid().ToString(),
+                Title = ComboTitle,
+                Fighter = Fighter,
+                Game = Game,
+                CreatedBy = "Unknown User",
+                CreatedOn = DateOnly.FromDateTime(DateTime.Now).ToShortDateString(),
+                ControlType = Game
             });
-
         }
 
         switch (Game)
