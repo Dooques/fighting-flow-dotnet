@@ -11,7 +11,7 @@ public class Combo
     
     [FirestoreDocumentId] public string Id { get; set; } = "";
     [FirestoreProperty("title")] public string Title { get; set; } = "";
-    [FirestoreProperty("character")] public string Character { get; set; } = "";
+    [FirestoreProperty("character")] public string Fighter { get; set; } = "";
     [FirestoreProperty("game")] public string Game { get; set; } = "";
     [FirestoreProperty("damage")] public int Damage { get; set; } = 0;
     [FirestoreProperty("created_by")] public string CreatedBy { get; set; } = "";

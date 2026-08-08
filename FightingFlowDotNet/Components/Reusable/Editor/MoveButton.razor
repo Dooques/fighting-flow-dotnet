@@ -1,4 +1,5 @@
 ﻿@using FightingFlowDotNet.Models
+
 @if (Move is { Type: "Character" or "Special" or "Modifier" or "Mechanics Input" or 
          "Mechanic" or "Common" or "Stage" or "Super Art" or "Fatal Blow" or "Text Input" })
 {
@@ -36,11 +37,6 @@ else
     
     [Parameter] public Move? Move { get; set; }
     [Parameter] public EventCallback<Move> AddMove { get; set; }
-
-    protected override void OnInitialized()
-    {
-        Console.WriteLine($"{Move?.Name} / {Move?.Type}");
-    }
 
     private async Task HandleAddMove()
     {

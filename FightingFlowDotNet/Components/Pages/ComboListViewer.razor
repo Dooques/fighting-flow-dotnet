@@ -1,10 +1,10 @@
 ﻿@page "/{Game}/{Name}"
 
 @using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Helpers
 @using FightingFlowDotNet.Components.Reusable
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
 @inject FirestoreGetter FirestoreGetter
 @inject NavigationManager Navigation
 
@@ -12,7 +12,8 @@
 
 <Row RowColumns="RowColumns.Are2">
     <Column Width="Width.Is75">
-        <Div Flex="Flex.Column">
+        <Div Flex="Flex.Column"
+             Margin="Margin.Is4.FromBottom">
             <Button
                 Type="ButtonType.Link"
                 Color="Color.Primary"
@@ -21,23 +22,24 @@
                 To="@GetCreatorUrl()">
                 Create a Combo
             </Button>
-            
+
             @if (ComboList.Any())
-            {
-                @foreach (var combo in ComboList)
+            { 
+                @foreach (var combo in ComboList) 
                 {
-                    <Div Margin="Margin.Is4.FromTop">
+                    <Div Margin="Margin.Is4.FromTop"
+                         Border="Border.Is2.Rounded.Light"
+                         Shadow="Shadow.Small"
+                         Padding="Padding.Is2">
                         <ComboDisplayWithButtons
                             DisplayCombo="combo"
                             ChosenFighter="@(ChosenFighter ?? new Fighter())"
-                            Username="@(GetUsername(combo.Combo.CreatedBy))"/>
-                    </Div>
-                }
+                            Username="@(GetUsername(combo.Combo.CreatedBy))"
+                            MoveList="MoveList"/>
+                    </Div> 
+                } 
             }
-            else
-            {
-                <p>No combos to be found... </p>
-            }
+            else { <p>No combos to be found... </p> }
         </Div>
     </Column>
 
@@ -94,26 +96,17 @@
     private Fighter? ChosenFighter { get; set; }
     private List<CustomUserInfo> UsersList { get; set; } = [];
     private List<DisplayCombo> ComboList { get; set; } = [];
+    private List<Move> MoveList { get; set; } = [];
 
     protected override async Task OnInitializedAsync()
     {
-        Console.WriteLine("Getting fighters");
-
-        try
+        ChosenFighter = Game switch
         {
-            ChosenFighter = Game switch
-            {
-                "T8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Name),
-                "SF6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Name),
-                "MK1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Name),
-                _ => throw new ArgumentOutOfRangeException(nameof(Game), Game, null)
-            };
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex);
-            Navigation.NavigateTo("");
-        }
+            "Tekken 8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Name),
+            "Street Fighter 6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Name),
+            "Mortal Kombat 1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Name),
+            _ => throw new ArgumentOutOfRangeException(nameof(Game), Game, null)
+        };
 
         Console.WriteLine($"ChosenFighter: {ChosenFighter?.Name}");
         
@@ -127,6 +120,7 @@
         );
         
         UsersList = await FirestoreGetter.GetUsers();
+        MoveList = ListPopulator.ReturnMoveList(Game);
     }
 
     private string GetUsername(string userId)
