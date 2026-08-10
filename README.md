@@ -8,7 +8,6 @@ Fighting Flow is a Blazor Server app for browsing fighting-game rosters and buil
 - **Blazorise** (Bootstrap 5 provider) for UI components
 - **Firebase Authentication** (Google sign-in popup, via the Firebase JS SDK + `FirebaseAuthentication.net` / `FirebaseAdmin` for server-side token verification)
 - **Google Cloud Firestore** for fighter/combo data (`Google.Cloud.Firestore`)
-- **Supabase** for additional data storage
 - Deployed to **Azure App Service** via GitHub Actions (`.github/workflows/main_fightingflow.yml`)
 
 ## Project layout
