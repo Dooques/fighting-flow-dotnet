@@ -1,7 +1,4 @@
 ﻿@using FightingFlowDotNet.Models
-@using FightingFlowDotNet.Resources
-@using FightingFlowDotNet.Resources.TekkenData
-
 
 @if (DisplayCombo?.Combo.Moves == null)
 {
@@ -43,6 +40,7 @@ else
                         <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
                                 TextColor="@GetMoveTextColor(convertedMove.Type)"
                                 TextWeight="TextWeight.Bold"
+                                Background="@(GetMoveBackgroundColor(convertedMove.Type))"
                                 Style="@($"background-color: {panelBackground};")"
                                 Class="move-btn"
                                 Disabled="@(!EditMode)"
