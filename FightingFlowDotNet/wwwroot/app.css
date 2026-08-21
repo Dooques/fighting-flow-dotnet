@@ -2,6 +2,204 @@ html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.background-container {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+}
+
+.glass-navbar {
+    position: relative;
+    z-index: 10;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.35rem 1.5rem !important;
+    background: rgba(20, 20, 20, 0.35) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.28);
+}
+
+@media (max-width: 576px) {
+    .glass-navbar {
+        margin: 0.75rem;
+        width: calc(100% - 1.5rem);
+    }
+}
+
+.glass-header {
+    background: transparent !important;
+    padding-top: 1rem !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-bottom: 2rem !important;
+}
+
+.glass-nav-brand {
+    background: transparent;
+    border: 0;
+}
+
+.glass-game-selector,
+.glass-game-selector :where(button, select, .dropdown-toggle) {
+    background: transparent !important;
+}
+
+.glass-game-selector .dropdown-toggle::after,
+.glass-game-selector button.dropdown-toggle::after {
+    display: inline-block;
+    margin-left: 0.255em !important;
+    vertical-align: 0.255em !important;
+    content: "" !important;
+    border-top: 0.3em solid currentColor !important;
+    border-right: 0.3em solid transparent !important;
+    border-bottom: 0 !important;
+    border-left: 0.3em solid transparent !important;
+    transform: none !important;
+}
+
+.glass-game-selector {
+    position: relative;
+    display: inline-block;
+    width: max-content;
+    max-width: max-content;
+    white-space: nowrap;
+}
+
+.glass-game-selector :where(.dropdown, .dropdown-list) {
+    position: relative;
+    display: inline-block;
+    width: max-content;
+}
+
+.glass-game-selector .dropdown-menu {
+    min-width: 12rem;
+    margin-left: 0.5rem !important;
+    background: rgba(12, 12, 12, 0.72) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    border-radius: 1rem !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+.glass-game-selector .dropdown-item {
+    color: rgba(255, 255, 255, 0.92) !important;
+    background: transparent !important;
+}
+
+.glass-game-selector .dropdown-item:hover,
+.glass-game-selector .dropdown-item:focus {
+    background: rgba(255, 255, 255, 0.12) !important;
+}
+
+.card.glass-card {
+    background: rgba(20, 20, 20, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.combo-item {
+    background: rgba(20, 20, 20, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25); 
+}
+
+.combo-display {
+    background: transparent;
+    border: 0;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+}
+
+.combo-viewer-moves .move-btn {
+    background: transparent !important;
+    background-image: none !important;
+    border-color: transparent !important;
+    box-shadow: none !important;
+}
+
+.combo-editor-layout {
+    border-radius: 1rem;
+}
+
+.combo-editor-layout :where(.btn, button) {
+    color: #fff !important;
+}
+
+.combo-editor-panel,
+.move-selector-card {
+    background: rgba(20, 20, 20, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.combo-editor-panel {
+    padding: 1.5rem;
+}
+
+.move-selector-card {
+    padding: 0.5rem;
+}
+
+.move-selector-heading {
+    padding-inline: 1rem;
+}
+
+.move-selector-items {
+    padding-inline: 1rem;
+}
+
+.move-btn-modifier {
+    background-color: #5c636a !important;
+    border-color: #565c62 !important;
+}
+
+.move-btn-stage {
+    background-color: #146c43 !important;
+    border-color: #125f3b !important;
+}
+
+.combo-editor-shell {
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.combo-viewer-list {
+    row-gap: 2rem;
+}
+
+.combo-empty-state {
+    padding: 1.5rem;
+    background: rgba(20, 20, 20, 0.35);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+}
+
+.combo-empty-state p {
+    margin: 0;
+}
+
 a, .btn-link {
     color: #006bb7;
 }

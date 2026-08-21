@@ -1,17 +1,101 @@
 ﻿@inherits LayoutComponentBase
+@implements IDisposable
+@using Microsoft.JSInterop
+@using FightingFlowDotNet.Models.Enums
+@using FightingFlowDotNet.Models.State
+@using FightingFlowDotNet.Resources
+@inject GameSelectedState GameState
+@inject IJSRuntime JS
 
-<Layout Height="Height.Is100">
-    <Container Fluid Padding="Padding.Is5.OnX">
-        <LayoutHeader>
-            <FlowAppBar/>    
-        </LayoutHeader>
-        
-        <LayoutContent>
-                @Body
-        </LayoutContent>
-        
-        <LayoutFooter>
+@if (_isStateReady)
+{
+    <Layout Height="Height.Is100">
+        <Div class="background-container" Style="@BackgroundStyle">
+                <LayoutHeader Class="glass-header" Width="Width.Is100">
+                    <Container Fluid Padding="Padding.Is5.OnX">
+                        <FlowAppBar/>
+                    </Container>
+                </LayoutHeader>
             
-        </LayoutFooter>
-    </Container>
-</Layout>
+            <Container Fluid Padding="Padding.Is5.OnX">
+
+                <LayoutContent>
+                    @Body
+                </LayoutContent>
+
+                <LayoutFooter>
+
+                </LayoutFooter>
+            </Container>
+        </Div>
+    </Layout>
+}
+
+@code {
+    private const string SavedGameKey = "fightingflow.selected-game";
+    private bool _hasRestoredState;
+    private bool _isRestoringState;
+    private bool _isStateReady;
+
+    private string BackgroundStyle => GameState.BackgroundImage is null
+        ? "background-color: #111;"
+        : $"background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('./images/{GameState.BackgroundImage}');";
+
+    protected override void OnInitialized()
+    {
+        GameState.OnChange += OnGameStateChanged;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender)
+            return;
+
+        var savedGame = await JS.InvokeAsync<string?>("localStorage.getItem", SavedGameKey);
+
+        var gameType = Enum.TryParse<GameType>(savedGame, out var savedGameType)
+            ? savedGameType
+            : GameState.GameType;
+        var backgroundImage = GetRandomBackground(gameType);
+        _isRestoringState = true;
+        GameState.SetGame(gameType, backgroundImage);
+        _isRestoringState = false;
+
+        _hasRestoredState = true;
+        _isStateReady = true;
+        await PersistGameStateAsync();
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private void OnGameStateChanged()
+    {
+        InvokeAsync(StateHasChanged);
+
+        if (_hasRestoredState && !_isRestoringState)
+            _ = PersistGameStateAsync();
+    }
+
+    private async Task PersistGameStateAsync()
+    {
+        await JS.InvokeVoidAsync("localStorage.setItem", SavedGameKey, GameState.GameType.ToString());
+    }
+
+    private static string? GetRandomBackground(GameType gameType)
+    {
+        var stageImages = gameType switch
+        {
+            GameType.MORTALKOMBAT1 => MortalKombat1.StageImages,
+            GameType.TEKKEN8 => Tekken8.StageImages,
+            _ => []
+        };
+
+        return stageImages.Count > 0
+            ? stageImages[Random.Shared.Next(stageImages.Count)]
+            : null;
+    }
+
+    public void Dispose()
+    {
+        GameState.OnChange -= OnGameStateChanged;
+    }
+}

@@ -1,13 +1,17 @@
 ﻿@using System.Text.Json
 @using FightingFlowDotNet.Models
 
-<Column Gap="Gap.Is1" Height="Height.Max100">
+<Column Gap="Gap.Is1"
+        Height="Height.Max100"
+        Class="combo-item combo-viewer-shell"
+        Padding="Padding.Is2">
+    
     <Heading4>@DisplayCombo?.Combo.Title</Heading4>
 
     <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
                            MoveList="MoveList"
                            EditMode="false"/>
-    
+
     <Divider/>
 
     <Container Flex="Flex.Row.JustifyContent.Between.AlignItems.Center"
@@ -16,7 +20,7 @@
             <Text>Damage: @DisplayCombo?.Combo.Damage</Text>
             <Text>Created By: @Username</Text>
         </Div>
-        
+
         <Div Flex="Flex.Row.AlignContent.Start.JustifyContent.Center"
              Gap="Gap.Is3">
             <Button Type="ButtonType.Link"
@@ -31,7 +35,7 @@
                 Share
             </Button>
         </Div>
-        
+
         <Div Flex="Flex.Column.AlignItems.Center.JustifyContent.Center">
             <Text TextWeight="TextWeight.Bold">Ki: @DisplayCombo?.Ki</Text>
             <Button>

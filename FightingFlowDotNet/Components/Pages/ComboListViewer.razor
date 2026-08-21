@@ -1,5 +1,6 @@
 ﻿@page "/{Game}/{Name}"
 
+@using System.Runtime.Serialization
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Helpers
 @using FightingFlowDotNet.Components.Reusable
@@ -11,76 +12,33 @@
 <PageTitle>Combo Viewer</PageTitle>
 
 <Row RowColumns="RowColumns.Are2">
-    <Column Width="Width.Is75">
-        <Div Flex="Flex.Column"
-             Margin="Margin.Is4.FromBottom">
-            <Button
-                Type="ButtonType.Link"
-                Color="Color.Primary"
-                TextColor="TextColor.Light"
-                Margin="Margin.Is2.OnY.Is5.OnX"
-                To="@GetCreatorUrl()">
-                Create a Combo
-            </Button>
-
-            @if (ComboList.Any())
-            { 
-                @foreach (var combo in ComboList) 
-                {
-                    <Div Margin="Margin.Is4.FromTop"
-                         Border="Border.Is2.Rounded.Light"
-                         Shadow="Shadow.Small"
-                         Padding="Padding.Is2">
-                        <ComboDisplayWithButtons
-                            DisplayCombo="combo"
-                            ChosenFighter="@(ChosenFighter ?? new Fighter())"
-                            Username="@(GetUsername(combo.Combo.CreatedBy))"
-                            MoveList="MoveList"/>
-                    </Div> 
-                } 
-            }
-            else { <p>No combos to be found... </p> }
-        </Div>
-    </Column>
-
-    <Column Width="Width.Is25">
-        <Card Background="Background.Dark">
-            <CardHeader TextAlignment="TextAlignment.Center">
+    <Column Width="Width.Is75"
+            Flex="Flex.Column"
+            Class="combo-viewer-list">
+        @if (ComboList.Any())
+        {
+            @foreach (var combo in ComboList)
+            {
                 <Div>
-                    <CardImage Source="@GetPhotoUrl()"
-                               Height="Height.Px().Min(100)"
-                               Width="Width.Max100"
-                               Style="object-fit: contain;"
-                               Alt="@ChosenFighter?.Name"/>
+                    <ComboDisplayWithButtons
+                        DisplayCombo="combo"
+                        ChosenFighter="@(ChosenFighter ?? new Fighter())"
+                        Username="@(GetUsername(combo.Combo.CreatedBy))"
+                        MoveList="MoveList"/>
                 </Div>
-            </CardHeader>
-        
-            <CardBody>
-                <CardTitle Size="HeadingSize.Is5"
-                           TextColor="TextColor.Light">
-                    @(ChosenFighter?.Name ?? "Invalid Character")
-                </CardTitle>
-                <Div Flex="Flex.Column" >
-
-                    @if (ChosenFighter?.Bio.Length > 0)
-                    {
-                        <Text>
-                            @(ChosenFighter?.Bio)
-                        </Text>
-                    }
-
-                    <Text class="text-white">
-                        @(ChosenFighter?.FightingStyle)
-                    </Text>
-
-                    <Text class="text-white">
-                        @(ChosenFighter?.Game)
-                    </Text>
-                </Div>
-            </CardBody>
-        </Card>
+            }
+        }
+        else
+        {
+            <Div Class="combo-empty-state">
+                <p>No combos to be found...</p>
+            </Div>
+        }
     </Column>
-    
+
+    <Column Width="Width.Is25" Flex="Flex.Column.AlignItems.Center">
+        <CharacterCardDetailed ChosenFighter="ChosenFighter"/>
+    </Column>
 </Row>
 
 <script type="text/javascript">
@@ -130,11 +88,6 @@
         var authDetailsUsername = UsersList.FirstOrDefault(u => 
             u.UserId == userId)?.Username;
         return authDetailsUsername ?? "Invalid Username";
-    }
-
-    private string GetCreatorUrl()
-    {
-        return $"/Editor/{Game}/{ChosenFighter?.Name}/new/False";
     }
 
     private string GetPhotoUrl()

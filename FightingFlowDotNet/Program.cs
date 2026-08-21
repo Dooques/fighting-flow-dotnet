@@ -7,6 +7,7 @@ using FightingFlowDotNet.Clients;
 using FightingFlowDotNet.Clients.Helper;
 using FightingFlowDotNet.Components;
 using FightingFlowDotNet.Models;
+using FightingFlowDotNet.Models.State;
 using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Microsoft.AspNetCore.Authentication;
@@ -41,6 +42,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie();
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
+builder.Services.AddScoped<GameSelectedState>();
 
 builder.Services.AddBlazorise(options =>
     {
@@ -70,15 +72,31 @@ builder.Services.AddRateLimiter(options =>
         opt.QueueLimit = 0;
     });
 
-    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext => 
-        RateLimitPartition.GetFixedWindowLimiter(
-            httpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown", _ => 
-                new FixedWindowRateLimiterOptions 
+    options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(httpContext =>
+    {
+        var path = httpContext.Request.Path;
+        var isBlazorOrStaticRequest =
+            path.StartsWithSegments("/_blazor") ||
+            path.StartsWithSegments("/_framework") ||
+            path.StartsWithSegments("/_content") ||
+            path.StartsWithSegments("/images") ||
+            path.StartsWithSegments("/css") ||
+            path == "/favicon.png";
+
+        if (isBlazorOrStaticRequest)
+            return RateLimitPartition.GetNoLimiter("blazor-or-static");
+
+        return RateLimitPartition.GetFixedWindowLimiter(
+            httpContext.Connection.RemoteIpAddress?.ToString() ?? "Unknown", _ =>
+                new FixedWindowRateLimiterOptions
                 {
-                    PermitLimit = 60,
+                    // Keep ordinary browsing usable while still limiting sustained abuse.
+                    PermitLimit = 300,
                     Window = TimeSpan.FromMinutes(1),
-                    QueueLimit = 0 
-                }));
+                    QueueLimit = 20,
+                    QueueProcessingOrder = QueueProcessingOrder.OldestFirst
+                });
+    });
 });
 
 builder.Services.AddRazorComponents()

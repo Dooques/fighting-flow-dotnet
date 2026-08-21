@@ -13,18 +13,19 @@
 <PageTitle>Combo Editor</PageTitle>
 
 <Div Flex="Flex.Column.AlignContent.Center"
-     Gap="Gap.Is2"
-     Padding="Padding.Is5.FromBottom">
-
+     Gap="Gap.Is4"
+     Padding="Padding.Is2"
+     Class="combo-editor-layout">
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
-         Gap="Gap.Is3">
+         Gap="Gap.Is4"
+         Class="combo-editor-panel">
 
-        <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
-                               UpdateEditorIndex="UpdateEditorIndex"
-                               EditorIndex="EditorIndex"
-                               ItemSelected="ItemSelected"
-                               MoveList="_moveList"
-                               EditMode="true"/>
+            <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
+                                   UpdateEditorIndex="UpdateEditorIndex"
+                                   EditorIndex="EditorIndex"
+                                   ItemSelected="ItemSelected"
+                                   MoveList="_moveList"
+                                   EditMode="true"/>
 
         <ComboEditorButtons DeleteMove="DeleteMove"
                             AddBreak="AddBreak"
@@ -36,10 +37,9 @@
                          ComboDifficulty="ComboDifficulty"/>
     </Div>
 
-    <Divider/>
-
     <Div Flex="Flex.Column.JustifyContent.Start"
-         Gap="Gap.Is3">
+         Gap="Gap.Is4"
+         Class="combo-selector-list">
         @foreach (var type in _types)
         {
             <MoveSelector Moves="_moveList"

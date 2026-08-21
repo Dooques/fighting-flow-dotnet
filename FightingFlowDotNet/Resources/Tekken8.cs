@@ -4,6 +4,30 @@ namespace FightingFlowDotNet.Resources;
 
 public static class Tekken8
 {
+    public static readonly IReadOnlyList<string> StageImages =
+    [
+        "stage_t8_arena.png",
+        "stage_t8_baobab.png",
+        "stage_t8_baobab_2.png",
+        "stage_t8_beach.png",
+        "stage_t8_coliseum.png",
+        "stage_t8_descent.png",
+        "stage_t8_fallen_destiny.png",
+        "stage_t8_forest.png",
+        "stage_t8_genmaji_2.png",
+        "stage_t8_midnight_siege.png",
+        "stage_t8_ortiz_farm.png",
+        "stage_t8_pacman.png",
+        "stage_t8_palace.png",
+        "stage_t8_phoenix_gate.png",
+        "stage_t8_sanctum.png",
+        "stage_t8_seine.png",
+        "stage_t8_stratosphere.png",
+        "stage_t8_temple.png",
+        "stage_t8_times_square.png",
+        "stage_t8_training_ground.png",
+    ];
+
     public static List<Fighter> Fighters { get; set; } =
     [
         new(name: "Alisa", imageId: "alisa", fightingStyle: "Thruster-Based High-Mobility Fighting Style", game: "Tekken 8"),
