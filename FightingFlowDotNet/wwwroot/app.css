@@ -200,6 +200,11 @@ html, body {
     margin: 0;
 }
 
+.character-detail-image {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
