@@ -3,12 +3,14 @@
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
 <Card Class="glass-card">
-    <CardHeader TextAlignment="TextAlignment.Center">
+    <CardHeader TextAlignment="TextAlignment.Center"
+                Class="character-detail-header">
         <Div>
             <CardImage Source="@GetPhotoUrl()"
                        Height="Height.Px().Min(100)"
                        Width="Width.Max100"
                        Style="object-fit: contain;"
+                       Class="character-detail-image"
                        Alt="@ChosenFighter?.Name"/>
         </Div>
     </CardHeader>
