@@ -1,0 +1,6 @@
+﻿namespace FightingFlowDotNet.Models.Enums;
+
+public enum GameType
+{
+    TEKKEN8, MORTALKOMBAT1, STREETFIGHTER6, INVINCIBLEVS, MARVELTOKON, DRAGONBALLFIGHTERZ
+}

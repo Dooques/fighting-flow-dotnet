@@ -5,6 +5,21 @@ namespace FightingFlowDotNet.Resources;
 
 public static class MortalKombat1
 {
+    public static readonly IReadOnlyList<string> StageImages =
+    [
+        "stage_mk1_firetemple.png",
+        "stage_mk1_fleshpit.png",
+        "stage_mk1_gateway.png",
+        "stage_mk1_greathall.png",
+        "stage_mk1_hourglass.png",
+        "stage_mk1_pyramid.png",
+        "stage_mk1_shangtsung.png",
+        "stage_mk1_teahouse.png",
+        "stage_mk1_temple.png",
+        "stage_mk1_treasurechamber.png",
+        "stages_mk1_sundo.png"
+    ];
+
     public static readonly List<Fighter> Fighters =
    [
         new Fighter { Name = "Ashrah", ImageId = "ashrah", FightingStyle = "Krabi-Krabong", Game = "Mortal Kombat 1", CombosById = [] },

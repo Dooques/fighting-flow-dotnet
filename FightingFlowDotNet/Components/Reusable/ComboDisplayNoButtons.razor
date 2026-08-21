@@ -7,7 +7,8 @@
 else
 {
     <Div Flex="Flex.Row.Wrap.AlignItems.Center"
-         Gap="Gap.Is2">
+         Gap="Gap.Is2"
+         Class="@(EditMode ? "combo-display" : "combo-display combo-viewer-moves")">
         @if (DisplayCombo?.Combo.Moves == null || !DisplayCombo.Combo.Moves.Any())
         {
             <p>No Moves found...</p>
@@ -28,8 +29,7 @@ else
                         <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
                                 Padding="Padding.Is1"
                                 Disabled="@(!EditMode)"
-                                Class="move-btn"
-                                Style="@($"background-color: {panelBackground};")">
+                                Class="move-btn">
                             <Span TextColor="TextColor.Info">
                                 @(text)
                             </Span>
@@ -55,8 +55,7 @@ else
                             <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
                                     Padding="Padding.Is1"
                                     Disabled="@(!EditMode)"
-                                    Class="move-btn"
-                                    Style="@($"background-color: {panelBackground};")">
+                                    Class="move-btn">
                                 <img src="@GetMoveImage(convertedMove.Name)"
                                      alt="@convertedMove.Name"
                                      height="40" width="40"/>

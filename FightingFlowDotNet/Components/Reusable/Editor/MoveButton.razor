@@ -16,6 +16,8 @@
                 _ => Background.Dark
             })"
             Type="ButtonType.Button"
+            Class="@GetToneClass(Move?.Type)"
+            Style="@GetToneStyle(Move?.Type)"
             @onclick="HandleAddMove">
         <Text TextWeight="TextWeight.Bold">@Move?.Name</Text>
     </Button>
@@ -37,6 +39,22 @@ else
     
     [Parameter] public Move? Move { get; set; }
     [Parameter] public EventCallback<Move> AddMove { get; set; }
+
+    private static string GetToneClass(string? type) => type switch
+    {
+        "Modifier" => "move-btn-modifier",
+        "Stage" => "move-btn-stage",
+        _ => ""
+    };
+
+    private static string GetToneStyle(string? type) => type switch
+    {
+        "Modifier" => "background-color: #5c636a !important; border-color: #565c62 !important;",
+        "Break" => "background-color: #0a8fab !important; border-color: #087d96 !important;",
+        "Stage" => "background-color: #146c43 !important; border-color: #125f3b !important;",
+        "Common" or "Mechanic" or "Text Input" => "background-color: #c73545 !important; border-color: #ad2e3b !important;",
+        _ => ""
+    };
 
     private async Task HandleAddMove()
     {

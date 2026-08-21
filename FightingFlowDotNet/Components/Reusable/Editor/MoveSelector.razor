@@ -2,13 +2,15 @@
 
 @if (Moves.Count > 0)
 {
-    <Div>
-        <Heading5>
+    <Div Padding="Padding.Is2"
+         Class="move-selector-card">
+        <Heading5 Class="move-selector-heading">
             @Type
         </Heading5>
 
         <Div Flex="Flex.Row.Wrap"
-             Gap="Gap.Is3">
+             Gap="Gap.Is4"
+             Class="move-selector-items">
             @foreach (var move in _filteredMoves)
             {
                 <MoveButton Move="move" AddMove="HandleAddMove"/>

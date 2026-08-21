@@ -1,16 +1,41 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
-<Bar Breakpoint="Breakpoint.Mobile">
+@using FightingFlowDotNet.Models.Enums
+@using FightingFlowDotNet.Models.State
+@using FightingFlowDotNet.Resources
+@inject GameSelectedState GameState
+
+<Bar Breakpoint="Breakpoint.Mobile" Class="glass-navbar">
     <BarBrand>
         <BarItem>
             <BarLink To="/">
-                <Text TextSize="TextSize.ExtraLarge" TextColor="TextColor.Light">
-                    Fighting <Span TextColor="TextColor.Primary">Flow</Span>
-                </Text>
+                <Div Class="glass-nav-brand" Border="Border.Rounded"
+                     Padding="Padding.Is2">
+                    <Text TextSize="TextSize.ExtraLarge" TextColor="TextColor.Light">
+                        Fighting <Span TextColor="TextColor.Primary">Flow</Span>
+                    </Text>    
+                </Div>
+                
             </BarLink>    
         </BarItem>
     </BarBrand>
     
-    <BarEnd Flex="Flex.InlineFlex.Row.Wrap.NoWrap">
+    <BarItem>
+        <Div Class="glass-game-selector">
+            <DropdownList TItem="string" TValue="string"
+                          Data="_gameList"
+                          TextField="@((item) => item)"
+                          ValueField="@(item => item)"
+                          ValueChanged="UpdateGameSelected"
+                          Color="Color.Dark"
+                          Direction="Direction.End"
+                          Class="m3-outlined-dropdown">
+                @CurrentGameName
+            </DropdownList>
+        </Div>
+    </BarItem>
+
+    <BarEnd Flex="Flex.InlineFlex.Row.Wrap.NoWrap"
+            Border="Border.Rounded">
         <BarItem>
             <BarLink To="resources">
                 <Button TextColor="TextColor.Light">
@@ -42,3 +67,41 @@
         </AuthorizeView>
     </BarEnd>
 </Bar>
+
+@code {
+    private readonly List<string> _gameList =
+    [
+        "Tekken 8",
+        "Street Fighter 6",
+        "Mortal Kombat 1"
+    ];
+
+    private string CurrentGameName => GameState.GameType switch
+    {
+        GameType.STREETFIGHTER6 => "Street Fighter 6",
+        GameType.MORTALKOMBAT1 => "Mortal Kombat 1",
+        _ => "Tekken 8"
+    };
+
+    private void UpdateGameSelected(string newGame)
+    {
+        var gameType = newGame switch
+        {
+            "Street Fighter 6" => GameType.STREETFIGHTER6,
+            "Mortal Kombat 1" => GameType.MORTALKOMBAT1,
+            _ => GameType.TEKKEN8
+        };
+
+        var stageImages = gameType switch
+        {
+            GameType.MORTALKOMBAT1 => MortalKombat1.StageImages,
+            GameType.TEKKEN8 => Tekken8.StageImages,
+            _ => []
+        };
+        var backgroundImage = stageImages.Count > 0
+            ? stageImages[Random.Shared.Next(stageImages.Count)]
+            : null;
+
+        GameState.SetGame(gameType, backgroundImage);
+    }
+}

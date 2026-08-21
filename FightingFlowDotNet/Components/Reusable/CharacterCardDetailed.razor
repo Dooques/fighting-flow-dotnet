@@ -1,0 +1,63 @@
+﻿@using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Components.Helpers
+@using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Resources
+<Card Class="glass-card">
+    <CardHeader TextAlignment="TextAlignment.Center">
+        <Div>
+            <CardImage Source="@GetPhotoUrl()"
+                       Height="Height.Px().Min(100)"
+                       Width="Width.Max100"
+                       Style="object-fit: contain;"
+                       Alt="@ChosenFighter?.Name"/>
+        </Div>
+    </CardHeader>
+
+    <CardBody>
+        <CardTitle Size="HeadingSize.Is5"
+                   TextColor="TextColor.Light">
+            @(ChosenFighter?.Name ?? "Invalid Character")
+        </CardTitle>
+        <Div Flex="Flex.Column">
+
+            @if (ChosenFighter?.Bio.Length > 0)
+            {
+                <Text>
+                    @(ChosenFighter?.Bio)
+                </Text>
+            }
+
+            <Text class="text-white">
+                @(ChosenFighter?.FightingStyle)
+            </Text>
+
+            <Text class="text-white">
+                @(ChosenFighter?.Game)
+            </Text>
+
+            <Button
+                Type="ButtonType.Link"
+                Color="Color.Primary"
+                TextColor="TextColor.Light"
+                Margin="Margin.Is2.OnY"
+                To="@GetCreatorUrl()">
+                Create a Combo
+            </Button>
+        </Div>
+    </CardBody>
+</Card>
+@code {
+    
+    [Parameter]
+    public Fighter? ChosenFighter { get; set; }
+
+    private string GetPhotoUrl()
+    {
+        return $"./images/{ChosenFighter?.ImageId}.png";
+    }
+
+    private string GetCreatorUrl()
+    {
+        return $"/Editor/{ChosenFighter?.Game}/{ChosenFighter?.Name}/new/False";
+    }
+}

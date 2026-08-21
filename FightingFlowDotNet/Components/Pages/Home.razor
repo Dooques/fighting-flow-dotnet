@@ -1,10 +1,13 @@
 ﻿@page "/"
-@using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
 @using FightingFlowDotNet.Components.Reusable
+@using FightingFlowDotNet.Models.Enums
 @using FightingFlowDotNet.Models
+@using FightingFlowDotNet.Models.State
 @using FightingFlowDotNet.Resources
 @inject FirestoreGetter FbGetter
+@inject GameSelectedState GameState
+@implements IDisposable
 
 <PageTitle>Fighting Flow</PageTitle>
 
@@ -15,27 +18,7 @@
         Fighting <Span TextColor="TextColor.Primary">Flow</Span>
     </Heading1>
 
-    <Field Floating>
-        <DropdownList TItem="string" TValue="string"
-                      Data="_gameList"
-                      TextField="@((item) => item)"
-                      ValueField="@(item => item)"
-                      ValueChanged="UpdateGameSelected"
-                      Color="Color.Dark"
-                      Class="m3-outlined-dropdown"
-                      Focus="true">
-            @if (!_gameSelected.IsNullOrEmpty())
-            {
-                @_gameSelected
-            }
-            else
-            {
-                <Text>Game Select</Text>
-            }
-        </DropdownList>
-    </Field>
-
-    <Div Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.5rem;">
+    <Div Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem;">
         @foreach (var fighter in Fighters)
         {
             <CharacterCard Fighter="@(fighter)"/>
@@ -45,40 +28,30 @@
 
 @code {
     private IReadOnlyList<Fighter> Fighters { get; set; } = Tekken8.Fighters;
-    private bool _dropDownSelected = false;
-    private string _gameSelected = "Tekken 8";
-
-    private readonly List<string> _gameList =
-    [
-        "Tekken 8",
-        "Street Fighter 6",
-        "Mortal Kombat 1",
-        // "2XKO",
-        // "Invincible Vs"
-    ];
-
-    private void ToggleDropDown()
+    protected override void OnInitialized()
     {
-        _dropDownSelected = !_dropDownSelected;
+        GameState.OnChange += OnGameStateChanged;
+
+        if (GameState.GameType == GameType.TEKKEN8 && 
+            GameState.BackgroundImage is null)
+            GameState.SetBackground(
+                Tekken8.StageImages[Random.Shared.Next(Tekken8.StageImages.Count)]);
     }
 
-    private async Task CloseDropdown()
+    private void OnGameStateChanged()
     {
-        await Task.Delay(150);
-        _dropDownSelected = false;
-    }
-
-    private void UpdateGameSelected(string newGame)
-    {
-        _gameSelected = newGame;
-        Console.WriteLine($"Switched to {newGame}");
-        Console.WriteLine($"New Value:  {_gameSelected}");
-        Fighters = _gameSelected switch
+        Fighters = GameState.GameType switch
         {
-            "Tekken 8" => Tekken8.Fighters,
-            "Street Fighter 6" => StreetFighter6.Fighters,
-            "Mortal Kombat 1" => MortalKombat1.Fighters,
-            _ => []
+            GameType.STREETFIGHTER6 => StreetFighter6.Fighters,
+            GameType.MORTALKOMBAT1 => MortalKombat1.Fighters,
+            _ => Tekken8.Fighters
         };
+
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        GameState.OnChange -= OnGameStateChanged;
     }
 }
