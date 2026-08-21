@@ -205,6 +205,10 @@ html, body {
     box-shadow: none !important;
 }
 
+.character-detail-header {
+    border-bottom: 0 !important;
+}
+
 a, .btn-link {
     color: #006bb7;
 }
