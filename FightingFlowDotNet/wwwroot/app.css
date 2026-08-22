@@ -235,6 +235,34 @@ html, body {
     margin: 0;
 }
 
+.combo-meta-fields .form-control {
+    background: rgba(20, 20, 20, 0.5);
+    color: rgba(255, 255, 255, 0.92);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.combo-meta-fields .form-control::placeholder {
+    color: rgba(255, 255, 255, 0.55);
+}
+
+.combo-meta-fields .form-control:focus {
+    background: rgba(20, 20, 20, 0.65);
+    color: rgba(255, 255, 255, 0.95);
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: none;
+}
+
+.combo-meta-fields textarea.form-control {
+    resize: none;
+    overflow: hidden;
+}
+
+.glass-panel {
+    max-width: 40rem;
+    margin: 2rem auto;
+    padding: 1.5rem;
+}
+
 .character-detail-image {
     border: 0 !important;
     box-shadow: none !important;

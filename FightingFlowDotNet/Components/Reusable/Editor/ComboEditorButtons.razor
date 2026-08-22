@@ -1,4 +1,5 @@
 @using System.Reflection.Metadata
+@inject NavigationManager Navigation
 <Div Flex="Flex.Row">
     <Button
         Color="Color.Light"
@@ -73,14 +74,32 @@
     </ModalContent>
 </Modal>
 
+<Modal @ref="_signInRequiredModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Sign in required</ModalTitle>
+            <CloseButton Clicked="CancelSignIn"/>
+        </ModalHeader>
+        <ModalBody>
+            You need to be signed in to save a combo.
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelSignIn">Cancel</Button>
+            <Button Color="Color.Primary" TextColor="TextColor.Light" Clicked="GoToLogin">Log In</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
 @code {
     [Parameter] public EventCallback DeleteMove {get; set; }
     [Parameter] public EventCallback AddBreak { get; set; }
     [Parameter] public EventCallback ClearMoves { get; set; }
     [Parameter] public EventCallback SaveCombo { get; set; }
+    [Parameter] public bool CanSave { get; set; } = true;
 
     private Modal? _confirmClearModal;
     private Modal? _confirmSaveModal;
+    private Modal? _signInRequiredModal;
 
     private async Task HandleDelete()
     {
@@ -103,7 +122,15 @@
         }
     }
 
-    private void RequestSave() => _confirmSaveModal?.Show();
+    private void RequestSave()
+    {
+        if (!CanSave)
+        {
+            _signInRequiredModal?.Show();
+            return;
+        }
+        _confirmSaveModal?.Show();
+    }
 
     private void CancelSave() => _confirmSaveModal?.Hide();
 
@@ -114,5 +141,13 @@
         {
             await SaveCombo.InvokeAsync();
         }
+    }
+
+    private void CancelSignIn() => _signInRequiredModal?.Hide();
+
+    private void GoToLogin()
+    {
+        _signInRequiredModal?.Hide();
+        Navigation.NavigateTo("/login");
     }
 }

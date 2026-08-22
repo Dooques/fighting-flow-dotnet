@@ -8,23 +8,45 @@
 @inject IJSRuntime Js
 @inject IConfiguration Config
 
-<Div Flex="Flex.Column">
-    <Heading Size="HeadingSize.Is3">Your Profile</Heading>
+<Card Class="glass-card glass-panel">
+<CardBody>
+    <Div Flex="Flex.Column">
+        <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
+            <Heading Size="HeadingSize.Is3" TextColor="TextColor.Light">Your Profile</Heading>
 
-    <Text>Under construction...</Text>
-    
-    <Button Color="Color.Secondary"
-            @onclick="Logout"
-            Width="Width.Is25"
-            Margin="Margin.Is2.FromTop">
-        Logout
-    </Button>
-    
-    @if (!ErrorMessage.IsNullOrEmpty())
-    {
-        <Text>@(ErrorMessage)</Text>
-    }
-</Div>
+            <Button Color="Color.Secondary"
+                    TextColor="TextColor.Light"
+                    @onclick="RequestLogout"
+                    Width="Width.Is25">
+                Logout
+            </Button>
+        </Div>
+
+        <Blazorise.Text TextColor="TextColor.Light">Under construction...</Blazorise.Text>
+
+        @if (!ErrorMessage.IsNullOrEmpty())
+        {
+            <Blazorise.Text TextColor="TextColor.Light">@(ErrorMessage)</Blazorise.Text>
+        }
+    </Div>
+</CardBody>
+</Card>
+
+<Modal @ref="_confirmLogoutModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Log out?</ModalTitle>
+            <CloseButton Clicked="CancelLogout"/>
+        </ModalHeader>
+        <ModalBody>
+            You'll need to sign in again to get back to your profile.
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelLogout">Cancel</Button>
+            <Button Color="Color.Primary" TextColor="TextColor.Light" Clicked="ConfirmLogout">Logout</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
 @code {
     private IJSObjectReference? FirebaseModule { get; set; }
@@ -49,6 +71,18 @@
         }
     }
 
+    private Modal? _confirmLogoutModal;
+
+    private void RequestLogout() => _confirmLogoutModal?.Show();
+
+    private void CancelLogout() => _confirmLogoutModal?.Hide();
+
+    private async Task ConfirmLogout()
+    {
+        _confirmLogoutModal?.Hide();
+        await Logout();
+    }
+
     private async Task Logout()
     {
         if (FirebaseModule != null)
@@ -62,6 +96,6 @@
                 ErrorMessage = "Logout has failed...";
                 Console.WriteLine(ex.Message);
             }
-        } 
+        }
     }
 }
