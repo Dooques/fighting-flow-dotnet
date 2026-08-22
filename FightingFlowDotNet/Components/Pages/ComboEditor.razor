@@ -39,12 +39,12 @@
              Gap="Gap.Is2"
              Class="combo-editor-fighter-header"
              Style="cursor: pointer;"
-             @onclick="NavigateToComboViewer">
-            <Heading5 Margin="Margin.Is0">@Fighter</Heading5>
+             @onclick="RequestLeaveEditor">
+            <Heading2 Margin="Margin.Is0" Style="font-size: 2.25rem;">@Fighter</Heading2>
             <img src="@GetFighterImageUrl()"
                  alt="@Fighter"
-                 height="72" width="72"
-                 style="border-radius: 50%; object-fit: cover;"/>
+                 height="75" width="75"
+                 style="object-fit: contain;"/>
         </Div>
 
         <ComboDisplay DisplayCombo="DisplayCombo"
@@ -57,7 +57,8 @@
         <ComboEditorButtons DeleteMove="DeleteMove"
                             AddBreak="AddBreak"
                             ClearMoves="ClearMoves"
-                            SaveCombo="SaveCombo"/>
+                            SaveCombo="SaveCombo"
+                            CanSave="_isAuthenticated"/>
 
         <ComboMetaFields ComboTitle="@ComboTitle"
                          ComboDamage="@ComboDamage"
@@ -76,6 +77,22 @@
         }
     </Div>
 </Div>
+
+<Modal @ref="_confirmLeaveModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Leave the editor?</ModalTitle>
+            <CloseButton Clicked="CancelLeaveEditor"/>
+        </ModalHeader>
+        <ModalBody>
+            Leaving now will take you back to the combo list and any unsaved changes to this combo will be lost. Continue?
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelLeaveEditor">Cancel</Button>
+            <Button Color="Color.Primary" TextColor="TextColor.Light" Clicked="ConfirmLeaveEditor">Leave Editor</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
 
 @code {
@@ -100,8 +117,16 @@
 
     private DisplayCombo DisplayCombo { get; set; } = new(new Combo());
     private string? _saveError;
+    private bool _isAuthenticated;
 
     private Fighter? _chosenFighter;
+    private Modal? _confirmLeaveModal;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthStateTask;
+        _isAuthenticated = authState.User.Identity is { IsAuthenticated: true };
+    }
 
     private string GetFighterImageUrl()
     {
@@ -158,6 +183,16 @@
         Navigation.NavigateTo($"/{Game}/{Fighter}");
     }
 
+    private void RequestLeaveEditor() => _confirmLeaveModal?.Show();
+
+    private void CancelLeaveEditor() => _confirmLeaveModal?.Hide();
+
+    private void ConfirmLeaveEditor()
+    {
+        _confirmLeaveModal?.Hide();
+        NavigateToComboViewer();
+    }
+
     private async Task<string> GetUsername()
     {
         var authState = await AuthStateTask;
@@ -188,6 +223,14 @@
     private async Task SaveCombo()
     {
         _saveError = null;
+
+        var authState = await AuthStateTask;
+        if (authState.User.Identity is not { IsAuthenticated: true })
+        {
+            _isAuthenticated = false;
+            _saveError = "You need to be logged in.";
+            return;
+        }
 
         try
         {

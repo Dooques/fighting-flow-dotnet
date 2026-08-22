@@ -63,3 +63,6 @@ nunit-*.xml
 
 # JetBrains Rider/ReSharper user-specific settings
 *.DotSettings.user
+
+# Local dev-server logs (windows-dev-server skill output)
+fightingflow-*.log

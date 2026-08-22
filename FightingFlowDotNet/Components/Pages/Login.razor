@@ -10,21 +10,22 @@
 @inject IJSRuntime Js
 @inject IConfiguration Config
 
-<Div>
-    @if (_signUp) { <Heading3>Sign Up</Heading3> }
-    else { <Heading3>Sign In</Heading3> }
+<Card Class="glass-card glass-panel">
+<CardBody>
+    @if (_signUp) { <Heading3 TextColor="TextColor.Light">Sign Up</Heading3> }
+    else { <Heading3 TextColor="TextColor.Light">Sign In</Heading3> }
 
     <Fields>
         <FieldSet Horizontal>
             <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromStart">
-                <FieldLabel>Username</FieldLabel>
+                <FieldLabel TextColor="TextColor.Light">Username</FieldLabel>
                 <FieldBody>
                     <TextInput @bind-Value="@_username"/>
                 </FieldBody>
             </Field>
 
             <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromEnd">
-                <FieldLabel>Password</FieldLabel>
+                <FieldLabel TextColor="TextColor.Light">Password</FieldLabel>
                 <FieldBody>
                     <TextInput Role="TextRole.Password"
                                @bind-Value="@_password"/>
@@ -37,25 +38,25 @@
             <FieldSet Horizontal>
                 <Field ColumnSize="ColumnSize.Is6"
                        Padding="Padding.Is2.FromStart">
-                    <FieldLabel>Confirm Password</FieldLabel>
+                    <FieldLabel TextColor="TextColor.Light">Confirm Password</FieldLabel>
                     <FieldBody>
                         <TextInput @bind-Value="@_confirmPassword"/>
                     </FieldBody>
                 </Field>
-                
+
                 <Field ColumnSize="ColumnSize.Is6"
                        Padding="Padding.Is2.FromStart">
-                    <FieldLabel>Name</FieldLabel>
+                    <FieldLabel TextColor="TextColor.Light">Name</FieldLabel>
                     <FieldBody>
                         <TextInput @bind-Value="@_name"/>
                     </FieldBody>
                 </Field>
             </FieldSet>
-            
+
             <FieldSet Horizontal>
                 <Field ColumnSize="ColumnSize.Is6"
                        Padding="Padding.Is2.FromEnd">
-                    <FieldLabel>Email</FieldLabel>
+                    <FieldLabel TextColor="TextColor.Light">Email</FieldLabel>
                     <FieldBody>
                         <TextInput Role="TextRole.Email"
                                    @bind-Value="_email"/>
@@ -63,7 +64,7 @@
                 </Field>
 
                 <Field ColumnSize="ColumnSize.Is6" Padding="Padding.Is2.FromStart">
-                    <FieldLabel>Date of Birth</FieldLabel>
+                    <FieldLabel TextColor="TextColor.Light">Date of Birth</FieldLabel>
                     <Addons>
                         <Addon>
                             <DatePicker @bind-Value="_dob"
@@ -89,40 +90,45 @@
                     Margin="Margin.Is4.FromEnd">
                 Sign Up
             </Button>
-            
+
             <Button Color="Color.Secondary"
                     TextColor="TextColor.Light"
-                    @onclick="@TriggerSignUp">
+                    @onclick="@TriggerSignUp"
+                    Margin="Margin.Is4.FromEnd">
                 Show Sign In
             </Button>
         }
         else
         {
             <Button Color="Color.Primary"
+                    TextColor="TextColor.Light"
                     @onclick="@SignInWitEmail"
                     Margin="Margin.Is4.FromEnd">
                 Sign In
             </Button>
-            
+
             <Button Color="Color.Secondary"
-                    @onclick="@TriggerSignUp">
+                    TextColor="TextColor.Light"
+                    @onclick="@TriggerSignUp"
+                    Margin="Margin.Is4.FromEnd">
                 Show Sign Up
             </Button>
         }
-        
+
+        <Button Color="Color.Success"
+                TextColor="TextColor.Light"
+                Clicked="@SignInWithGoogle">
+            Sign In With Google
+        </Button>
     </Div>
-    <Button Color="Color.Success"
-            Margin="Margin.Is4.FromTop"
-            Clicked="@SignInWithGoogle">
-        Sign In With Google
-    </Button>
     <Div>
         @if (!string.IsNullOrEmpty(_errorMessage))
-        { 
-            <Text>@_errorMessage</Text> 
+        {
+            <Blazorise.Text TextColor="TextColor.Light">@_errorMessage</Blazorise.Text>
         }
     </Div>
-</Div>
+</CardBody>
+</Card>
 
 @code {
     private string _username = "";
