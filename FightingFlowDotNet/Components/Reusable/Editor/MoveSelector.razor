@@ -49,7 +49,6 @@
         TypeFilter = Type switch
         {
             "Stances" => "Common",
-            "Mechanics" or "Mechanic" => "Mechanics Input",
             _ => Type
         };
         return moves.FindAll(m => m.Type == TypeFilter);

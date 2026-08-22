@@ -25,9 +25,9 @@ public static class ListPopulator
     {
         return game switch
         {
-            "Tekken 8" => ["Misc", "Movement", "Input", "Character", "Stances", "Mechanics", "Stage", "Modifier"],
-            "Street Fighter 6" => ["Movement", "SF Classic", "SF Modern", "Mechanic", "Stage", "Special", "Super Art"],
-            "Mortal Kombat 1" => ["Input", "Movement", "Text Input", "Special", "Fatal Blow"],
+            "Tekken 8" => ["Misc", "Movement", "Input", "Mechanics Input", "Mechanics", "Character", "Stances", "Stage", "Modifier"],
+            "Street Fighter 6" => ["Movement", "SF Classic", "SF Modern", "Mechanics", "Stage", "Special", "Super Art"],
+            "Mortal Kombat 1" => ["Input", "Movement", "Mechanics", "Special", "Fatal Blow"],
             _ => throw new ArgumentOutOfRangeException(nameof(game), game, null)
         };
     }

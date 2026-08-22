@@ -4,9 +4,10 @@ public class Fighter
 {
     public Fighter() { }
 
-    public Fighter(string name, string imageId, string fightingStyle, string game)
+    public Fighter(string name, string bio, string imageId, string fightingStyle, string game)
     {
         Name = name;
+        Bio = bio;
         ImageId = imageId;
         FightingStyle = fightingStyle;
         Game = game;

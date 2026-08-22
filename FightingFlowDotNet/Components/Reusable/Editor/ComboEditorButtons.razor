@@ -1,4 +1,4 @@
-﻿@using System.Reflection.Metadata
+@using System.Reflection.Metadata
 <Div Flex="Flex.Row">
     <Button
         Color="Color.Light"
@@ -10,7 +10,7 @@
         Outline>
         Break
     </Button>
-    
+
     <Button Color="Color.Light"
             Width="Width.Is25"
             Margin="Margin.Is4.FromEnd"
@@ -21,31 +21,66 @@
             >
         Delete
     </Button>
-    
+
     <Button Color="Color.Light"
             Width="Width.Is25"
             Margin="Margin.Is4.FromEnd"
             Padding="Padding.Is3.OnX"
             TextWeight="TextWeight.Bold"
-            Clicked="ClearMoves"
+            Clicked="RequestClear"
             Outline>
         Clear
     </Button>
-    
+
     <Button Color="Color.Primary"
             Width="Width.Is25"
             Padding="Padding.Is3.OnX"
             TextWeight="TextWeight.Bold"
-            Clicked="SaveCombo">
+            Clicked="RequestSave">
         Save
     </Button>
 </Div>
+
+<Modal @ref="_confirmClearModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Clear all moves?</ModalTitle>
+            <CloseButton Clicked="CancelClear"/>
+        </ModalHeader>
+        <ModalBody>
+            This removes every move currently in the combo. This can't be undone.
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelClear">Cancel</Button>
+            <Button Color="Color.Danger" TextColor="TextColor.Light" Clicked="ConfirmClear">Clear Moves</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+<Modal @ref="_confirmSaveModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Save this combo?</ModalTitle>
+            <CloseButton Clicked="CancelSave"/>
+        </ModalHeader>
+        <ModalBody>
+            This saves the combo as it currently appears.
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelSave">Cancel</Button>
+            <Button Color="Color.Primary" TextColor="TextColor.Light" Clicked="ConfirmSave">Save Combo</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
 
 @code {
     [Parameter] public EventCallback DeleteMove {get; set; }
     [Parameter] public EventCallback AddBreak { get; set; }
     [Parameter] public EventCallback ClearMoves { get; set; }
     [Parameter] public EventCallback SaveCombo { get; set; }
+
+    private Modal? _confirmClearModal;
+    private Modal? _confirmSaveModal;
 
     private async Task HandleDelete()
     {
@@ -54,28 +89,30 @@
             await DeleteMove.InvokeAsync();
         }
     }
-    
-    private async Task HandleBreak()
+
+    private void RequestClear() => _confirmClearModal?.Show();
+
+    private void CancelClear() => _confirmClearModal?.Hide();
+
+    private async Task ConfirmClear()
     {
-        if (DeleteMove.HasDelegate)
-        {
-            await AddBreak.InvokeAsync();
-        }
-    }
-    
-    private async Task HandleClear()
-    {
+        _confirmClearModal?.Hide();
         if (ClearMoves.HasDelegate)
         {
             await ClearMoves.InvokeAsync();
         }
     }
 
-    private async Task HandleSave()
+    private void RequestSave() => _confirmSaveModal?.Show();
+
+    private void CancelSave() => _confirmSaveModal?.Hide();
+
+    private async Task ConfirmSave()
     {
-        if (AddBreak.HasDelegate)
+        _confirmSaveModal?.Hide();
+        if (SaveCombo.HasDelegate)
         {
-            await AddBreak.InvokeAsync();
+            await SaveCombo.InvokeAsync();
         }
     }
 }

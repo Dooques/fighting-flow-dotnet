@@ -51,15 +51,26 @@ public class FirestoreGetter(IConfiguration configuration, IHostEnvironment env)
             .Document(comboId).GetSnapshotAsync();
         return comboCollection.ConvertTo<Combo>();
     }
-    public async Task SaveCombo(DisplayCombo displayCombo, string fighter, string comboId)
+    public async Task SaveCombo(DisplayCombo displayCombo)
     {
         var comboCollection = Db
+            .Collection("characters")
+            .Document(displayCombo.Combo.Fighter)
+            .Collection("combos")
+            .Document(displayCombo.Combo.Id);
+        var docRef= await comboCollection.SetAsync(displayCombo.Combo);
+        Console.WriteLine($"Document Saved: {docRef}");
+    }
+
+    public async Task DeleteCombo(string fighter, string comboId)
+    {
+        var comboDocument = Db
             .Collection("characters")
             .Document(fighter)
             .Collection("combos")
             .Document(comboId);
-        var docRef= await comboCollection.SetAsync(displayCombo);
-        Console.WriteLine($"Document Saved: {docRef}");
+        await comboDocument.DeleteAsync();
+        Console.WriteLine($"Document Deleted: {comboDocument.Path}");
     }
     
     public async Task<List<CustomUserInfo>> GetUsers()

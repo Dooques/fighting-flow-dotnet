@@ -32,20 +32,24 @@
     {
         GameState.OnChange += OnGameStateChanged;
 
-        if (GameState.GameType == GameType.TEKKEN8 && 
+        Fighters = FightersFor(GameState.GameType);
+
+        if (GameState.GameType == GameType.TEKKEN8 &&
             GameState.BackgroundImage is null)
             GameState.SetBackground(
                 Tekken8.StageImages[Random.Shared.Next(Tekken8.StageImages.Count)]);
     }
 
+    private static IReadOnlyList<Fighter> FightersFor(GameType gameType) => gameType switch
+    {
+        GameType.STREETFIGHTER6 => StreetFighter6.Fighters,
+        GameType.MORTALKOMBAT1 => MortalKombat1.Fighters,
+        _ => Tekken8.Fighters
+    };
+
     private void OnGameStateChanged()
     {
-        Fighters = GameState.GameType switch
-        {
-            GameType.STREETFIGHTER6 => StreetFighter6.Fighters,
-            GameType.MORTALKOMBAT1 => MortalKombat1.Fighters,
-            _ => Tekken8.Fighters
-        };
+        Fighters = FightersFor(GameState.GameType);
 
         InvokeAsync(StateHasChanged);
     }

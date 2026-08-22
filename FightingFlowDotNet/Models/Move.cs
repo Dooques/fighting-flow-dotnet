@@ -3,13 +3,14 @@
 namespace FightingFlowDotNet.Models;
 
 public class Move(
-    string? name, 
-    string? type, 
+    string? name,
+    string? type,
     string? notation,
-    string? character, 
+    string? character,
     Sf6Type? sf6Type =  Sf6Type.None,
-    string? game = "", 
-    string? id = ""
+    string? game = "",
+    string? id = "",
+    string? imageId = ""
     )
 {
     public string Id { get; set; } = id ?? "";
@@ -19,4 +20,5 @@ public class Move(
     public string Character { get; set; } = character ?? "";
     public Sf6Type Sf6Type { get; set; }
     public string Game { get; set; } = game ?? "";
+    public string ImageId { get; set; } = imageId ?? "";
 }

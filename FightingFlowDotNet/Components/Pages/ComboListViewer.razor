@@ -20,11 +20,12 @@
             @foreach (var combo in ComboList)
             {
                 <Div>
-                    <ComboDisplayWithButtons
+                    <ComboDisplayButtons
                         DisplayCombo="combo"
                         ChosenFighter="@(ChosenFighter ?? new Fighter())"
                         Username="@(GetUsername(combo.Combo.CreatedBy))"
-                        MoveList="MoveList"/>
+                        MoveList="MoveList"
+                        ComboDeleted="HandleComboDeleted"/>
                 </Div>
             }
         }
@@ -81,6 +82,11 @@
         
         UsersList = await FirestoreGetter.GetUsers();
         MoveList = ListPopulator.ReturnMoveList(Game);
+    }
+
+    private void HandleComboDeleted(string comboId)
+    {
+        ComboList.RemoveAll(c => c.Combo.Id == comboId);
     }
 
     private string GetUsername(string userId)
