@@ -18,7 +18,8 @@
         Fighting <Span TextColor="TextColor.Primary">Flow</Span>
     </Heading1>
 
-    <Div Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem;">
+    <Div Margin="Margin.Is5.FromBottom"
+         Style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem;">
         @foreach (var fighter in Fighters)
         {
             <CharacterCard Fighter="@(fighter)"/>

@@ -4,6 +4,15 @@ Tracks changes made with Claude Code in this repo: what's planned before it's ex
 
 Newest entries at the top. Statuses: `Planned`, `In progress`, `Done`, `Abandoned`.
 
+## 2026-08-22 — Bottom margin on the Home page character card grid
+**Status:** Done
+
+The card grid on Home had no bottom spacing (`MainLayout`'s container only pads X, not Y), so the last row sat flush against the bottom of the page. Added `Margin="Margin.Is5.FromBottom"` to the grid `<Div>` in `Home.razor` — scoped to this page rather than changing `MainLayout`'s shared container padding.
+
+**Files:** FightingFlowDotNet/Components/Pages/Home.razor
+
+**Outcome:** Verified with `dotnet build -o <scratch dir>`: 0 errors, same pre-existing warnings only.
+
 ## 2026-08-22 — Favicon switched to the Fighting Flow logo
 **Status:** Done
 
