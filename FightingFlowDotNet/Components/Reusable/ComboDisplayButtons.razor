@@ -1,0 +1,140 @@
+@using System.Text.Json
+@using FightingFlowDotNet.Clients
+@using FightingFlowDotNet.Models
+@inject FirestoreGetter FirestoreGetter
+
+<Column Gap="Gap.Is1"
+        Height="Height.Max100"
+        Class="combo-item combo-viewer-shell"
+        Padding="Padding.Is4">
+
+    <Heading4>@DisplayCombo?.Combo.Title</Heading4>
+
+    @if (_deleteError is not null)
+    {
+        <Alert Color="Color.Danger" Class="glass-alert">
+            <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
+                <Text TextColor="TextColor.Light">Couldn't delete this combo. @_deleteError</Text>
+                <CloseButton Clicked="@(() => _deleteError = null)"/>
+            </Div>
+        </Alert>
+    }
+
+    <ComboDisplay DisplayCombo="DisplayCombo"
+                           MoveList="MoveList"
+                           EditMode="false"/>
+
+    <Divider/>
+
+    <Container Flex="Flex.Row.JustifyContent.Between.AlignItems.Center"
+               Gap="Gap.Is2">
+        <Div class="d-flex flex-column">
+            <Text>Damage: @DisplayCombo?.Combo.Damage</Text>
+            <Text>Created By: @Username</Text>
+        </Div>
+
+        <Div Flex="Flex.Row.AlignItems.Center.JustifyContent.End"
+             Gap="Gap.Is4">
+            <Div Flex="Flex.Row.AlignContent.Start.JustifyContent.Center"
+                 Gap="Gap.Is3">
+                <Button Type="ButtonType.Link"
+                        To="@HandleNavigation()"
+                        Color="Color.Secondary">
+                    Edit
+                </Button>
+                <Button Type="ButtonType.Link"
+                        Color="Color.Success"
+                        TextColor="TextColor.Light"
+                        To="#">
+                    Share
+                </Button>
+                <Button Color="Color.Warning"
+                        TextColor="TextColor.Light"
+                        Clicked="RequestDelete">
+                    Delete
+                </Button>
+            </Div>
+
+            <Div Flex="Flex.Column.AlignItems.Center.JustifyContent.Center">
+                <Text TextWeight="TextWeight.Bold">Ki: @DisplayCombo?.Ki</Text>
+                <Button>
+                    <img class="img" src="images/icon_like.png" height="32" width="32" alt="Like Button"/>
+                </Button>
+            </Div>
+        </Div>
+    </Container>
+</Column>
+
+<Modal @ref="_confirmDeleteModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Delete this combo?</ModalTitle>
+            <CloseButton Clicked="CancelDelete"/>
+        </ModalHeader>
+        <ModalBody>
+            This permanently deletes "@DisplayCombo?.Combo.Title". This can't be undone.
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelDelete">Cancel</Button>
+            <Button Color="Color.Danger" TextColor="TextColor.Light" Clicked="ConfirmDelete">Delete Combo</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
+@code {
+    [Parameter]
+    public DisplayCombo? DisplayCombo { get; set; }
+    [Parameter]
+    public Fighter ChosenFighter { get; set; } = new();
+    [Parameter]
+    public string Username { get; set; } = "";
+    [Parameter]
+    public EventCallback GetEditorUrl { get; set; }
+    [Parameter]
+    public List<Move> MoveList { get; set; } = [];
+    [Parameter]
+    public EventCallback<string> ComboDeleted { get; set; }
+
+    private Modal? _confirmDeleteModal;
+    private string? _deleteError;
+
+    protected override Task OnInitializedAsync()
+    {
+        Console.WriteLine($"Combo: {DisplayCombo?.Combo.Title}");
+        Console.WriteLine($"Moves: {JsonSerializer.Serialize(DisplayCombo?.Combo.Moves)}");
+        return base.OnInitializedAsync();
+    }
+
+    private string HandleNavigation()
+    {
+        return $"/Editor/{ChosenFighter.Game}/{ChosenFighter.Name}/{DisplayCombo?.Combo.Id}/True";
+    }
+
+    private void RequestDelete() => _confirmDeleteModal?.Show();
+
+    private void CancelDelete() => _confirmDeleteModal?.Hide();
+
+    private async Task ConfirmDelete()
+    {
+        _confirmDeleteModal?.Hide();
+
+        if (DisplayCombo is null) return;
+
+        _deleteError = null;
+
+        try
+        {
+            await FirestoreGetter.DeleteCombo(DisplayCombo.Combo.Fighter, DisplayCombo.Combo.Id);
+
+            if (ComboDeleted.HasDelegate)
+            {
+                await ComboDeleted.InvokeAsync(DisplayCombo.Combo.Id);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Failed to delete combo: {e.Message}");
+            _deleteError = "Please try again.";
+        }
+    }
+}

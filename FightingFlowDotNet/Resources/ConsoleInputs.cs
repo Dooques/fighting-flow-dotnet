@@ -17,10 +17,10 @@ public class ConsoleInputs
 
     public static readonly IReadOnlyList<Move> PlaystationInputs = new List<Move>
     {
-        new Move(name: "square", type: "Console", notation: "□", character: "Character"),
-        new Move(name: "triangle", type: "Console", notation: "△", character: "Character"),
-        new Move(name: "cross", type: "Console", notation: "×", character: "Character"),
-        new Move(name: "circle", type: "Console", notation: "○", character: "Character"),
+        new Move(name: "square", type: "Console", notation: "□", character: "Character", imageId: "button_playstation_square"),
+        new Move(name: "triangle", type: "Console", notation: "△", character: "Character", imageId: "button_playstation_triangle"),
+        new Move(name: "cross", type: "Console", notation: "×", character: "Character", imageId: "button_playstation_cross"),
+        new Move(name: "circle", type: "Console", notation: "○", character: "Character", imageId: "button_playstation_circle"),
         new Move(name: "R1", type: "Console Text", notation: "R1", character: "Character"),
         new Move(name: "R2", type: "Console Text", notation: "R2", character: "Character"),
         new Move(name: "R3", type: "Console Text", notation: "R3", character: "Character"),
@@ -31,10 +31,10 @@ public class ConsoleInputs
 
     public static readonly IReadOnlyList<Move> XboxInputs = new List<Move>
     {
-        new Move(name: "x_xbox", type: "Console", notation: "X", character: "Character"),
-        new Move(name: "y_xbox", type: "Console", notation: "Y", character: "Character"),
-        new Move(name: "a_xbox", type: "Console", notation: "A", character: "Character"),
-        new Move(name: "b_xbox", type: "Console", notation: "B", character: "Character"),
+        new Move(name: "x_xbox", type: "Console", notation: "X", character: "Character", imageId: "button_xbox_x"),
+        new Move(name: "y_xbox", type: "Console", notation: "Y", character: "Character", imageId: "button_xbox_y"),
+        new Move(name: "a_xbox", type: "Console", notation: "A", character: "Character", imageId: "button_xbox_a"),
+        new Move(name: "b_xbox", type: "Console", notation: "B", character: "Character", imageId: "button_xbox_b"),
         new Move(name: "RB", type: "Console Text", notation: "RB", character: "Character"),
         new Move(name: "RT", type: "Console Text", notation: "RT", character: "Character"),
         new Move(name: "RS", type: "Console Text", notation: "RS", character: "Character"),
@@ -45,10 +45,10 @@ public class ConsoleInputs
 
     public static readonly IReadOnlyList<Move> NintendoInputs = new List<Move>
     {
-        new Move(name: "y_nintendo", type: "Console", notation: "Y", character: "Character"),
-        new Move(name: "x_nintendo", type: "Console", notation: "X", character: "Character"),
-        new Move(name: "b_nintendo", type: "Console", notation: "B", character: "Character"),
-        new Move(name: "a_nintendo", type: "Console", notation: "A", character: "Character"),
+        new Move(name: "y_nintendo", type: "Console", notation: "Y", character: "Character", imageId: "button_nintendo_y"),
+        new Move(name: "x_nintendo", type: "Console", notation: "X", character: "Character", imageId: "button_nintendo_x"),
+        new Move(name: "b_nintendo", type: "Console", notation: "B", character: "Character", imageId: "button_nintendo_b"),
+        new Move(name: "a_nintendo", type: "Console", notation: "A", character: "Character", imageId: "button_nintendo_a"),
         new Move(name: "R", type: "Console Text", notation: "R", character: "Character"),
         new Move(name: "ZR", type: "Console Text", notation: "ZR", character: "Character"),
         new Move(name: "RS", type: "Console Text", notation: "RS", character: "Character"),

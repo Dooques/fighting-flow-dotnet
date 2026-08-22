@@ -1,0 +1,116 @@
+@using FightingFlowDotNet.Components.Helpers
+@using FightingFlowDotNet.Models
+
+@if (DisplayCombo?.Combo.Moves == null)
+{
+    <Text>Loading Moves...</Text>
+}
+else
+{
+    <Div Flex="Flex.Row.Wrap.AlignItems.Center"
+         Gap="Gap.Is2"
+         Class="@(EditMode ? "combo-display" : "combo-display combo-viewer-moves")">
+        @if (DisplayCombo?.Combo.Moves == null || !DisplayCombo.Combo.Moves.Any())
+        {
+            <p>No Moves found...</p>
+        }
+        else
+        {
+            MoveIndex = 0;
+            foreach (var convertedMove in DisplayCombo.Combo.Moves.Select(GetMove))
+            {
+                var text = convertedMove?.Notation;
+                var moveIndex = MoveIndex;
+                var panelBackground = moveIndex == EditorIndex && ItemSelected
+                    ? SelectedMoveBackground
+                    : UnselectedMoveBackground;
+
+                if (convertedMove?.Type == "Break")
+                {
+                    <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
+                            Padding="Padding.Is1"
+                            Disabled="@(!EditMode)"
+                            Class="move-btn">
+                        <Span TextColor="TextColor.Info">
+                            @(text)
+                        </Span>
+                    </Button>
+                }
+                else if (MoveStyle.IsColored(convertedMove?.Type))
+                {
+                    <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
+                            TextColor="@MoveStyle.GetTextColor(convertedMove!.Type)"
+                            TextWeight="TextWeight.Bold"
+                            Background="@MoveStyle.GetBackground(convertedMove.Type)"
+                            Class="move-btn"
+                            Disabled="@(!EditMode)"
+                            Padding="Padding.Is1">
+                        @convertedMove.Name
+                    </Button>
+                }
+                else if (convertedMove != null)
+                {
+                    <Button @onclick="@(() => UpdateEditorIndexCallback(moveIndex))"
+                            Padding="Padding.Is1"
+                            Disabled="@(!EditMode)"
+                            Class="move-btn">
+                        <img src="@GetMoveImage(convertedMove)"
+                             alt="@MoveStyle.FormatName(convertedMove.Name)"
+                             title="@MoveStyle.FormatName(convertedMove.Name)"
+                             height="40" width="40"/>
+                    </Button>
+                }
+                MoveIndex++;
+            }
+        }
+    </Div>
+}
+
+@code {
+    [Parameter]
+    public DisplayCombo? DisplayCombo { get; set; }
+    [Parameter]
+    public EventCallback<int> UpdateEditorIndex { get; set; }
+    [Parameter]
+    public int EditorIndex { get; set; }
+    [Parameter]
+    public bool ItemSelected { get; set; }
+    [Parameter]
+    public List<Move> MoveList { get; set; } = [];
+    [Parameter]
+    public bool EditMode { get; set; }
+
+    private int MoveIndex { get; set; }
+
+    private const string SelectedMoveBackground = "#26262e";
+    private const string UnselectedMoveBackground = "#0a0a0d";
+
+    private Move? GetMove(string note)
+    {
+        if (string.IsNullOrEmpty(note)) return null;
+        try
+        {
+            var move = MoveList.FirstOrDefault(m => m.Notation == note);
+            return move;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+            return null;
+        }
+    }
+
+    private async Task UpdateEditorIndexCallback(int index)
+    {
+        if (UpdateEditorIndex.HasDelegate)
+        {
+            await UpdateEditorIndex.InvokeAsync(index);
+        }
+    }
+
+   private static string GetMoveImage(Move move)
+   {
+       var id = string.IsNullOrEmpty(move.ImageId) ? move.Name : move.ImageId;
+       return $"images/{id}.png";
+   }
+}

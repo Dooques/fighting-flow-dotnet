@@ -1,5 +1,6 @@
 ﻿@page "/Editor/{Game}/{Fighter}/{ComboId}/{EditMode:bool}"
 
+@using System.Security.Claims
 @using System.Text.Json
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
@@ -8,9 +9,23 @@
 @using FightingFlowDotNet.Components.Reusable.Editor
 @using FightingFlowDotNet.Models
 @using FightingFlowDotNet.Resources
+@using Microsoft.AspNetCore.Components.Authorization
+@using Firebase.Auth
+
 @inject FirestoreGetter FirestoreGetter
+@inject NavigationManager Navigation
 
 <PageTitle>Combo Editor</PageTitle>
+
+@if (_saveError is not null)
+{
+    <Alert Color="Color.Danger" Class="glass-alert">
+        <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
+            <Text TextColor="TextColor.Light">Couldn't save this combo. @_saveError</Text>
+            <CloseButton Clicked="@(() => _saveError = null)"/>
+        </Div>
+    </Alert>
+}
 
 <Div Flex="Flex.Column.AlignContent.Center"
      Gap="Gap.Is4"
@@ -19,13 +34,25 @@
     <Div Flex="Flex.Column.JustifyContent.Center.AlignContent.Center"
          Gap="Gap.Is4"
          Class="combo-editor-panel">
+        
+        <Div Flex="Flex.Row.AlignItems.Center.JustifyContent.Between"
+             Gap="Gap.Is2"
+             Class="combo-editor-fighter-header"
+             Style="cursor: pointer;"
+             @onclick="NavigateToComboViewer">
+            <Heading5 Margin="Margin.Is0">@Fighter</Heading5>
+            <img src="@GetFighterImageUrl()"
+                 alt="@Fighter"
+                 height="72" width="72"
+                 style="border-radius: 50%; object-fit: cover;"/>
+        </Div>
 
-            <ComboDisplayNoButtons DisplayCombo="DisplayCombo"
-                                   UpdateEditorIndex="UpdateEditorIndex"
-                                   EditorIndex="EditorIndex"
-                                   ItemSelected="ItemSelected"
-                                   MoveList="_moveList"
-                                   EditMode="true"/>
+        <ComboDisplay DisplayCombo="DisplayCombo"
+                               UpdateEditorIndex="UpdateEditorIndex"
+                               EditorIndex="EditorIndex"
+                               ItemSelected="ItemSelected"
+                               MoveList="_moveList"
+                               EditMode="true"/>
 
         <ComboEditorButtons DeleteMove="DeleteMove"
                             AddBreak="AddBreak"
@@ -56,6 +83,7 @@
     [Parameter] public string Fighter { get; set; } = "";
     [Parameter] public string ComboId { get; set; } = "";
     [Parameter] public bool EditMode { get; set; }
+    [CascadingParameter] private Task<AuthenticationState> AuthStateTask { get; set; }
 
     private string LastComboId { get; set; } = "";
     private bool _lastEditMode;
@@ -71,10 +99,27 @@
     private List<string> _types = [];
 
     private DisplayCombo DisplayCombo { get; set; } = new(new Combo());
+    private string? _saveError;
+
+    private Fighter? _chosenFighter;
+
+    private string GetFighterImageUrl()
+    {
+        return $"./images/{_chosenFighter?.ImageId}.png";
+    }
 
     protected override async Task OnParametersSetAsync()
     {
         if (!RendererInfo.IsInteractive) return;
+
+        _chosenFighter = Game switch
+        {
+            "Tekken 8" => Tekken8.Fighters.FirstOrDefault(f => f.Name == Fighter),
+            "Street Fighter 6" => StreetFighter6.Fighters.FirstOrDefault(f => f.Name == Fighter),
+            "Mortal Kombat 1" => MortalKombat1.Fighters.FirstOrDefault(f => f.Name == Fighter),
+            _ => null
+        };
+
         if (ComboId == LastComboId && EditMode == _lastEditMode)
         {
             return;
@@ -96,7 +141,7 @@
                 Title = ComboTitle,
                 Fighter = Fighter,
                 Game = Game,
-                CreatedBy = "Unknown User",
+                CreatedBy = await GetUsername(),
                 CreatedOn = DateOnly.FromDateTime(DateTime.Now).ToShortDateString(),
                 ControlType = Game
             });
@@ -106,12 +151,22 @@
 
         _moveList = ListPopulator.ReturnMoveList(Game);
         _types = ListPopulator.ReturnTypes(Game);
+    }
 
-        // Console.WriteLine($"Game: {Game}");
-        // Console.WriteLine($"Move Types : {JsonSerializer.Serialize(_types)}");
-        // Console.WriteLine($"Combo:  {JsonSerializer.Serialize(DisplayCombo)}");
-        // Console.WriteLine($"Moves:  {JsonSerializer.Serialize(_moveList)}");
+    private void NavigateToComboViewer()
+    {
+        Navigation.NavigateTo($"/{Game}/{Fighter}");
+    }
 
+    private async Task<string> GetUsername()
+    {
+        var authState = await AuthStateTask;
+        var uid = authState.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+        if (string.IsNullOrEmpty(uid)) return "Unknown User";
+
+        var customUser = await FirestoreGetter.GetUser(uid);
+        return customUser.Username;
     }
 
     private void UpdateEditorIndex(int index)
@@ -132,8 +187,19 @@
 
     private async Task SaveCombo()
     {
-        await FirestoreGetter.SaveCombo(DisplayCombo,
-            DisplayCombo.Combo.Fighter, DisplayCombo.Combo.Id);
+        _saveError = null;
+
+        try
+        {
+            await FirestoreGetter.SaveCombo(DisplayCombo);
+
+            Navigation.NavigateTo($"/{Game}/{Fighter}");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Failed to save combo: {e.Message}");
+            _saveError = "Please try again.";
+        }
     }
 
     public void AddMove(Move? move)

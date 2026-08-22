@@ -98,6 +98,41 @@ html, body {
     background: rgba(255, 255, 255, 0.12) !important;
 }
 
+.glass-modal .modal-content {
+    background: rgba(20, 20, 20, 0.85) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 1rem;
+    color: rgba(255, 255, 255, 0.92);
+}
+
+.glass-modal .modal-header,
+.glass-modal .modal-footer {
+    border: 0 !important;
+}
+
+.glass-modal .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.glass-modal .btn-primary {
+    color: #fff !important;
+    border-color: transparent !important;
+}
+
+.glass-alert {
+    background: rgba(199, 53, 69, 0.25) !important;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(199, 53, 69, 0.5) !important;
+    border-radius: 1rem;
+}
+
+.glass-alert .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
 .card.glass-card {
     background: rgba(20, 20, 20, 0.35);
     backdrop-filter: blur(12px);
@@ -126,7 +161,7 @@ html, body {
     -webkit-backdrop-filter: none;
 }
 
-.combo-viewer-moves .move-btn {
+.combo-viewer-moves .move-btn:not([class*="bg-"]) {
     background: transparent !important;
     background-image: none !important;
     border-color: transparent !important;

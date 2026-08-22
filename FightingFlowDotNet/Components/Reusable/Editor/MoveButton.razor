@@ -1,23 +1,12 @@
-﻿@using FightingFlowDotNet.Models
+﻿@using FightingFlowDotNet.Components.Helpers
+@using FightingFlowDotNet.Models
 
-@if (Move is { Type: "Character" or "Special" or "Modifier" or "Mechanics Input" or 
-         "Mechanic" or "Common" or "Stage" or "Super Art" or "Fatal Blow" or "Text Input" })
+@if (MoveStyle.IsColored(Move?.Type))
 {
-    <Button Background=
-            "@(
-             Move?.Type switch 
-             {
-                "Character" or "Super Art" or "Fatal Blow" => Background.Primary,
-                "Mechanics Input" or "Special" => Background.Secondary,
-                "Modifier" => Background.Light,
-                "Break" => Background.Info,
-                "Stage" => Background.Success,
-                "Common" or "Mechanic" or "Text Input" => Background.Danger,
-                _ => Background.Dark
-            })"
+    <Button Background="@MoveStyle.GetBackground(Move?.Type)"
             Type="ButtonType.Button"
-            Class="@GetToneClass(Move?.Type)"
-            Style="@GetToneStyle(Move?.Type)"
+            TextColor="TextColor.White"
+            Class="@MoveStyle.GetToneClass(Move?.Type)"
             @onclick="HandleAddMove">
         <Text TextWeight="TextWeight.Bold">@Move?.Name</Text>
     </Button>
@@ -27,8 +16,9 @@ else
     @if (Move != null)
     {
         <Button Type="ButtonType.Button">
-            <img src="@GetMoveImage(Move.Name)"
-                 alt="@Move.Name"
+            <img src="@GetMoveImage(Move)"
+                 alt="@MoveStyle.FormatName(Move.Name)"
+                 title="@MoveStyle.FormatName(Move.Name)"
                  height="40" width="40"
                  @onclick="HandleAddMove"/>
         </Button>
@@ -36,25 +26,9 @@ else
 }
 
 @code {
-    
+
     [Parameter] public Move? Move { get; set; }
     [Parameter] public EventCallback<Move> AddMove { get; set; }
-
-    private static string GetToneClass(string? type) => type switch
-    {
-        "Modifier" => "move-btn-modifier",
-        "Stage" => "move-btn-stage",
-        _ => ""
-    };
-
-    private static string GetToneStyle(string? type) => type switch
-    {
-        "Modifier" => "background-color: #5c636a !important; border-color: #565c62 !important;",
-        "Break" => "background-color: #0a8fab !important; border-color: #087d96 !important;",
-        "Stage" => "background-color: #146c43 !important; border-color: #125f3b !important;",
-        "Common" or "Mechanic" or "Text Input" => "background-color: #c73545 !important; border-color: #ad2e3b !important;",
-        _ => ""
-    };
 
     private async Task HandleAddMove()
     {
@@ -68,9 +42,10 @@ else
             Console.WriteLine("Move is null");
         }
     }
-    
-    private static string GetMoveImage(string name)
+
+    private static string GetMoveImage(Move move)
     {
-        return $"./images/{name}.png";
+        var id = string.IsNullOrEmpty(move.ImageId) ? move.Name : move.ImageId;
+        return $"./images/{id}.png";
     }
 }

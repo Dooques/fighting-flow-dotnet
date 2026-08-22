@@ -24,18 +24,10 @@
 
             @if (ChosenFighter?.Bio.Length > 0)
             {
-                <Text>
+                <Blazorise.Text TextColor="TextColor.Light">
                     @(ChosenFighter?.Bio)
-                </Text>
+                </Blazorise.Text>
             }
-
-            <Text class="text-white">
-                @(ChosenFighter?.FightingStyle)
-            </Text>
-
-            <Text class="text-white">
-                @(ChosenFighter?.Game)
-            </Text>
 
             <Button
                 Type="ButtonType.Link"

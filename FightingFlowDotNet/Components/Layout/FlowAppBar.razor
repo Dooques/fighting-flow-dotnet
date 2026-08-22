@@ -2,20 +2,22 @@
 @using FightingFlowDotNet.Models.Enums
 @using FightingFlowDotNet.Models.State
 @using FightingFlowDotNet.Resources
+
 @inject GameSelectedState GameState
+@inject NavigationManager Navigation
 
 <Bar Breakpoint="Breakpoint.Mobile" Class="glass-navbar">
     <BarBrand>
         <BarItem>
-            <BarLink To="/">
+            <BarLink @onclick="RequestHomeNavigation" Style="cursor: pointer;">
                 <Div Class="glass-nav-brand" Border="Border.Rounded"
                      Padding="Padding.Is2">
                     <Text TextSize="TextSize.ExtraLarge" TextColor="TextColor.Light">
                         Fighting <Span TextColor="TextColor.Primary">Flow</Span>
-                    </Text>    
+                    </Text>
                 </Div>
-                
-            </BarLink>    
+
+            </BarLink>
         </BarItem>
     </BarBrand>
     
@@ -68,6 +70,22 @@
     </BarEnd>
 </Bar>
 
+<Modal @ref="_confirmSwitchModal" Class="glass-modal">
+    <ModalContent>
+        <ModalHeader>
+            <ModalTitle>Leave the editor?</ModalTitle>
+            <CloseButton Clicked="CancelLeaveEditor"/>
+        </ModalHeader>
+        <ModalBody>
+            Leaving now will take you back to the home page and any unsaved changes to this combo will be lost. Continue?
+        </ModalBody>
+        <ModalFooter>
+            <Button Color="Color.Secondary" Clicked="CancelLeaveEditor">Cancel</Button>
+            <Button Color="Color.Primary" TextColor="TextColor.Light" Clicked="ConfirmLeaveEditor">Leave Editor</Button>
+        </ModalFooter>
+    </ModalContent>
+</Modal>
+
 @code {
     private readonly List<string> _gameList =
     [
@@ -83,7 +101,59 @@
         _ => "Tekken 8"
     };
 
+    private Modal? _confirmSwitchModal;
+    private string? _pendingGame;
+    private bool _pendingHomeNavigation;
+
     private void UpdateGameSelected(string newGame)
+    {
+        if (IsOnEditorPage())
+        {
+            _pendingGame = newGame;
+            _confirmSwitchModal?.Show();
+            return;
+        }
+
+        ApplyGameSwitch(newGame, returnHome: IsOnComboViewerPage());
+    }
+
+    private void RequestHomeNavigation()
+    {
+        if (IsOnEditorPage())
+        {
+            _pendingHomeNavigation = true;
+            _confirmSwitchModal?.Show();
+            return;
+        }
+
+        Navigation.NavigateTo("/");
+    }
+
+    private void ConfirmLeaveEditor()
+    {
+        _confirmSwitchModal?.Hide();
+
+        if (_pendingHomeNavigation)
+        {
+            _pendingHomeNavigation = false;
+            Navigation.NavigateTo("/");
+            return;
+        }
+
+        if (_pendingGame is null) return;
+
+        ApplyGameSwitch(_pendingGame, returnHome: true);
+        _pendingGame = null;
+    }
+
+    private void CancelLeaveEditor()
+    {
+        _confirmSwitchModal?.Hide();
+        _pendingGame = null;
+        _pendingHomeNavigation = false;
+    }
+
+    private void ApplyGameSwitch(string newGame, bool returnHome)
     {
         var gameType = newGame switch
         {
@@ -94,6 +164,7 @@
 
         var stageImages = gameType switch
         {
+            GameType.STREETFIGHTER6 => StreetFighter6.StageImages,
             GameType.MORTALKOMBAT1 => MortalKombat1.StageImages,
             GameType.TEKKEN8 => Tekken8.StageImages,
             _ => []
@@ -103,5 +174,21 @@
             : null;
 
         GameState.SetGame(gameType, backgroundImage);
+
+        if (returnHome)
+            Navigation.NavigateTo("/");
     }
+
+    private string[] CurrentPathSegments =>
+        Navigation.ToBaseRelativePath(Navigation.Uri)
+            .Split('/', StringSplitOptions.RemoveEmptyEntries);
+
+    private bool IsOnEditorPage()
+    {
+        var segments = CurrentPathSegments;
+        return segments.Length > 0 &&
+               segments[0].Equals("Editor", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private bool IsOnComboViewerPage() => CurrentPathSegments.Length == 2 && !IsOnEditorPage();
 }
