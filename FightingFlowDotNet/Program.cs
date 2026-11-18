@@ -151,7 +151,9 @@ app.MapPost("/auth/signin", async (HttpContext http, FirebaseAuthVerifier verifi
     var claims = new List<Claim>
     {
         new(ClaimTypes.NameIdentifier, token.Uid),
-        new(ClaimTypes.Email, token.Claims.GetValueOrDefault("email")?.ToString() ?? "")
+        new(
+            ClaimTypes.Email, 
+            token.Claims.GetValueOrDefault("email")?.ToString() ?? "")
     };
     var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
     await http.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
