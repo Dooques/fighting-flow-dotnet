@@ -1,36 +1,86 @@
 ﻿@page "/Profile"
 @using Blazorise.Extensions
 @using FightingFlowDotNet.Clients
-@using Firebase.Auth
+@using Microsoft.AspNetCore.Components.Authorization
 
 @inject FirebaseClientFactory FirebaseClientFactory
 @inject NavigationManager Navigation
 @inject IJSRuntime Js
 @inject IConfiguration Config
+@inject UserData UserData
 
-<Card Class="glass-card glass-panel">
-<CardBody>
-    <Div Flex="Flex.Column">
-        <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
-            <Heading Size="HeadingSize.Is3" TextColor="TextColor.Light">Your Profile</Heading>
+<AuthorizeView>
+    
+    <NotAuthorized>
+        <Card Class="glass-card glass-panel">
+            <CardBody>
+                <Div Flex="Flex.Column">
 
-            <Button Color="Color.Secondary"
-                    TextColor="TextColor.Light"
-                    @onclick="RequestLogout"
-                    Width="Width.Is25">
-                Logout
-            </Button>
-        </Div>
+                    <Heading Size="HeadingSize.Is3" TextColor="TextColor.Light">
+                        No profile found
+                    </Heading>
 
-        <Blazorise.Text TextColor="TextColor.Light">Under construction...</Blazorise.Text>
+                    <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
+                        <Blazorise.Text TextColor="TextColor.Light">
+                            You need to log in before you can view profile details
+                        </Blazorise.Text>
 
-        @if (!ErrorMessage.IsNullOrEmpty())
-        {
-            <Blazorise.Text TextColor="TextColor.Light">@(ErrorMessage)</Blazorise.Text>
-        }
-    </Div>
-</CardBody>
-</Card>
+                        <Button Color="Color.Secondary"
+                                TextColor="TextColor.Light"
+                                @onclick="NavigateToLogin"
+                                Width="Width.Is25">
+                            Logout
+                        </Button>
+
+                    </Div>
+
+                    @if (!ErrorMessage.IsNullOrEmpty())
+                    {
+                        <Blazorise.Text TextColor="TextColor.Light">
+                            @(ErrorMessage)
+                        </Blazorise.Text>
+                    }
+                </Div>
+            </CardBody>
+        </Card>
+    </NotAuthorized>
+
+    <Authorized>
+        <Card Class="glass-card glass-panel">
+            <CardBody>
+                <Div Flex="Flex.Column">
+                    <Div Flex="Flex.Row.JustifyContent.Between.AlignItems.Center">
+                        <Heading Size="HeadingSize.Is3" TextColor="TextColor.Light">
+                            Your Profile
+                        </Heading>
+
+                        <Button Color="Color.Secondary"
+                                TextColor="TextColor.Light"
+                                @onclick="RequestLogout"
+                                Width="Width.Is25">
+                            Logout
+                        </Button>
+                    </Div>
+
+                    <Div Flex="Flex.Column">
+                        <Text TextColor="TextColor.Light">
+                            Username: @UserData.UserCredential?.User.Info.DisplayName
+                        </Text>
+                        <Text TextColor="TextColor.Light">
+                            Email: @UserData.UserCredential?.User.Info.Email
+                        </Text>
+                    </Div>
+
+                    @if (!ErrorMessage.IsNullOrEmpty())
+                    {
+                        <Blazorise.Text TextColor="TextColor.Light">@(ErrorMessage)</Blazorise.Text>
+                    }
+                </Div>
+            </CardBody>
+        </Card>
+    </Authorized>
+
+</AuthorizeView>
 
 <Modal @ref="_confirmLogoutModal" Class="glass-modal">
     <ModalContent>
@@ -72,6 +122,8 @@
     }
 
     private Modal? _confirmLogoutModal;
+    
+    private void NavigateToLogin() => Navigation.NavigateTo("/login");
 
     private void RequestLogout() => _confirmLogoutModal?.Show();
 
