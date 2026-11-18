@@ -51,7 +51,7 @@
                 <BarItem>
                     <BarLink To="profile">
                         <Button TextColor="TextColor.Light">
-                            Profile    
+                            Profile
                         </Button>
                     </BarLink>
                 </BarItem>
@@ -167,8 +167,9 @@
             GameType.STREETFIGHTER6 => StreetFighter6.StageImages,
             GameType.MORTALKOMBAT1 => MortalKombat1.StageImages,
             GameType.TEKKEN8 => Tekken8.StageImages,
-            _ => []
+            _ => throw new ArgumentOutOfRangeException()
         };
+        
         var backgroundImage = stageImages.Count > 0
             ? stageImages[Random.Shared.Next(stageImages.Count)]
             : null;
