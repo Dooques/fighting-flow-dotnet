@@ -2,7 +2,7 @@
 using FightingFlowDotNet.Models;
 using Google.Cloud.Firestore;
 
-namespace FightingFlowDotNet.Clients;
+namespace FightingFlowDotNet.Clients.Firebase;
 
 public class FirestoreGetter(IConfiguration configuration, IHostEnvironment env)
 {

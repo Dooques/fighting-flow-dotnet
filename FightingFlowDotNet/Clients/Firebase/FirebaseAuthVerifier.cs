@@ -1,6 +1,6 @@
 ﻿using FirebaseAdmin.Auth;
 
-namespace FightingFlowDotNet.Clients;
+namespace FightingFlowDotNet.Clients.Firebase;
 
 public class FirebaseAuthVerifier(FirebaseAuth firebaseAuth)
 {

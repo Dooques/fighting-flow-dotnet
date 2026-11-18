@@ -2,7 +2,7 @@
 using Firebase.Auth.Providers;
 using Firebase.Auth.Repository;
 
-namespace FightingFlowDotNet.Clients;
+namespace FightingFlowDotNet.Clients.Firebase;
 
 public class FirebaseClientFactory(IConfiguration configuration)
 {
